@@ -1,9 +1,14 @@
 #pragma once
+
+#include "TEST.h"
+
 class ServerScene : public Scene
 {
 	POINT m_MousePos = { 0,0 };
 
 	Text2D m_Font;
+
+	TEST m_test;
 
 public:
 

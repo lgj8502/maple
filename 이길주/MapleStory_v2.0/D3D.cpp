@@ -160,12 +160,7 @@ void D3D::Render()
 LRESULT D3D::MyWndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 {
 	switch (iMessage)
-	{
-	case WM_CREATE:
-	{
-		SCENE_MGR->SetHwnd(hWnd);
-		SCENE_MGR->ChangeScene(SCENE_SERVER);
-	}break;
+	{	
 
 	case WM_LBUTTONDOWN :
 	{

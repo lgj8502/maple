@@ -14,14 +14,10 @@ class ImageMgr : public TemplateSingleton<ImageMgr>
 {
 	BASESET(ImageMgr);
 
-private :
-
 	map<wstring, ImgInfo>	m_Imglist;
 
 	IWICImagingFactory		*m_pIWICFactory = nullptr;
 	IWICFormatConverter		*m_pConvertedSourceBitmap = nullptr;
-
-	D2D1_RECT_F				m_ImgRT = {};
 
 	ID2D1RenderTarget	*m_pRT = nullptr;
 
@@ -32,7 +28,6 @@ private:
 
 	ID2D1Bitmap *ImageAsBitmap(LPCWSTR _FilePath);
 
-	Matrix3x2F		m_matSRT = Matrix3x2F::Identity();
 
 public:
 
@@ -42,23 +37,15 @@ public:
 
 	void FileFindDir(wstring _Path);
 
-
-
-	inline ID2D1Bitmap				*GetImage(wstring _bitmapName)
+	inline ID2D1Bitmap *GetImage(wstring _bitmapName)
 	{
 		return m_Imglist[_bitmapName].m_Bitmap;
 	}
 
-
-	inline ID2D1RenderTarget	*GetRT()
+	inline ID2D1RenderTarget* GetpRT()
 	{
 		return m_pRT;
 	}
-
-	
-	VOID RendRect(wstring _bitmapName);
-	VOID RendRect(wstring _bitmapName, D2D1_RECT_F _rt);
-	
 };
 
 #define IMG_MGR	ImageMgr::GetInstance()

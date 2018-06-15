@@ -144,6 +144,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="BufferType.h" />
+    <ClInclude Include="cLogMgr.h" />
     <ClInclude Include="cTimer.h" />
     <ClInclude Include="D2D.h" />
     <ClInclude Include="D3D.h" />
@@ -151,30 +152,37 @@
     <ClInclude Include="ImageMgr.h" />
     <ClInclude Include="IngameScene.h" />
     <ClInclude Include="LobbyScene.h" />
-    <ClInclude Include="LogMgr.h" />
     <ClInclude Include="MK_KeyMgr.h" />
+    <ClInclude Include="Object2D.h" />
     <ClInclude Include="Object3D.h" />
+    <ClInclude Include="Renderer2D.h" />
     <ClInclude Include="RenderObject3D.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneMgr.h" />
     <ClInclude Include="ServerScene.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="TemplateSingleton.h" />
+    <ClInclude Include="TEST.h" />
     <ClInclude Include="Text2D.h" />
+    <ClInclude Include="Transform2D.h" />
     <ClInclude Include="Transform3D.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BufferType.cpp" />
+    <ClCompile Include="cLogMgr.cpp" />
     <ClCompile Include="cTimer.cpp" />
     <ClCompile Include="D2D.cpp" />
     <ClCompile Include="D3D.cpp" />
     <ClCompile Include="ImageMgr.cpp" />
     <ClCompile Include="IngameScene.cpp" />
     <ClCompile Include="LobbyScene.cpp" />
-    <ClCompile Include="LogMgr.cpp" />
+    <ClCompile Include="Object2D.cpp" />
+    <ClCompile Include="Renderer2D.cpp" />
     <ClCompile Include="SceneMgr.cpp" />
     <ClCompile Include="ServerScene.cpp" />
+    <ClCompile Include="TEST.cpp" />
     <ClCompile Include="Text2D.cpp" />
+    <ClCompile Include="Transform2D.cpp" />
     <ClCompile Include="WinMain.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

@@ -35,7 +35,7 @@ LRESULT IngameScene::MyWndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM l
 	case WM_LBUTTONDOWN:
 	{
 		SCENE_MGR->ChangeScene(SCENE_SERVER);
-		Log_MGR("게임씬에서 클릭함");
+
 	}break;
 
 	}

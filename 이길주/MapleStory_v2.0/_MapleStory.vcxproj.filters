@@ -34,20 +34,26 @@
     <Filter Include="소스 파일\D2D">
       <UniqueIdentifier>{45cf8830-98af-428b-888c-6ce83c5d5681}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\D3D\3D_Object">
-      <UniqueIdentifier>{c52b9832-02f4-4a34-94f6-654d9999c7c2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="소스 파일\D3D\Shader">
       <UniqueIdentifier>{6d1f8309-ad54-4365-bd73-a4bd2089ad5a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="소스 파일\Common\Manager">
-      <UniqueIdentifier>{730d9e8a-7717-4579-821e-9409f582c06d}</UniqueIdentifier>
     </Filter>
     <Filter Include="소스 파일\Common\Key">
       <UniqueIdentifier>{17286da6-33dd-4b11-aace-75255f19daf7}</UniqueIdentifier>
     </Filter>
     <Filter Include="소스 파일\Scene">
       <UniqueIdentifier>{6ee4008d-6876-46ce-9e51-58485e14c6cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\D3D\Object3D">
+      <UniqueIdentifier>{c52b9832-02f4-4a34-94f6-654d9999c7c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\D2D\Object2D">
+      <UniqueIdentifier>{d81dbf17-6352-48e5-a346-8d97341448c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\D2D\TEST">
+      <UniqueIdentifier>{70d48ddb-bd13-4870-9f54-b423f88feaab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Manager">
+      <UniqueIdentifier>{730d9e8a-7717-4579-821e-9409f582c06d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -76,25 +82,22 @@
       <Filter>소스 파일\D3D</Filter>
     </ClInclude>
     <ClInclude Include="Object3D.h">
-      <Filter>소스 파일\D3D\3D_Object</Filter>
+      <Filter>소스 파일\D3D\Object3D</Filter>
     </ClInclude>
     <ClInclude Include="RenderObject3D.h">
-      <Filter>소스 파일\D3D\3D_Object</Filter>
+      <Filter>소스 파일\D3D\Object3D</Filter>
     </ClInclude>
     <ClInclude Include="Transform3D.h">
-      <Filter>소스 파일\D3D\3D_Object</Filter>
-    </ClInclude>
-    <ClInclude Include="LogMgr.h">
-      <Filter>소스 파일\Common\Manager</Filter>
+      <Filter>소스 파일\D3D\Object3D</Filter>
     </ClInclude>
     <ClInclude Include="SceneMgr.h">
-      <Filter>소스 파일\Common\Manager</Filter>
+      <Filter>소스 파일\Manager</Filter>
     </ClInclude>
     <ClInclude Include="TemplateSingleton.h">
-      <Filter>소스 파일\Common\Manager</Filter>
+      <Filter>소스 파일\Manager</Filter>
     </ClInclude>
     <ClInclude Include="ImageMgr.h">
-      <Filter>소스 파일\Common\Manager</Filter>
+      <Filter>소스 파일\Manager</Filter>
     </ClInclude>
     <ClInclude Include="IngameScene.h">
       <Filter>소스 파일\Scene</Filter>
@@ -107,6 +110,21 @@
     </ClInclude>
     <ClInclude Include="ServerScene.h">
       <Filter>소스 파일\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Object2D.h">
+      <Filter>소스 파일\D2D\Object2D</Filter>
+    </ClInclude>
+    <ClInclude Include="Transform2D.h">
+      <Filter>소스 파일\D2D\Object2D</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer2D.h">
+      <Filter>소스 파일\D2D\Object2D</Filter>
+    </ClInclude>
+    <ClInclude Include="TEST.h">
+      <Filter>소스 파일\D2D\TEST</Filter>
+    </ClInclude>
+    <ClInclude Include="cLogMgr.h">
+      <Filter>소스 파일\Manager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -135,22 +153,19 @@
       <Filter>소스 파일\D3D</Filter>
     </ClCompile>
     <ClCompile Include="Object3D.cpp">
-      <Filter>소스 파일\D3D\3D_Object</Filter>
+      <Filter>소스 파일\D3D\Object3D</Filter>
     </ClCompile>
     <ClCompile Include="RenderObjec3Dt.cpp">
-      <Filter>소스 파일\D3D\3D_Object</Filter>
+      <Filter>소스 파일\D3D\Object3D</Filter>
     </ClCompile>
     <ClCompile Include="Transform3D.cpp">
-      <Filter>소스 파일\D3D\3D_Object</Filter>
-    </ClCompile>
-    <ClCompile Include="LogMgr.cpp">
-      <Filter>소스 파일\Common\Manager</Filter>
+      <Filter>소스 파일\D3D\Object3D</Filter>
     </ClCompile>
     <ClCompile Include="SceneMgr.cpp">
-      <Filter>소스 파일\Common\Manager</Filter>
+      <Filter>소스 파일\Manager</Filter>
     </ClCompile>
     <ClCompile Include="ImageMgr.cpp">
-      <Filter>소스 파일\Common\Manager</Filter>
+      <Filter>소스 파일\Manager</Filter>
     </ClCompile>
     <ClCompile Include="IngameScene.cpp">
       <Filter>소스 파일\Scene</Filter>
@@ -160,6 +175,21 @@
     </ClCompile>
     <ClCompile Include="ServerScene.cpp">
       <Filter>소스 파일\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Object2D.cpp">
+      <Filter>소스 파일\D2D\Object2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Transform2D.cpp">
+      <Filter>소스 파일\D2D\Object2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer2D.cpp">
+      <Filter>소스 파일\D2D\Object2D</Filter>
+    </ClCompile>
+    <ClCompile Include="TEST.cpp">
+      <Filter>소스 파일\D2D\TEST</Filter>
+    </ClCompile>
+    <ClCompile Include="cLogMgr.cpp">
+      <Filter>소스 파일\Manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

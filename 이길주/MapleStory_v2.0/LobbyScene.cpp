@@ -14,7 +14,7 @@ void LobbyScene::Render(ID2D1RenderTarget * _pRT, ID2D1SolidColorBrush * _pBrush
 {
 	//m_Font.TextRender(_pRT, _pBrush, Point2F(20, 20), "로비씬");
 
-	IMG_MGR->RendRect(L"LobbyMain", { 0,0,1200,800 });
+
 }
 
 LRESULT LobbyScene::MyWndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
@@ -29,7 +29,7 @@ LRESULT LobbyScene::MyWndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lP
 	case WM_LBUTTONDOWN:
 	{
 		SCENE_MGR->ChangeScene(SCENE_INGAME);
-		Log_MGR("로비씬에서 클릭함");
+
 
 	}break;
 

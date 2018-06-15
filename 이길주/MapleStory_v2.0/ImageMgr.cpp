@@ -100,7 +100,6 @@ ID2D1Bitmap * ImageMgr::ImageAsBitmap(LPCWSTR _FilePath)
 
 ImageMgr::~ImageMgr()
 {
-
 	if (m_pConvertedSourceBitmap != nullptr)
 	{
 		m_pConvertedSourceBitmap->Release();
@@ -180,32 +179,3 @@ void ImageMgr::FileFindDir(wstring _Path)
 
 
 
-VOID ImageMgr::RendRect(wstring _bitmapName)
-{
-	
-	if (m_Imglist[_bitmapName].m_Bitmap == nullptr)
-	{
-		return;
-	}
-
-	auto Size = m_Imglist[_bitmapName].m_Bitmap->GetSize();
-
-	m_ImgRT.left = -Size.width / 2;
-	m_ImgRT.right = +Size.width / 2;
-	m_ImgRT.top = -Size.height / 2;
-	m_ImgRT.bottom = Size.height / 2;
-
-	m_pRT->DrawBitmap(m_Imglist[_bitmapName].m_Bitmap, m_ImgRT);
-}
-
-VOID ImageMgr::RendRect(wstring _bitmapName, D2D1_RECT_F _rt)
-{
-	if (m_Imglist[_bitmapName].m_Bitmap == nullptr)
-	{
-		return;
-	}
-
-	m_pRT->SetTransform(m_matSRT);
-
-	m_pRT->DrawBitmap(m_Imglist[_bitmapName].m_Bitmap, _rt);
-}

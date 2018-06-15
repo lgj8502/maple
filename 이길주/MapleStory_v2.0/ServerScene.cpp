@@ -14,6 +14,7 @@ void ServerScene::Init(HWND hWnd)
 
 void ServerScene::Update(float _DelayTime)
 {
+	m_test.Update();
 }
 
 void ServerScene::Render(ID2D1RenderTarget *_pRT, ID2D1SolidColorBrush *_pBrush)
@@ -21,7 +22,7 @@ void ServerScene::Render(ID2D1RenderTarget *_pRT, ID2D1SolidColorBrush *_pBrush)
 	//m_Font.TextRender(_pRT, _pBrush, Point2F(20, 20), "서버씬");
 
 
-	IMG_MGR->RendRect(L"ServerMain", { 0,0,1200,800 });
+	m_test.Render();
 
 }
 
@@ -34,11 +35,17 @@ LRESULT ServerScene::MyWndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM l
 		m_MousePos.x = GET_X_LPARAM(lParam);
 		m_MousePos.y = GET_Y_LPARAM(lParam);
 	}break;
+	//case WM_LBUTTONDOWN:
+	//{
+	//	SCENE_MGR->ChangeScene(SCENE_LOBBY);
+
+	//	Log_MGR("서버씬에서 클릭함");
+	//}break;
+
 	case WM_LBUTTONDOWN:
 	{
-		SCENE_MGR->ChangeScene(SCENE_LOBBY);
-
-		Log_MGR("서버씬에서 클릭함");
+		POINT pt = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
+		MK_LOG("%d, %d 클릭", pt.x, pt.y);
 	}break;
 
 	}
