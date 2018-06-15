@@ -9,7 +9,7 @@ IngameScene::~IngameScene()
 void IngameScene::Init(HWND hWnd)
 {
 	m_Font.SetFont(L"°íµñ");
-
+	IMG_MGR->FileFindDir(ImgDir);
 }
 
 void IngameScene::Update(float _DelayTime)

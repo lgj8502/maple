@@ -10,6 +10,8 @@ void ServerScene::Init(HWND hWnd)
 {
 	m_Font.SetFont(L"°íµñ");
 
+	IMG_MGR->FileFindDir(ImgDir);
+
 }
 
 void ServerScene::Update(float _DelayTime)

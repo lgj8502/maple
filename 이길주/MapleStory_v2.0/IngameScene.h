@@ -1,4 +1,7 @@
 #pragma once
+
+CONST LPCWSTR ImgDir = L".\\Img\\InGameScene\\";
+
 class IngameScene: public Scene
 {
 	POINT m_MousePos = { 0,0 };

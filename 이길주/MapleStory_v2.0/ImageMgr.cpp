@@ -132,6 +132,8 @@ void ImageMgr::Init(ID2D1RenderTarget *_pRT)
 
 void ImageMgr::FileFindDir(wstring _Path)
 {
+	m_Imglist.clear();
+
 	HANDLE t_hSrch;
 	WIN32_FIND_DATAW t_wfd;
 	BOOL t_bResult = TRUE;
@@ -175,6 +177,21 @@ void ImageMgr::FileFindDir(wstring _Path)
 	FindClose(t_hSrch);
 
 	return VOID();
+}
+
+ID2D1Bitmap * ImageMgr::GetImage(wstring _bitmapName)
+{
+	auto Find = m_Imglist.find(_bitmapName);
+
+	if (Find == m_Imglist.end())
+	{
+		MK_LOG("이미지를 불러오기 실패");
+
+		return nullptr;
+	}
+
+
+	return m_Imglist[_bitmapName].m_Bitmap;
 }
 
 

@@ -37,10 +37,8 @@ public:
 
 	void FileFindDir(wstring _Path);
 
-	inline ID2D1Bitmap *GetImage(wstring _bitmapName)
-	{
-		return m_Imglist[_bitmapName].m_Bitmap;
-	}
+	ID2D1Bitmap *GetImage(wstring _bitmapName);
+
 
 	inline ID2D1RenderTarget* GetpRT()
 	{

@@ -4,6 +4,8 @@
 void LobbyScene::Init(HWND hWnd)
 {
 	m_Font.SetFont(L"°íµñ");
+
+	IMG_MGR->FileFindDir(ImgDir);
 }
 
 void LobbyScene::Update(float _DelayTime)
