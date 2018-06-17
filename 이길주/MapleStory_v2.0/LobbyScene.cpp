@@ -4,15 +4,13 @@
 void LobbyScene::Init(HWND hWnd)
 {
 	m_Font.SetFont(L"°íµñ");
-
-	IMG_MGR->FileFindDir(ImgDir);
 }
 
 void LobbyScene::Update(float _DelayTime)
 {
 }
 
-void LobbyScene::Render(ID2D1RenderTarget * _pRT, ID2D1SolidColorBrush * _pBrush)
+void LobbyScene::Render()
 {
 	//m_Font.TextRender(_pRT, _pBrush, Point2F(20, 20), "·Îºñ¾À");
 

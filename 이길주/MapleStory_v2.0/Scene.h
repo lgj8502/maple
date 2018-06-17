@@ -11,7 +11,7 @@ public:
 
 	virtual void Init(HWND hWnd) = 0;
 	virtual	void Update(float _DelayTime = 0.0f) = 0;
-	virtual void Render(ID2D1RenderTarget *_pRT, ID2D1SolidColorBrush *_pBrush) = 0;
+	virtual void Render() = 0;
 
 	virtual LRESULT MyWndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam) = 0;
 };

@@ -14,7 +14,7 @@ public:
 	ID2D1RenderTarget * m_pRT = nullptr;
 
 	Transform2D m_Transform;
-	Renderer2D m_Renderer;
+	Renderer2D	m_Renderer;
 
 	void	Update(float _DelayTime = 0.0f);
 	void	Render();

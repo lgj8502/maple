@@ -4,7 +4,7 @@
 
 Renderer2D::Renderer2D()
 {
-	
+	m_BitmapList.push_back(nullptr);
 }
 
 
@@ -14,10 +14,9 @@ Renderer2D::~Renderer2D()
 }
 
 void Renderer2D::Render(Matrix3x2F _mat, ID2D1RenderTarget *_pRT)
-{
+{	
 	if (m_BitmapList[m_BitmapIndex] == nullptr)	return;
 
-	// 행렬을 랜더타켓에 적용한다.
 	_pRT->SetTransform(_mat);
 
 	_pRT->DrawBitmap(
@@ -28,9 +27,16 @@ void Renderer2D::Render(Matrix3x2F _mat, ID2D1RenderTarget *_pRT)
 		m_ImgRT);
 }
 
-void Renderer2D::AddBitmap(wstring _name)
+void Renderer2D::AddBitmap(ID2D1Bitmap* _bitmap)
 {
-	m_BitmapList.push_back(IMG_MGR->GetImage(_name));	
+	if (m_BitmapList[m_BitmapIndex] == nullptr)
+	{
+		m_BitmapList.clear();
+	}
+
+	m_BitmapList.push_back(_bitmap);
+
+
 }
 
 

@@ -14,4 +14,5 @@ void Object2D::Update(float _DelayTime)
 void Object2D::Render()
 {
 	m_Renderer.Render(m_Transform.m_matSRT, m_pRT);
+
 }

@@ -42,11 +42,11 @@ HRESULT D2D::Init2D(IDXGISwapChain * _pSwapChain)
 
 	HR_CHECK_MSG("브러쉬 생성 실패");
 
-	m_Font.SetFont(L"고딕");
+	//m_Font.SetFont(L"고딕");
 
 	IMG_MGR->Init(m_pRT);
-
-	SCENE_MGR->SetRT_Brush(m_pRT, m_pBrush);
+	IMG_MGR->FileFindDir(ImgDir);
+	IMG_MGR->SetBrush(m_pBrush);
 
 	return hr;
 }

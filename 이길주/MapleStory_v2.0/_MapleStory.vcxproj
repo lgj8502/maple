@@ -146,6 +146,8 @@
     <ClInclude Include="BufferType.h" />
     <ClInclude Include="cLogMgr.h" />
     <ClInclude Include="cTimer.h" />
+    <ClInclude Include="cUI.h" />
+    <ClInclude Include="cUIMgr.h" />
     <ClInclude Include="D2D.h" />
     <ClInclude Include="D3D.h" />
     <ClInclude Include="DDSTextureLoader.h" />
@@ -171,6 +173,8 @@
     <ClCompile Include="BufferType.cpp" />
     <ClCompile Include="cLogMgr.cpp" />
     <ClCompile Include="cTimer.cpp" />
+    <ClCompile Include="cUI.cpp" />
+    <ClCompile Include="cUIMgr.cpp" />
     <ClCompile Include="D2D.cpp" />
     <ClCompile Include="D3D.cpp" />
     <ClCompile Include="ImageMgr.cpp" />

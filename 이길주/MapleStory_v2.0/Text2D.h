@@ -3,7 +3,7 @@
 #include <dwrite.h>
 #pragma comment(lib, "dwrite.lib")
 
-#define BASE_FONTSIZE	15
+#define BASE_FONTSIZE	5
 
 class Text2D
 {
@@ -23,4 +23,5 @@ public:
 	VOID		TextRender(ID2D1RenderTarget *_pRT, ID2D1Brush *_pBrush, D2D1_POINT_2F _Pos, const char *_Format, ...);
 	VOID		TextRender(ID2D1RenderTarget *_pRT, ID2D1Brush *_pBrush, float _Size, D2D1_POINT_2F _Pos, const char *_Format, ...);
 };
+
 

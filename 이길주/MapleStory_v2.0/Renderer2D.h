@@ -28,7 +28,7 @@ public:
 
 	void Render(Matrix3x2F _mat, ID2D1RenderTarget *_pRT);
 
-	void AddBitmap(wstring _name);
+	void AddBitmap(ID2D1Bitmap* _bitmap);
 
 	inline void ClearBitmap()
 	{
@@ -43,6 +43,10 @@ public:
 	inline void SetImgRT(D2D1_RECT_F _rt)
 	{
 		m_ImgRT = _rt;
+	}
+	inline D2D1_RECT_F GetImgRT()
+	{
+		return m_ImgRT;
 	}
 
 

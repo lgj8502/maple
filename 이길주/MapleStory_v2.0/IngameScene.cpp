@@ -9,7 +9,7 @@ IngameScene::~IngameScene()
 void IngameScene::Init(HWND hWnd)
 {
 	m_Font.SetFont(L"∞ÌµÒ");
-	IMG_MGR->FileFindDir(ImgDir);
+
 }
 
 void IngameScene::Update(float _DelayTime)
@@ -18,9 +18,9 @@ void IngameScene::Update(float _DelayTime)
 
 }
 
-void IngameScene::Render(ID2D1RenderTarget *_pRT, ID2D1SolidColorBrush *_pBrush)
+void IngameScene::Render()
 {
-	m_Font.TextRender(_pRT, _pBrush, Point2F(20, 20), "¿Œ∞‘¿”æ¿");
+	//m_Font.TextRender(_pRT, _pBrush, Point2F(20, 20), "¿Œ∞‘¿”æ¿");
 }
 
 LRESULT IngameScene::MyWndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)

@@ -20,6 +20,7 @@ class ImageMgr : public TemplateSingleton<ImageMgr>
 	IWICFormatConverter		*m_pConvertedSourceBitmap = nullptr;
 
 	ID2D1RenderTarget	*m_pRT = nullptr;
+	ID2D1SolidColorBrush *m_pBrush = nullptr;
 
 private:
 
@@ -37,8 +38,19 @@ public:
 
 	void FileFindDir(wstring _Path);
 
-	ID2D1Bitmap *GetImage(wstring _bitmapName);
+	inline void SetBrush(ID2D1SolidColorBrush *_pBrush)
+	{
+		m_pBrush = _pBrush;
+	}
+	inline ID2D1SolidColorBrush* GetBrush()
+	{
+		return m_pBrush;
+	}
 
+	inline ID2D1Bitmap *GetImage(wstring _bitmapName)
+	{
+		return m_Imglist[_bitmapName].m_Bitmap;
+	}
 
 	inline ID2D1RenderTarget* GetpRT()
 	{

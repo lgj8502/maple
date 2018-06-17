@@ -50,7 +50,7 @@ void SceneMgr::Render()
 {
 	if (m_pScene != nullptr)
 	{
-		m_pScene->Render(m_pRT, m_pBrush);
+		m_pScene->Render();
 	}
 }
 

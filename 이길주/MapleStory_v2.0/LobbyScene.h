@@ -1,6 +1,4 @@
 #pragma once
-CONST LPCWSTR ImgDir = L".\\Img\\LobbyScene\\";
-
 class LobbyScene : public Scene
 {
 	POINT m_MousePos = { 0,0 };
@@ -10,7 +8,7 @@ class LobbyScene : public Scene
 public:
 	void Init(HWND hWnd);
 	void Update(float _DelayTime = 0.0f);
-	void Render(ID2D1RenderTarget *_pRT, ID2D1SolidColorBrush *_pBrush);
+	void Render();
 
 	LRESULT MyWndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam);
 };
