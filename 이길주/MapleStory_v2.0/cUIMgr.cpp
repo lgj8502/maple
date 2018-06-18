@@ -31,13 +31,114 @@ void cUIMgr::DeleteUI(cUI * _delUI)
 
 }
 
-void cUIMgr::FirstUI(cUI * _fSTui)
+void cUIMgr::DrawFirst(cUI * _fSTui)
 {
 	DeleteUI(_fSTui);
 
 	m_UIList.push_back(_fSTui);
 
 }
+
+
+cUI * cUIMgr::FirstUI()
+{
+	return m_UIList.back();
+}
+
+void cUIMgr::OnMouseDown(POINT _mousePos)
+{
+	list<cUI*>::iterator Iter;
+
+	for (Iter = m_UIList.end(); Iter != m_UIList.begin(); Iter--)
+	{
+
+		if (Iter == m_UIList.end()) continue;
+
+		D2D1_RECT_F pos = (*Iter)->m_Renderer.GetImgRT();
+
+		if (RayCastCheck(_mousePos, pos) == true)
+		{
+			(*Iter)->OnMouseDown();
+
+			return;
+		}
+	}
+}
+
+void cUIMgr::OnMouseUp(POINT _mousePos)
+{
+	list<cUI*>::iterator Iter;
+
+
+	for (Iter = m_UIList.end(); Iter != m_UIList.begin(); Iter--)
+	{
+		if (Iter == m_UIList.end()) continue;
+
+		D2D1_RECT_F pos = (*Iter)->m_Renderer.GetImgRT();
+
+		if ((*Iter)->m_isClicked == true && RayCastCheck(_mousePos, pos) == true)
+		{
+			(*Iter)->OnMouseClick();
+			return;
+		}
+		else
+		{
+			(*Iter)->OnMouseUp();
+			return;
+		}
+	}
+}
+
+void cUIMgr::OnMouseOver(POINT _mousePos)
+{
+	list<cUI*>::iterator Iter;
+
+	for (Iter = m_UIList.end(); Iter != m_UIList.begin(); Iter--)
+	{
+		if (Iter == m_UIList.end()) continue;
+
+		D2D1_RECT_F pos = (*Iter)->m_Renderer.GetImgRT();
+
+		if (RayCastCheck(_mousePos, pos) == true)
+		{
+			(*Iter)->OnMouseOver();
+
+			return;
+		}
+	}
+}
+
+
+
+void cUIMgr::AddEvent(string _name, eEvent_Type _Type, FUNC _func)
+{
+	if (FindUI(_name) == nullptr)
+	{
+		MK_LOG("리스트에 이름 없음: SetFunc 실패");
+		return;
+	}
+
+	switch (_Type)
+	{
+	case Event_OnMouseDown:		FindUI(_name)->m_OnMouseDown.push_back(_func);
+		break;
+	case Event_OnMouseUP:		FindUI(_name)->m_OnMouseUp.push_back(_func);
+		break;
+	case Event_OnMouseClick:	FindUI(_name)->m_OnMouseClick.push_back(_func);
+		break;
+	case Event_OnMouseOver:
+		break;
+	default: 
+	{
+		MK_LOG("없는 이벤트 타입 : SetFunc 실패"); 
+		return;
+	}
+		break;
+	}
+}
+
+
+
 
 void cUIMgr::SetParent(string _Parent, string _Son)
 {
@@ -131,9 +232,12 @@ void cUIMgr::AddImage(string _name, wstring _bitmapName, D2D1_POINT_2F _pos, D2D
 
 	UI->m_Renderer.SetImgRT(ImgRT);
 
-	UI->m_Transform.SetScale(_scale.x / 2.0f, _scale.y / 2.0f);
+	UI->m_Transform.SetScale(_scale.x, _scale.y);
 	UI->m_Transform.SetPos(_pos);
 	UI->m_Renderer.SetAlpha(_alpha);
+
+	UI->m_isActive = _isActive;
+	UI->m_RayCast = _isRayCast;
 
 	m_UIList.push_back(UI);
 }
@@ -156,26 +260,16 @@ void cUIMgr::AddImage(string _name, wstring _bitmapName, D2D1_RECT_F _rect, floa
 
 
 	UI->m_Renderer.AddBitmap(AddBitmap);
-
 	UI->m_Renderer.SetImgRT(_rect);
-
 	UI->m_Renderer.SetAlpha(_alpha);
+
+	UI->m_isActive = _isActive;
+	UI->m_RayCast = _isRayCast;
 
 	m_UIList.push_back(UI);
 }
 
-void cUIMgr::OnMouseDown(POINT _mousePos)
-{
-	for (auto &i : m_UIList)
-	{
-		D2D1_RECT_F pos = i->m_Renderer.GetImgRT();
 
-		if (RayCastCheck(_mousePos, pos))
-		{
-			i->OnMouseDown();
-		}
-	}
-}
 
 bool cUIMgr::RayCastCheck(POINT _Ray, D2D1_RECT_F _object)
 {

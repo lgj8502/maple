@@ -10,12 +10,18 @@ void ServerScene::Init(HWND hWnd)
 {
 	//m_Font.SetFont(L"°íµñ");
 	UI_MGR->AddImage("ServerMain", L"ServerMain", { 0,0,1200,800 });
-
-	UI_MGR->AddText("Son", "ÀÚ½Ä", { 0,0 }, ColorF(ColorF::Red), L"±Ã¼­");
 	
-	UI_MGR->AddImage("test1", L"test1", { 300,300 }, { 1.0f, 1.0f });
+	UI_MGR->AddImage("test1", L"test1", { 300,300 }, { 0.3f, 0.3f });
+
+	UI_MGR->AddText("Son", "ÀÚ½Ä", { 200,0 }, ColorF(ColorF::Red), L"±Ã¼­");
 
 	UI_MGR->SetParent("test1", "Son");
+
+	UI_MGR->FindUI("test1")->m_RayCast = true;
+
+	auto Func = [](void) { 	UI_MGR->FindUI("test1")->m_Transform.SetPos(500, 300); };
+
+	UI_MGR->AddEvent("test1", Event_OnMouseDown, Func);
 
 
 }
@@ -56,14 +62,16 @@ LRESULT ServerScene::MyWndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM l
 		MK_LOG("%d, %d Å¬¸¯", pt.x, pt.y);
 
 
-
+		UI_MGR->OnMouseDown(m_MousePos);
 
 		//UI_MGR->FindUI("test1")->m_Transform.SetPos(m_MousePos.x, m_MousePos.y);
 
-
-
 	}break;
 
+	case WM_LBUTTONUP:
+	{
+		UI_MGR->OnMouseUp(m_MousePos);
+	}break;
 	}
 
 	return (DefWindowProcA(hWnd, iMessage, wParam, lParam));

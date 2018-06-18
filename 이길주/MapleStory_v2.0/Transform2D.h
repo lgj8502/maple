@@ -33,8 +33,8 @@ public:
 
 	void	SetScale(float _x, float _y)
 	{
-		m_Scale.x = _x;
-		m_Scale.y = _y;
+		m_Scale.x = _x / 2;
+		m_Scale.y = _y / 2;
 	}
 	void	SetPos(float _x, float _y)
 	{

@@ -42,5 +42,57 @@ void cUI::TextRender()
 
 void cUI::OnMouseDown()
 {
-	UI_MGR->FirstUI(this);	
+	if (m_RayCast == false)
+	{
+		return;
+	}
+
+	m_isClicked = true;
+
+	if (UI_MGR->FirstUI() != this)
+	{
+		UI_MGR->DrawFirst(this);
+
+	}	
+
+	for (auto &i : m_OnMouseDown)
+	{
+		i();
+	}
+}
+
+void cUI::OnMouseUp()
+{
+	if (m_RayCast == false)
+	{
+		return;
+	}
+
+	m_isClicked = false;
+
+	for (auto &i : m_OnMouseUp)
+	{
+		i();
+	}
+}
+
+void cUI::OnMouseClick()
+{
+
+	m_isClicked = false;
+
+	for (auto &i : m_OnMouseClick)
+	{
+		i();
+	}
+}
+
+void cUI::OnMouseOver()
+{
+	m_isMouseOver = true;
+
+	for (auto &i : m_OnMouseOver)
+	{
+		i();
+	}
 }

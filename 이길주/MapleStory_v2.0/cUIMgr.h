@@ -16,6 +16,14 @@ enum eUI_Type
 	UI_PANEL,
 };
 
+enum eEvent_Type
+{
+	Event_OnMouseDown,
+	Event_OnMouseUP,
+	Event_OnMouseClick,
+	Event_OnMouseOver,	
+};
+
 class cUIMgr : public TemplateSingleton<cUIMgr>
 {
 	BASESET(cUIMgr);
@@ -26,14 +34,25 @@ class cUIMgr : public TemplateSingleton<cUIMgr>
 
 	list<cUI*> m_UIList;
 
+private:
+
+	bool	RayCastCheck(POINT _Ray, D2D1_RECT_F _object);
+	void	Destroy();
+
 public:
 
 	~cUIMgr();
 
 	cUI* FindUI(string _name);
 	void DeleteUI(cUI * _delUI);
-	void FirstUI(cUI *_fSTui);
+	void DrawFirst(cUI *_fSTui);
+	cUI* FirstUI();
 
+	void OnMouseDown(POINT _mousePos);
+	void OnMouseUp(POINT _mousePos);
+	void OnMouseOver(POINT _mousePos);
+
+	void AddEvent(string _name, eEvent_Type _Type, FUNC _func);
 
 	void SetParent(string _Parent, string _Son);
 
@@ -45,9 +64,6 @@ public:
 	void AddImage(string _name, wstring _bitmapName, D2D1_RECT_F _rect,
 				 float _alpha = 1.0f, bool _isActive = true, bool _isRayCast = false);
 
-	void OnMouseDown(POINT _mousePos);
-	bool RayCastCheck(POINT _Ray, D2D1_RECT_F _object);
-
 	//void OnMouseOver();
 	//void OnMouseUp();
 	//void OnMouseDrag();
@@ -55,7 +71,7 @@ public:
 	void	Update(float _DelayTime = 0);
 	void	Render();
 
-	void	Destroy();
+
 };
 
 #define UI_MGR	cUIMgr::GetInstance()

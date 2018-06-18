@@ -1,5 +1,6 @@
 #pragma once
 
+typedef void(*FUNC)();
 
 class cUI : public Object2D 
 {
@@ -18,12 +19,20 @@ public:
 	// 활성화/비활성화
 	bool m_isActive = true;
 
+	bool m_isClicked = false;
+	bool m_isMouseOver = false;
+
 	// UI_TEXT 용
 	Text2D m_Font;
 	string m_Text = "";
 	float m_FontSize = 20.0f;
 	D2D1_COLOR_F m_FontColor = ColorF(ColorF::White);
 	wstring m_FontName = L"고딕";
+
+	vector<FUNC> m_OnMouseDown;
+	vector<FUNC> m_OnMouseUp;
+	vector<FUNC> m_OnMouseClick;
+	vector<FUNC> m_OnMouseOver;
 
 public:
 	cUI();
@@ -34,8 +43,9 @@ public:
 
 	void OnMouseDown();
 	void OnMouseUp();
+	void OnMouseClick();
 	void OnMouseOver();
-	void OnMouseDrag();
+
 
 
 };
