@@ -1,0 +1,64 @@
+#include "stdafx.h"
+#include "Renderer2D.h"
+#include <cstdarg>
+
+Renderer2D::Renderer2D()
+{
+	m_BitmapList.push_back(nullptr);
+}
+
+
+Renderer2D::~Renderer2D()
+{
+
+}
+
+void Renderer2D::Render(Matrix3x2F _mat, ID2D1RenderTarget *_pRT)
+{	
+	if (m_BitmapList[m_BitmapIndex] == nullptr)	return;
+
+
+
+	_pRT->SetTransform(_mat);
+
+	_pRT->DrawBitmap(
+		m_BitmapList[m_BitmapIndex],
+		m_ImgRTList[m_BitmapIndex],
+		m_Alpha,
+		D2D1_BITMAP_INTERPOLATION_MODE_LINEAR,
+		m_ImgRTList[m_BitmapIndex]);
+}
+
+void Renderer2D::AddBitmap(ID2D1Bitmap* _bitmap)
+{
+	if (m_BitmapList[m_BitmapIndex] == nullptr)
+	{
+		m_BitmapList.clear();
+	}
+
+	m_BitmapList.push_back(_bitmap);	
+
+	auto Size = m_BitmapList[m_BitmapIndex]->GetSize();
+
+	D2D1_RECT_F ImgRT;
+
+	ImgRT.left = -Size.width ;
+	ImgRT.right = +Size.width ;
+	ImgRT.top = -Size.height;
+	ImgRT.bottom = Size.height;
+
+	m_ImgRTList.push_back(ImgRT);
+}
+
+void Renderer2D::ChangeBitmap(int _index)
+{
+	if (_index >= m_BitmapList.size())
+	{
+		MK_LOG("ChangeBitmap ½ÇÆÐ");
+		return;
+	}
+
+	m_BitmapIndex = _index;
+}
+
+
