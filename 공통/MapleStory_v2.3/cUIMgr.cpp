@@ -7,6 +7,31 @@ cUIMgr::~cUIMgr()
 	Destroy();
 }
 
+bool cUIMgr::RayCastCheck(POINT _Ray, D2D1_RECT_F _object)
+{
+	if (_Ray.x > _object.left && _Ray.x < _object.right &&
+		_Ray.y < _object.bottom && _Ray.y > _object.top)
+	{
+		return true;
+	}
+
+	return false;
+}
+
+
+void cUIMgr::Destroy()
+{
+	for (auto &i : m_UIList)
+	{		
+		i = {};
+		delete i;
+		i = nullptr;
+	}
+	m_UIList.clear();
+}
+
+
+
 cUI * cUIMgr::FindUI(string _name)
 {
 	for (auto &i : m_UIList)
@@ -37,16 +62,29 @@ void cUIMgr::DeleteUI(cUI * _delUI)
 void cUIMgr::DrawFirst(cUI * _fSTui)
 {
 
-	cUI* Iter = FindParent(_fSTui);	
+	cUI* UI = FindParent(_fSTui);
+	vector<cUI*> temp;
 
-	while (Iter != nullptr)
+	for (auto &i : m_UIList)
 	{
-		m_UIList.remove(Iter);
-
-		m_UIList.push_back(Iter);
-
-		Iter = Iter->m_SonUI;
+		if (FindParent(i) == UI)
+		{
+			temp.push_back(i);	
+		}
 	}
+
+	for (auto &i : temp)
+	{
+		m_UIList.remove(i);
+	}
+
+	for (auto &i : temp)
+	{
+		m_UIList.push_back(i);
+	}
+
+	temp.clear();
+
 }
 
 
@@ -89,53 +127,77 @@ void cUIMgr::OnMouseDown(POINT _mousePos)
 
 		if (Iter == m_UIList.end()) continue;
 
-		if ((*Iter)->m_RayCast == false) continue;
+		cUI* UI = (*Iter);
 
-		D2D1_RECT_F rect = (*Iter)->m_Renderer.GetImgRT();
+		if (UI->m_RayCast == false) continue;
 
-		rect.left	= rect.left		*	(*Iter)->m_Transform.GetScale().x  + (*Iter)->m_Transform.GetPos().x;
-		rect.right	= rect.right	*	(*Iter)->m_Transform.GetScale().x  + (*Iter)->m_Transform.GetPos().x;
-		rect.bottom = rect.bottom   *	(*Iter)->m_Transform.GetScale().y  + (*Iter)->m_Transform.GetPos().y;
-		rect.top	= rect.top		*	(*Iter)->m_Transform.GetScale().y  + (*Iter)->m_Transform.GetPos().y;
+		D2D1_RECT_F rect = UI->m_Renderer.GetImgRT();
+		D2D1_POINT_2F Scale = UI->GetUIScale();
 
-		if (RayCastCheck(_mousePos, rect) == true)
+		float posX = UI->m_Transform.m_matSRT.dx;
+		float posY = UI->m_Transform.m_matSRT.dy;
+
+		rect.left	= rect.left		*	Scale.x  + posX;
+		rect.right	= rect.right	*	Scale.x  + posX;
+		rect.bottom = rect.bottom   *	Scale.y  + posY;
+		rect.top	= rect.top		*	Scale.y  + posY;
+
+		if (RayCastCheck(_mousePos, rect) == false) continue;
+		
+		// Toggle 이라면
+		if (UI->m_Type == UI_TOGGLE)
 		{
-			(*Iter)->OnMouseDown();
+			if (UI->m_isOn == true)
+			{
+				if (UI->m_parentUI != nullptr)
+				{
+					if (UI->m_parentUI->m_Type == UI_TOGGLEGROUP) return;
+				}				
 
+				UI->m_isOn = false;
+				UI->OnMouseDown();
+			}
+			else
+			{
+				UI->m_isOn = true;
+
+				cUI* parent = UI->m_parentUI;
+
+				UI->OnMouseDown();
+
+				if (parent != nullptr)
+				{
+					if (parent->m_Type == UI_TOGGLEGROUP)
+					{
+						for (auto &i : parent->m_SonUI)
+						{
+							if (i == UI) continue;
+
+							if (i->m_isOn == true)
+							{
+								i->m_isOn = false;
+								i->ToggleOff();
+							}
+						}
+						return;
+					}
+				}
+			}
+			
 			return;
 		}
+
+		UI->OnMouseDown();
+		m_ClickedUI = UI;
+		return;		
 	}
 }
 
 void cUIMgr::OnMouseUp(POINT _mousePos)
 {
-	list<cUI*>::iterator Iter;
+	if (m_ClickedUI == nullptr) return;
 
-
-	for (Iter = m_UIList.end(); Iter != m_UIList.begin(); Iter--)
-	{
-		if (Iter == m_UIList.end()) continue;
-
-		if ((*Iter)->m_RayCast == false) continue;
-
-		D2D1_RECT_F rect = (*Iter)->m_Renderer.GetImgRT();
-
-		rect.left = rect.left		*	(*Iter)->m_Transform.GetScale().x + (*Iter)->m_Transform.GetPos().x;
-		rect.right = rect.right	*	(*Iter)->m_Transform.GetScale().x + (*Iter)->m_Transform.GetPos().x;
-		rect.bottom = rect.bottom   *	(*Iter)->m_Transform.GetScale().y + (*Iter)->m_Transform.GetPos().y;
-		rect.top = rect.top		*	(*Iter)->m_Transform.GetScale().y + (*Iter)->m_Transform.GetPos().y;
-
-		if (RayCastCheck(_mousePos, rect) == true)
-		{
-			(*Iter)->OnMouseClick();
-			return;
-		}
-		else
-		{
-			(*Iter)->OnMouseUp();
-			return;
-		}
-	}
+	m_ClickedUI->m_isClicked = false;
 }
 
 void cUIMgr::OnMouseOver(POINT _mousePos)
@@ -153,10 +215,10 @@ void cUIMgr::OnMouseOver(POINT _mousePos)
 
 		D2D1_RECT_F rect = (*Iter)->m_Renderer.GetImgRT();
 
-		rect.left = rect.left		*	(*Iter)->m_Transform.GetScale().x + (*Iter)->m_Transform.GetPos().x;
-		rect.right = rect.right	*	(*Iter)->m_Transform.GetScale().x + (*Iter)->m_Transform.GetPos().x;
-		rect.bottom = rect.bottom   *	(*Iter)->m_Transform.GetScale().y + (*Iter)->m_Transform.GetPos().y;
-		rect.top = rect.top		*	(*Iter)->m_Transform.GetScale().y + (*Iter)->m_Transform.GetPos().y;
+		rect.left = rect.left		*	(*Iter)->GetUIScale().x + (*Iter)->GetUIPos().x;
+		rect.right = rect.right	*	(*Iter)->GetUIScale().x + (*Iter)->GetUIPos().x;
+		rect.bottom = rect.bottom   *	(*Iter)->GetUIScale().y + (*Iter)->GetUIPos().y;
+		rect.top = rect.top		*	(*Iter)->GetUIScale().y + (*Iter)->GetUIPos().y;
 
 
 		if (RayCastCheck(_mousePos, rect) == true)
@@ -178,6 +240,8 @@ void cUIMgr::OnMouseDrag(POINT _mousePos)
 	for (Iter = m_UIList.end(); Iter != m_UIList.begin(); Iter--)
 	{
 		if (Iter == m_UIList.end()) continue;
+
+		if ((*Iter)->m_UseDrag == false) continue;
 
 		if ((*Iter)->m_RayCast == false) continue;
 
@@ -202,10 +266,10 @@ void cUIMgr::OnMouseExit(POINT _mousePos)
 
 		D2D1_RECT_F rect = (*Iter)->m_Renderer.GetImgRT();
 
-		rect.left = rect.left		*	(*Iter)->m_Transform.GetScale().x + (*Iter)->m_Transform.GetPos().x;
-		rect.right = rect.right	*	(*Iter)->m_Transform.GetScale().x + (*Iter)->m_Transform.GetPos().x;
-		rect.bottom = rect.bottom   *	(*Iter)->m_Transform.GetScale().y + (*Iter)->m_Transform.GetPos().y;
-		rect.top = rect.top		*	(*Iter)->m_Transform.GetScale().y + (*Iter)->m_Transform.GetPos().y;
+		rect.left = rect.left		*	(*Iter)->GetUIScale().x + (*Iter)->GetUIPos().x;
+		rect.right = rect.right	*	(*Iter)->GetUIScale().x + (*Iter)->GetUIPos().x;
+		rect.bottom = rect.bottom   *	(*Iter)->GetUIScale().y + (*Iter)->GetUIPos().y;
+		rect.top = rect.top		*	(*Iter)->GetUIScale().y + (*Iter)->GetUIPos().y;
 
 		if (RayCastCheck(_mousePos, rect) == false && (*Iter)->m_isMouseOver == true)
 		{
@@ -240,6 +304,11 @@ void cUIMgr::AddEvent(string _name, eEvent_Type _Type, FUNC _func)
 		break;
 	case Event_OnMouseDrag:     FindUI(_name)->m_OnMouseDrag.push_back(_func);
 		break;
+	case Event_ToggleOn :		FindUI(_name)->m_ToggleOn.push_back(_func);
+		break;
+	case Event_ToggleOff:		FindUI(_name)->m_ToggleOff.push_back(_func);
+		break;
+
 	default: 
 	{
 		MK_LOG("없는 이벤트 타입 : AddEvent 실패"); 
@@ -263,36 +332,147 @@ void cUIMgr::SetParent(string _Parent, string _Son)
 
 		return;
 	}	
-	
-	SonUI->m_parentUI = ParentUI;
-	ParentUI->m_SonUI = SonUI;
 
-	SonUI->m_Transform.m_pParent = &(ParentUI->m_Transform);
+	vector<cUI*> temp;
 
+	temp.push_back(ParentUI);
+	temp.push_back(SonUI);
+
+	m_UIList.remove(ParentUI);
 	m_UIList.remove(SonUI);
-
-	list<cUI*>::iterator Iter;
-
-	Iter = m_UIList.begin();
 
 	for (auto &i : m_UIList)
 	{
-		if ((*Iter)->m_Name == _Parent)
+		if (FindParent(i) == ParentUI)
 		{
-			break;
+			temp.push_back(i);
 		}
-
-		Iter++;
 	}
 
-	Iter++;
+	for (auto &i : m_UIList)
+	{
+		if (FindParent(i) == SonUI)
+		{
+			temp.push_back(i);
+		}
+	}
 
-	m_UIList.insert(Iter, SonUI);
+	for (auto &i : temp)
+	{
+		m_UIList.remove(i);
+	}
+
+	for (auto &i : temp)
+	{
+		m_UIList.push_back(i);
+	}
+
+	temp.clear();
+
+	SonUI->m_parentUI = ParentUI;
+	ParentUI->m_SonUI.push_back(SonUI);
+
+	SonUI->m_Transform.m_pParent = &(ParentUI->m_Transform);
+
+
+	//m_UIList.remove(SonUI);
+
+	//list<cUI*>::iterator Iter;
+
+	//Iter = m_UIList.begin();
+
+	//for (auto &i : m_UIList)
+	//{
+	//	if ((*Iter)->m_Name == _Parent)
+	//	{
+	//		break;
+	//	}
+
+	//	Iter++;
+	//}
+	//
+	//m_UIList.insert(Iter, SonUI);
+
+
+
+
+
 
 }
 
+void cUIMgr::SetParent(cUI * _Parent, cUI * _Son)
+{
+	if (_Parent == nullptr || _Son == nullptr)
+	{
+		MK_LOG("SetParent 실패");
+
+		return;
+	}
+
+
+
+	vector<cUI*> temp;
+
+	temp.push_back(_Parent);
+	temp.push_back(_Son);
+
+	m_UIList.remove(_Parent);
+	m_UIList.remove(_Son);
+
+	for (auto &i : m_UIList)
+	{
+		if (FindParent(i) == _Parent)
+		{
+			temp.push_back(i);
+		}
+	}
+
+	for (auto &i : m_UIList)
+	{
+		if (FindParent(i) == _Son)
+		{
+			temp.push_back(i);
+		}
+	}
+
+	for (auto &i : temp)
+	{
+		m_UIList.remove(i);
+	}
+
+	for (auto &i : temp)
+	{
+		m_UIList.push_back(i);
+	}
+
+	temp.clear();
+
+	_Son->m_parentUI = _Parent;
+	_Parent->m_SonUI.push_back(_Son);
+
+	_Son->m_Transform.m_pParent = &(_Parent->m_Transform);
+
+	//m_UIList.remove(_Parent);
+
+	//list<cUI*>::iterator Iter;
+
+	//Iter = m_UIList.begin();
+
+	//for (auto &i : m_UIList)
+	//{
+	//	if (*Iter == _Son)
+	//	{
+	//		break;
+	//	}
+
+	//	Iter++;
+	//}
+	//
+	//m_UIList.insert(Iter, _Parent);
+}
+
 void cUIMgr::AddText(string _name, string _text, D2D1_POINT_2F _pos, D2D1_COLOR_F _FontColor, wstring _FontName,
-	                 float _FontSize, bool _isActive, bool _isRayCast, bool _canDrag)
+	                 float _FontSize, bool _isActive, bool _isRayCast)
 {
 	if (FindUI(_name) != nullptr)
 	{
@@ -311,7 +491,7 @@ void cUIMgr::AddText(string _name, string _text, D2D1_POINT_2F _pos, D2D1_COLOR_
 	UI->m_FontName = _FontName;
 	UI->m_isActive = _isActive;
 	UI->m_RayCast = _isRayCast;
-	UI->m_CanDrag = _canDrag;
+
 
 	UI->m_Font.SetFont(UI->m_FontName.c_str());
 
@@ -321,7 +501,7 @@ void cUIMgr::AddText(string _name, string _text, D2D1_POINT_2F _pos, D2D1_COLOR_
 	m_UIList.push_back(UI);
 }
 
-void cUIMgr::AddImage(string _name, wstring _bitmapName, D2D1_POINT_2F _pos, D2D1_POINT_2F _scale, float _alpha, bool _isActive, bool _isRayCast, bool _canDrag)
+void cUIMgr::AddImage(string _name, wstring _bitmapName, D2D1_POINT_2F _pos, D2D1_POINT_2F _scale, float _alpha, bool _isActive, bool _isRayCast)
 {
 	if (FindUI(_name) != nullptr)
 	{
@@ -345,12 +525,12 @@ void cUIMgr::AddImage(string _name, wstring _bitmapName, D2D1_POINT_2F _pos, D2D
 
 	UI->m_isActive = _isActive;
 	UI->m_RayCast = _isRayCast;
-	UI->m_CanDrag = _canDrag;
+
 
 	m_UIList.push_back(UI);
 }
 
-void cUIMgr::AddImage(string _name, wstring _bitmapName, D2D1_RECT_F _rect, float _alpha, bool _isActive, bool _isRayCast, bool _canDrag)
+void cUIMgr::AddImage(string _name, wstring _bitmapName, D2D1_RECT_F _rect, float _alpha, bool _isActive, bool _isRayCast)
 {
 	if (FindUI(_name) != nullptr)
 	{
@@ -373,12 +553,12 @@ void cUIMgr::AddImage(string _name, wstring _bitmapName, D2D1_RECT_F _rect, floa
 
 	UI->m_isActive = _isActive;
 	UI->m_RayCast = _isRayCast;
-	UI->m_CanDrag = _canDrag;
+
 
 	m_UIList.push_back(UI);
 }
 
-void cUIMgr::AddButton(string _name, wstring _bitmapName, D2D1_POINT_2F _pos, D2D1_POINT_2F _scale, float _alpha, bool _isActive, bool _isRayCast, bool _canDrag)
+void cUIMgr::AddButton(string _name, wstring _bitmapName, D2D1_POINT_2F _pos, D2D1_POINT_2F _scale, float _alpha, bool _isActive, bool _isRayCast)
 {
 	if (FindUI(_name) != nullptr)
 	{
@@ -402,28 +582,126 @@ void cUIMgr::AddButton(string _name, wstring _bitmapName, D2D1_POINT_2F _pos, D2
 
 	UI->m_isActive = _isActive;
 	UI->m_RayCast = _isRayCast;
-	UI->m_CanDrag = _canDrag;
+
+
+	m_UIList.push_back(UI);
+}
+
+void cUIMgr::AddButton(string _name, wstring _bitmapName, D2D1_RECT_F _rect, float _alpha, bool _isActive, bool _isRayCast)
+{
+
+	if (FindUI(_name) != nullptr)
+	{
+		MK_LOG("UI 이름 중복 : UI 생성 실패");
+		return;
+	}
+
+	cUI *UI = new cUI;
+
+	UI->m_Type = UI_BUTTON;
+	UI->m_Name = _name;
+
+	ID2D1Bitmap* AddBitmap = IMG_MGR->GetImage(_bitmapName);
+
+	UI->m_Renderer.AddBitmap(AddBitmap);
+	UI->m_Renderer.SetImgRT(_rect);
+	UI->m_Renderer.SetAlpha(_alpha);
+
+	UI->m_isActive = _isActive;
+	UI->m_RayCast = _isRayCast;
+
+
+	m_UIList.push_back(UI);
+}
+
+void cUIMgr::AddToggle(string _name, wstring _bitmapName, D2D1_POINT_2F _pos, D2D1_POINT_2F _scale, float _alpha, bool _isActive , bool _isRayCast)
+{
+	if (FindUI(_name) != nullptr)
+	{
+		MK_LOG("UI 이름 중복 : UI 생성 실패");
+		return;
+	}
+
+	cUI *UI = new cUI;
+
+	UI->m_Type = UI_TOGGLE;
+	UI->m_Name = _name;
+
+	ID2D1Bitmap* AddBitmap = IMG_MGR->GetImage(_bitmapName);
+
+	UI->m_Renderer.AddBitmap(AddBitmap);
+
+	UI->m_Transform.SetScale(_scale.x, _scale.y);
+	UI->m_Transform.SetPos(_pos);
+	UI->m_Renderer.SetAlpha(_alpha);
+
+	UI->m_isActive = _isActive;
+	UI->m_RayCast = _isRayCast;
+
+
+	m_UIList.push_back(UI);
+}
+
+void cUIMgr::AddToggle(string _name, wstring _bitmapName, D2D1_RECT_F _rect, float _alpha, bool _isActive, bool _isRayCast)
+{
+	if (FindUI(_name) != nullptr)
+	{
+		MK_LOG("UI 이름 중복 : UI 생성 실패");
+		return;
+	}
+
+	cUI *UI = new cUI;
+
+	UI->m_Type = UI_TOGGLE;
+	UI->m_Name = _name;
+
+	ID2D1Bitmap* AddBitmap = IMG_MGR->GetImage(_bitmapName);
+
+	UI->m_Renderer.AddBitmap(AddBitmap);
+	UI->m_Renderer.SetImgRT(_rect);
+	UI->m_Renderer.SetAlpha(_alpha);
+
+	UI->m_isActive = _isActive;
+	UI->m_RayCast = _isRayCast;
+
 
 	m_UIList.push_back(UI);
 }
 
 
 
-bool cUIMgr::RayCastCheck(POINT _Ray, D2D1_RECT_F _object)
+
+
+void cUIMgr::AddToggleGroup(string _name, D2D1_POINT_2F _pos, vector<cUI*> _Toggles)
 {
-	if (_Ray.x > _object.left && _Ray.x < _object.right &&
-		_Ray.y < _object.bottom && _Ray.y > _object.top)
+	if (FindUI(_name) != nullptr)
 	{
-		return true;
+		MK_LOG("UI 이름 중복 : UI 생성 실패");
+		return;
 	}
 
-	return false;
+	cUI *UI = new cUI;
+
+	UI->m_Type = UI_TOGGLEGROUP;
+	UI->m_Name = _name;
+	UI->m_Transform.SetPos(_pos);
+
+	m_UIList.push_back(UI);
+
+	for (auto &i : _Toggles)
+	{
+		SetParent(UI, i);
+	}
+
+
 }
 
 void cUIMgr::Update(float _DelayTime)
 {
 	for (auto &i : m_UIList)
 	{
+		if (i->m_isActive == false) continue;
+
 		i->Update(_DelayTime);
 	}
 }
@@ -443,12 +721,3 @@ void cUIMgr::Render()
 	}
 }
 
-void cUIMgr::Destroy()
-{
-	for (auto &i : m_UIList)
-	{
-		i = {};
-		delete i;
-		i = nullptr;
-	}
-}

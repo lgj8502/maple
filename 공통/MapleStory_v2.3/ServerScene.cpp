@@ -22,21 +22,88 @@ void ServerScene::Init(HWND hWnd)
 
 	UI_MGR->BitMapAdd("플레이어", L"test2");	
 
-
+	
 
 	auto Func1 = [](void) { UI_MGR->FindUI("플레이어")->m_Transform.SetPos({ 500,500 }); };
 	auto Func2 = [](void) { UI_MGR->FindUI("플레이어")->m_Renderer.ChangeBitmap(1); };
 	auto Func3 = [](void) { UI_MGR->FindUI("플레이어")->m_Renderer.ChangeBitmap(0); };
 
-	UI_MGR->AddEvent("플레이어", Event_OnMouseDown, Func1);
+
+	//UI_MGR->AddEvent("플레이어", Event_OnMouseDown, Func1);
 	UI_MGR->AddEvent("플레이어", Event_OnMouseOver, Func2);
 	UI_MGR->AddEvent("플레이어", Event_OnMouseExit, Func3);
 
 
-	UI_MGR->AddButton("베라서버", L"bera", { 100,500 });
+	UI_MGR->AddButton("베라서버", L"bera", { 100,500 }, { 1.0f, 1.0f });
 
-	UI_MGR->FindUI("베라서버")->m_CanDrag = true;
+	UI_MGR->FindUI("베라서버")->m_UseDrag = true;
 
+
+//////////////////////// 탭바 예시 //////////////////////////////////////////////////
+
+	// 토글 버튼 추가
+	UI_MGR->AddToggle("토글1", L"toggle1", { -80,-200 }, { 0.8f, 0.8f });
+	UI_MGR->BitMapAdd("토글1", L"toggle2");
+
+	UI_MGR->AddToggle("토글2", L"toggle1", { 80,-200 }, { 0.8f, 0.8f });
+	UI_MGR->BitMapAdd("토글2", L"toggle2");
+
+	// 토글 on/off 시 이미지 변경 함수
+	auto tog1_1 = [](void) { UI_MGR->FindUI("토글1")->m_Renderer.ChangeBitmap(1); };
+	auto tog1_2 = [](void) { UI_MGR->FindUI("토글1")->m_Renderer.ChangeBitmap(0); };
+	auto tog2_1 = [](void) { UI_MGR->FindUI("토글2")->m_Renderer.ChangeBitmap(1); };
+	auto tog2_2 = [](void) { UI_MGR->FindUI("토글2")->m_Renderer.ChangeBitmap(0); };
+
+	UI_MGR->AddEvent("토글1", Event_ToggleOn, tog1_1);
+	UI_MGR->AddEvent("토글1", Event_ToggleOff, tog1_2);
+	UI_MGR->AddEvent("토글2", Event_ToggleOn, tog2_1);
+	UI_MGR->AddEvent("토글2", Event_ToggleOff, tog2_2);
+
+	// 토글1 버튼은 활성화
+	UI_MGR->FindUI("토글1")->m_isOn = true;
+	UI_MGR->FindUI("토글1")->m_Renderer.ChangeBitmap(1);
+
+	// 토글 그룹 지정
+	vector<cUI*> vUI;
+
+	vUI.push_back(UI_MGR->FindUI("토글1"));
+	vUI.push_back(UI_MGR->FindUI("토글2"));
+
+	UI_MGR->AddToggleGroup("토글그룹", { 0, 0 }, vUI);
+
+	// 탭바 몸체 추가
+	UI_MGR->AddImage("탭바", L"TabBar", { 600,200 }, { 0.5f, 0.5f });
+
+	// 탭바 드래그 가능
+	UI_MGR->FindUI("탭바")->m_RayCast = true;
+	UI_MGR->FindUI("탭바")->m_UseDrag = true;
+
+	// 탭바 구성
+	UI_MGR->SetParent("탭바", "토글그룹");
+	UI_MGR->AddImage("탭바헤드", L"탭바드래그", { 0, -300 }, { 0.8f, 0.8f });
+	UI_MGR->SetParent("탭바", "탭바헤드");
+
+	// 토글키 클릭시 나올 화면 표시
+	UI_MGR->AddImage("왼쪽", L"왼쪽", { 0, 100 }, { 0.6f, 0.6f });
+	UI_MGR->AddImage("오른쪽", L"오른쪽", { 0, 100 }, { 0.6f, 0.6f });
+
+	UI_MGR->SetParent("탭바", "왼쪽");
+	UI_MGR->SetParent("탭바", "오른쪽");	
+
+	auto tog1_3 = [](void) { UI_MGR->FindUI("왼쪽")->m_isActive = true; };
+	auto tog1_4 = [](void) { UI_MGR->FindUI("왼쪽")->m_isActive = false; };
+	auto tog2_3 = [](void) { UI_MGR->FindUI("오른쪽")->m_isActive = true; };
+	auto tog2_4 = [](void) { UI_MGR->FindUI("오른쪽")->m_isActive = false; };
+
+	UI_MGR->AddEvent("토글1", Event_ToggleOn, tog1_3);
+	UI_MGR->AddEvent("토글1", Event_ToggleOff, tog1_4);
+
+	UI_MGR->AddEvent("토글2", Event_ToggleOn, tog2_3);
+	UI_MGR->AddEvent("토글2", Event_ToggleOff, tog2_4);
+
+	UI_MGR->FindUI("오른쪽")->m_isActive = false;
+
+//////////////////////////////////////////////////////////////////////////
 
 
 	m_player.m_Renderer.AddBitmap(IMG_MGR->GetImage(L"test2"));
@@ -84,8 +151,6 @@ LRESULT ServerScene::MyWndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM l
 			UI_MGR->OnMouseExit(m_MousePos);			
 		}
 
-
-
 	}break;
 
 	case WM_LBUTTONDOWN:
@@ -95,8 +160,6 @@ LRESULT ServerScene::MyWndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM l
 		UI_MGR->OnMouseDown(m_MousePos);
 
 		m_isClicked = true;
-
-		//UI_MGR->FindUI("test1")->m_Transform.SetPos(m_MousePos.x, m_MousePos.y);
 
 	}break;
 

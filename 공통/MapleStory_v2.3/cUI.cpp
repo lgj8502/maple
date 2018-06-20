@@ -13,10 +13,7 @@ cUI::~cUI()
 
 void cUI::TextRender()
 {
-	if (m_isActive == false)
-	{
-		return;
-	}
+	if (m_isActive == false) return;
 
 	D2D1_COLOR_F oldColor = IMG_MGR->GetBrush()->GetColor();
 
@@ -41,7 +38,7 @@ void cUI::TextRender()
 
 void cUI::OnMouseDown()
 {
-
+	if (m_isActive == false) return;
 	if (m_RayCast == false)	return;
 
 	m_isClicked = true;
@@ -49,20 +46,33 @@ void cUI::OnMouseDown()
 
 	UI_MGR->DrawFirst(this);
 
+	if (m_Type == UI_TOGGLE)
+	{
+		if (m_isOn == true)
+		{
+			ToggleOn();
+			return;
+		}
+	}
 
 	for (auto &i : m_OnMouseDown)
 	{
 		i();
 	}
 
-	m_ClickPos = m_Transform.GetPos();
+	if (m_UseDrag == true)
+	{
+		m_ClickPos = m_Transform.GetPos();
 
-	m_ClickPos.x -= (float)UI_MGR->GetMousePoint().x;
-	m_ClickPos.y -= (float)UI_MGR->GetMousePoint().y;
+		m_ClickPos.x -= (float)UI_MGR->GetMousePoint().x;
+		m_ClickPos.y -= (float)UI_MGR->GetMousePoint().y;
+	}
+
 }
 
 void cUI::OnMouseUp()
 {
+	if (m_isActive == false) return;
 	if (m_RayCast == false)	return;
 
 	m_isClicked = false;
@@ -75,6 +85,7 @@ void cUI::OnMouseUp()
 
 void cUI::OnMouseClick()
 {
+	if (m_isActive == false) return;
 	if (m_RayCast == false)	return;
 
 	m_isClicked = false;
@@ -83,10 +94,12 @@ void cUI::OnMouseClick()
 	{
 		i();
 	}
+
 }
 
 void cUI::OnMouseOver()
 {
+	if (m_isActive == false) return;
 	if (m_RayCast == false)	return;
 
 	if (m_isMouseOver == true) return;
@@ -101,6 +114,7 @@ void cUI::OnMouseOver()
 
 void cUI::OnMouseExit()
 {
+	if (m_isActive == false) return;
 	if (m_RayCast == false)	return;
 
 	if (m_isMouseOver == false) return;
@@ -115,9 +129,10 @@ void cUI::OnMouseExit()
 
 void cUI::OnMouseDrag()
 {
+	if (m_isActive == false) return;
 	if (m_RayCast == false)	return;
 	if (m_isClicked == false)	return;
-	if (m_CanDrag == false)	return;
+	if (m_UseDrag == false)	return;
 
 	POINT moustPos = UI_MGR->GetMousePoint();
 
@@ -127,6 +142,22 @@ void cUI::OnMouseDrag()
 	m_Transform.SetPos(x, y);
 
 	for (auto &i : m_OnMouseDrag)
+	{
+		i();
+	}
+}
+
+void cUI::ToggleOn()
+{
+	for (auto &i : m_ToggleOn)
+	{
+		i();
+	}
+}
+
+void cUI::ToggleOff()
+{
+	for (auto &i : m_ToggleOff)
 	{
 		i();
 	}

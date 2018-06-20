@@ -10,6 +10,7 @@ enum eUI_Type
 	UI_IMAGE,
 	UI_BUTTON,
 	UI_TOGGLE,
+	UI_TOGGLEGROUP,
 	UI_SLIDER,
 	UI_SCROLLBAR,
 	UI_INPUTFIELD,
@@ -24,6 +25,8 @@ enum eEvent_Type
 	Event_OnMouseOver,
 	Event_OnMouseExit,
 	Event_OnMouseDrag,
+	Event_ToggleOn,
+	Event_ToggleOff,
 };
 
 class cUIMgr : public TemplateSingleton<cUIMgr>
@@ -38,10 +41,13 @@ class cUIMgr : public TemplateSingleton<cUIMgr>
 
 	POINT m_MosuePoint = {};
 
+	cUI* m_ClickedUI = nullptr;
+
 private:
 
 	bool	RayCastCheck(POINT _Ray, D2D1_RECT_F _object);
 	void	Destroy();
+	
 
 public:
 
@@ -71,19 +77,28 @@ public:
 	void AddEvent(string _name, eEvent_Type _Type, FUNC _func);
 
 	void SetParent(string _Parent, string _Son);
+	void SetParent(cUI* _Parent, cUI* _Son);
 
 	void AddText(string _name, string _text, D2D1_POINT_2F _pos, D2D1_COLOR_F _FontColor = ColorF(1, 1, 1), wstring _FontName = L"°íµñ", 
-		         float _FontSize = 20.0f,  bool _isActive = true, bool _isRayCast = false, bool _canDrag = false);
+		         float _FontSize = 20.0f,  bool _isActive = true, bool _isRayCast = false);
 
 	void AddImage(string _name, wstring _bitmapName, D2D1_POINT_2F _pos, D2D1_POINT_2F _scale = { 1.0f, 1.0f }, 
-		         float _alpha = 1.0f, bool _isActive = true, bool _isRayCast = false, bool _canDrag = false);
+		         float _alpha = 1.0f, bool _isActive = true, bool _isRayCast = false);
 	void AddImage(string _name, wstring _bitmapName, D2D1_RECT_F _rect,
-				 float _alpha = 1.0f, bool _isActive = true, bool _isRayCast = false, bool _canDrag = false);
+				 float _alpha = 1.0f, bool _isActive = true, bool _isRayCast = false);
 
 	void AddButton(string _name, wstring _bitmapName, D2D1_POINT_2F _pos, D2D1_POINT_2F _scale = { 1.0f, 1.0f },
-		         float _alpha = 1.0f, bool _isActive = true, bool _isRayCast = true, bool _canDrag = false);
+		         float _alpha = 1.0f, bool _isActive = true, bool _isRayCast = true);
 
+	void AddButton(string _name, wstring _bitmapName, D2D1_RECT_F _rect, float _alpha = 1.0f, bool _isActive = true, bool _isRayCast = true);
 
+	void AddToggle(string _name, wstring _bitmapName, D2D1_POINT_2F _pos, D2D1_POINT_2F _scale = { 1.0f, 1.0f },
+				 float _alpha = 1.0f, bool _isActive = true, bool _isRayCast = true);
+
+	void AddToggle(string _name, wstring _bitmapName, D2D1_RECT_F _rect,
+		float _alpha = 1.0f, bool _isActive = true, bool _isRayCast = true);
+
+	void AddToggleGroup(string _name, D2D1_POINT_2F _pos, vector<cUI*> _Toggles);
 
 	void	Update(float _DelayTime = 0);
 	void	Render();

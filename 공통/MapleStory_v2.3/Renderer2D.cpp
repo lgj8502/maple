@@ -24,9 +24,7 @@ void Renderer2D::Render(Matrix3x2F _mat, ID2D1RenderTarget *_pRT)
 	_pRT->DrawBitmap(
 		m_BitmapList[m_BitmapIndex],
 		m_ImgRTList[m_BitmapIndex],
-		m_Alpha,
-		D2D1_BITMAP_INTERPOLATION_MODE_LINEAR,
-		m_ImgRTList[m_BitmapIndex]);
+		m_Alpha);
 }
 
 void Renderer2D::AddBitmap(ID2D1Bitmap* _bitmap)
@@ -42,15 +40,15 @@ void Renderer2D::AddBitmap(ID2D1Bitmap* _bitmap)
 
 	D2D1_RECT_F ImgRT;
 
-	ImgRT.left = -Size.width ;
-	ImgRT.right = +Size.width ;
-	ImgRT.top = -Size.height;
-	ImgRT.bottom = Size.height;
+	ImgRT.left = -Size.width / 2;
+	ImgRT.right = +Size.width / 2;
+	ImgRT.top = -Size.height / 2;
+	ImgRT.bottom = Size.height / 2;
 
 	m_ImgRTList.push_back(ImgRT);
 }
 
-void Renderer2D::ChangeBitmap(int _index)
+void Renderer2D::ChangeBitmap(size_t _index)
 {
 	if (_index >= m_BitmapList.size())
 	{
