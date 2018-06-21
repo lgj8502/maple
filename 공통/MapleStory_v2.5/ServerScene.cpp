@@ -117,6 +117,10 @@ void ServerScene::Init(HWND hWnd)
 //////////////////////////////////////////////////////////////////////////
 
 
+	UI_MGR->AddScrollBar("스크롤바", L"Scrollbar", L"ScrollHandle", { 300,600 });
+
+
+
 	m_player.m_Renderer.AddBitmap(IMG_MGR->GetImage(L"test2"));
 
 

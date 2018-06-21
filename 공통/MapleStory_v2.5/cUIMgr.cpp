@@ -777,20 +777,23 @@ void cUIMgr::AddScrollBar(string _name, wstring _barBitmap, wstring _handleBitma
 	UI_handle->m_Type = UI_SCROLLBAR_HANDLE;
 	UI_handle->m_Name = _name + "_Handle";
 
-	ID2D1Bitmap* AddBitmap = IMG_MGR->GetImage(_handleBitmap);
+	AddBitmap = IMG_MGR->GetImage(_handleBitmap);
 
 	UI_handle->m_Renderer.AddBitmap(AddBitmap);
 
 	D2D1_RECT_F rectBar = UI->m_Renderer.GetImgRT();
 	D2D1_RECT_F rectHandle = UI_handle->m_Renderer.GetImgRT();	
 
-	float maxRange = (rectBar.top - ((rectHandle.bottom - rectHandle.top) / 2.0f)) * _scale.y * 2.0f ;
+	float maxRange = (rectBar.bottom - rectHandle.bottom) * _scale.y * 2.0f ;
 
 	float pos = - maxRange * (_value + 0.5f);
 
-	UI->m_Transform.SetPos({0, pos});
+	UI_handle->m_Transform.SetPos({0, pos});
 
-	UI->m_RayCast = true;
+	UI_handle->m_RayCast = true;
+	UI_handle->m_UseDrag = true;
+
+	SetParent(UI, UI_handle);
 
 }
 
