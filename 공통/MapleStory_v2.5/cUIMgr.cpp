@@ -198,6 +198,45 @@ void cUIMgr::OnMouseUp(POINT _mousePos)
 	if (m_ClickedUI == nullptr) return;
 
 	m_ClickedUI->m_isClicked = false;
+
+	list<cUI*>::iterator Iter;
+
+	for (Iter = m_UIList.end(); Iter != m_UIList.begin(); Iter--)
+	{
+		if (Iter == m_UIList.end()) continue;
+
+		cUI* UI = (*Iter);
+
+		if (UI->m_RayCast == false) continue;
+
+		D2D1_RECT_F rect = UI->m_Renderer.GetImgRT();
+		D2D1_POINT_2F Scale = UI->GetUIScale();
+
+		float posX = UI->m_Transform.m_matSRT.dx;
+		float posY = UI->m_Transform.m_matSRT.dy;
+
+		rect.left = rect.left		*	Scale.x + posX;
+		rect.right = rect.right	*	Scale.x + posX;
+		rect.bottom = rect.bottom   *	Scale.y + posY;
+		rect.top = rect.top		*	Scale.y + posY;
+
+
+		if (RayCastCheck(_mousePos, rect) == true)
+		{
+
+			UI->OnMouseClick();
+
+			return;
+		}
+		else
+		{
+			UI->OnMouseUp();
+		}
+	}
+
+
+
+
 }
 
 void cUIMgr::OnMouseOver(POINT _mousePos)
@@ -210,21 +249,26 @@ void cUIMgr::OnMouseOver(POINT _mousePos)
 	{
 		if (Iter == m_UIList.end()) continue;
 
-		if ((*Iter)->m_RayCast == false) continue;
+		cUI* UI = (*Iter);
 
+		if (UI->m_RayCast == false) continue;
 
-		D2D1_RECT_F rect = (*Iter)->m_Renderer.GetImgRT();
+		D2D1_RECT_F rect = UI->m_Renderer.GetImgRT();
+		D2D1_POINT_2F Scale = UI->GetUIScale();
 
-		rect.left = rect.left		*	(*Iter)->GetUIScale().x + (*Iter)->GetUIPos().x;
-		rect.right = rect.right	*	(*Iter)->GetUIScale().x + (*Iter)->GetUIPos().x;
-		rect.bottom = rect.bottom   *	(*Iter)->GetUIScale().y + (*Iter)->GetUIPos().y;
-		rect.top = rect.top		*	(*Iter)->GetUIScale().y + (*Iter)->GetUIPos().y;
+		float posX = UI->m_Transform.m_matSRT.dx;
+		float posY = UI->m_Transform.m_matSRT.dy;
+
+		rect.left = rect.left		*	Scale.x + posX;
+		rect.right = rect.right	*	Scale.x + posX;
+		rect.bottom = rect.bottom   *	Scale.y + posY;
+		rect.top = rect.top		*	Scale.y + posY;
 
 
 		if (RayCastCheck(_mousePos, rect) == true)
 		{		
 
-			(*Iter)->OnMouseOver();
+			UI->OnMouseOver();
 
 			return;
 		}
@@ -262,18 +306,24 @@ void cUIMgr::OnMouseExit(POINT _mousePos)
 	{
 		if (Iter == m_UIList.end()) continue;
 
-		if ((*Iter)->m_RayCast == false) continue;
+		cUI* UI = (*Iter);
 
-		D2D1_RECT_F rect = (*Iter)->m_Renderer.GetImgRT();
+		if (UI->m_RayCast == false) continue;
 
-		rect.left = rect.left		*	(*Iter)->GetUIScale().x + (*Iter)->GetUIPos().x;
-		rect.right = rect.right	*	(*Iter)->GetUIScale().x + (*Iter)->GetUIPos().x;
-		rect.bottom = rect.bottom   *	(*Iter)->GetUIScale().y + (*Iter)->GetUIPos().y;
-		rect.top = rect.top		*	(*Iter)->GetUIScale().y + (*Iter)->GetUIPos().y;
+		D2D1_RECT_F rect = UI->m_Renderer.GetImgRT();
+		D2D1_POINT_2F Scale = UI->GetUIScale();
+
+		float posX = UI->m_Transform.m_matSRT.dx;
+		float posY = UI->m_Transform.m_matSRT.dy;
+
+		rect.left = rect.left		*	Scale.x + posX;
+		rect.right = rect.right	*	Scale.x + posX;
+		rect.bottom = rect.bottom   *	Scale.y + posY;
+		rect.top = rect.top		*	Scale.y + posY;
 
 		if (RayCastCheck(_mousePos, rect) == false && (*Iter)->m_isMouseOver == true)
 		{
-			(*Iter)->OnMouseExit();
+			UI->OnMouseExit();
 
 			return;
 		}
@@ -696,10 +746,63 @@ void cUIMgr::AddToggleGroup(string _name, D2D1_POINT_2F _pos, vector<cUI*> _Togg
 
 }
 
+void cUIMgr::AddScrollBar(string _name, wstring _barBitmap, wstring _handleBitmap, D2D1_POINT_2F _pos, float _value, D2D1_POINT_2F _scale, float _alpha, bool _isActive, bool _isRayCast)
+{
+	if (FindUI(_name) != nullptr)
+	{
+		MK_LOG("UI 이름 중복 : UI 생성 실패");
+		return;
+	}
+	
+	cUI *UI = new cUI;
+
+	UI->m_Type = UI_SCROLLBAR;
+	UI->m_Name = _name;
+	
+	ID2D1Bitmap* AddBitmap = IMG_MGR->GetImage(_barBitmap);
+
+	UI->m_Renderer.AddBitmap(AddBitmap);
+
+	UI->m_Transform.SetScale(_scale.x, _scale.y);
+	UI->m_Transform.SetPos(_pos);
+	UI->m_Renderer.SetAlpha(_alpha);
+
+	UI->m_isActive = _isActive;
+	UI->m_RayCast = _isRayCast;
+
+	UI->m_Value = _value;
+
+	cUI *UI_handle = new cUI;
+
+	UI_handle->m_Type = UI_SCROLLBAR_HANDLE;
+	UI_handle->m_Name = _name + "_Handle";
+
+	ID2D1Bitmap* AddBitmap = IMG_MGR->GetImage(_handleBitmap);
+
+	UI_handle->m_Renderer.AddBitmap(AddBitmap);
+
+	D2D1_RECT_F rectBar = UI->m_Renderer.GetImgRT();
+	D2D1_RECT_F rectHandle = UI_handle->m_Renderer.GetImgRT();	
+
+	float maxRange = (rectBar.top - ((rectHandle.bottom - rectHandle.top) / 2.0f)) * _scale.y * 2.0f ;
+
+	float pos = - maxRange * (_value + 0.5f);
+
+	UI->m_Transform.SetPos({0, pos});
+
+	UI->m_RayCast = true;
+
+}
+
 void cUIMgr::Update(float _DelayTime)
 {
 	for (auto &i : m_UIList)
 	{
+		if (i->m_parentUI != nullptr)
+		{
+			if (FindParent(i)->m_isActive == false) continue;
+		}
+
 		if (i->m_isActive == false) continue;
 
 		i->Update(_DelayTime);
@@ -710,6 +813,11 @@ void cUIMgr::Render()
 {
 	for (auto &i : m_UIList)
 	{
+		if (i->m_parentUI != nullptr)
+		{
+			if (FindParent(i)->m_isActive == false) continue;
+		}
+
 		if (i->m_isActive == false) continue;
 
 		i->Render();

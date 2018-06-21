@@ -80,8 +80,8 @@ void ServerScene::Init(HWND hWnd)
 
 	// ÅÇ¹Ù ±¸¼º
 	UI_MGR->SetParent("ÅÇ¹Ù", "Åä±Û±×·ì");
-	UI_MGR->AddImage("ÅÇ¹ÙÇìµå", L"ÅÇ¹Ùµå·¡±×", { 0, -300 }, { 0.8f, 0.8f });
-	UI_MGR->SetParent("ÅÇ¹Ù", "ÅÇ¹ÙÇìµå");
+	UI_MGR->AddImage("ÅÇ¹Ù±Û¾¾", L"ÅÇ¹Ù±Û¾¾", { 0, -300 }, { 0.8f, 0.8f });
+	UI_MGR->SetParent("ÅÇ¹Ù", "ÅÇ¹Ù±Û¾¾");
 
 	// Åä±ÛÅ° Å¬¸¯½Ã ³ª¿Ã È­¸é Ç¥½Ã
 	UI_MGR->AddImage("¿ÞÂÊ", L"¿ÞÂÊ", { 0, 100 }, { 0.6f, 0.6f });
@@ -102,6 +102,17 @@ void ServerScene::Init(HWND hWnd)
 	UI_MGR->AddEvent("Åä±Û2", Event_ToggleOff, tog2_4);
 
 	UI_MGR->FindUI("¿À¸¥ÂÊ")->m_isActive = false;
+
+	// Ã¢´Ý±â ¹öÆ° Ãß°¡
+
+	UI_MGR->AddButton("ÅÇ¹Ù´Ý±â", L"Ã¢´Ý±â", { 200,-250 }, { 0.8f, 0.8f });
+
+	UI_MGR->SetParent("ÅÇ¹Ù", "ÅÇ¹Ù´Ý±â");
+
+	auto tabBar_off = [](void) { UI_MGR->FindUI("ÅÇ¹Ù")->m_isActive = false; };
+
+	UI_MGR->AddEvent("ÅÇ¹Ù´Ý±â", Event_OnMouseClick, tabBar_off);
+	
 
 //////////////////////////////////////////////////////////////////////////
 

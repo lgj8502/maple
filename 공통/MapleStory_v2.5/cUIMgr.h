@@ -11,10 +11,12 @@ enum eUI_Type
 	UI_BUTTON,
 	UI_TOGGLE,
 	UI_TOGGLEGROUP,
-	UI_SLIDER,
 	UI_SCROLLBAR,
+	UI_SCROLLBAR_HANDLE,
 	UI_INPUTFIELD,
 	UI_PANEL,
+	UI_SCROLLVIEW,
+	UI_SLIDER,
 };
 
 enum eEvent_Type
@@ -64,7 +66,6 @@ public:
 	cUI* FirstUI();
 	cUI* FindParent(cUI *_UI);
 
-
 	void BitMapAdd(string _name, wstring _bitmapName);
 
 	void OnMouseDown(POINT _mousePos);
@@ -99,6 +100,9 @@ public:
 		float _alpha = 1.0f, bool _isActive = true, bool _isRayCast = true);
 
 	void AddToggleGroup(string _name, D2D1_POINT_2F _pos, vector<cUI*> _Toggles);
+
+	void AddScrollBar(string _name, wstring _barBitmap, wstring _handleBitmap, D2D1_POINT_2F _pos, float _value = 0.0f, D2D1_POINT_2F _scale = { 1.0f, 1.0f },
+		         float _alpha = 1.0f, bool _isActive = true, bool _isRayCast = false);
 
 	void	Update(float _DelayTime = 0);
 	void	Render();

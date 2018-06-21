@@ -34,6 +34,9 @@ public:
 	//toggle ¿ë
 	bool m_isOn = false;
 
+	//Scrollbar¿ë
+	float m_Value = 0.0f;
+
 
 	// UI_TEXT ¿ë
 	Text2D m_Font;

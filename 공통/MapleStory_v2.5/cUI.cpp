@@ -15,6 +15,11 @@ void cUI::TextRender()
 {
 	if (m_isActive == false) return;
 
+	if (m_parentUI != nullptr)
+	{
+		if (m_parentUI->m_isActive == false) return;
+	}
+
 	D2D1_COLOR_F oldColor = IMG_MGR->GetBrush()->GetColor();
 
 	IMG_MGR->GetBrush()->SetColor(m_FontColor);
@@ -38,6 +43,11 @@ void cUI::TextRender()
 
 void cUI::OnMouseDown()
 {
+	if (m_parentUI != nullptr)
+	{
+		if (m_parentUI->m_isActive == false) return;
+	}
+
 	if (m_isActive == false) return;
 	if (m_RayCast == false)	return;
 
@@ -72,6 +82,11 @@ void cUI::OnMouseDown()
 
 void cUI::OnMouseUp()
 {
+	if (m_parentUI != nullptr)
+	{
+		if (m_parentUI->m_isActive == false) return;
+	}
+
 	if (m_isActive == false) return;
 	if (m_RayCast == false)	return;
 
@@ -85,6 +100,10 @@ void cUI::OnMouseUp()
 
 void cUI::OnMouseClick()
 {
+	if (m_parentUI != nullptr)
+	{
+		if (m_parentUI->m_isActive == false) return;
+	}
 	if (m_isActive == false) return;
 	if (m_RayCast == false)	return;
 
@@ -99,6 +118,10 @@ void cUI::OnMouseClick()
 
 void cUI::OnMouseOver()
 {
+	if (m_parentUI != nullptr)
+	{
+		if (m_parentUI->m_isActive == false) return;
+	}
 	if (m_isActive == false) return;
 	if (m_RayCast == false)	return;
 
@@ -114,6 +137,10 @@ void cUI::OnMouseOver()
 
 void cUI::OnMouseExit()
 {
+	if (m_parentUI != nullptr)
+	{
+		if (m_parentUI->m_isActive == false) return;
+	}
 	if (m_isActive == false) return;
 	if (m_RayCast == false)	return;
 
@@ -129,6 +156,10 @@ void cUI::OnMouseExit()
 
 void cUI::OnMouseDrag()
 {
+	if (m_parentUI != nullptr)
+	{
+		if (m_parentUI->m_isActive == false) return;
+	}
 	if (m_isActive == false) return;
 	if (m_RayCast == false)	return;
 	if (m_isClicked == false)	return;
@@ -149,6 +180,10 @@ void cUI::OnMouseDrag()
 
 void cUI::ToggleOn()
 {
+	if (m_parentUI != nullptr)
+	{
+		if (m_parentUI->m_isActive == false) return;
+	}
 	for (auto &i : m_ToggleOn)
 	{
 		i();
@@ -157,6 +192,10 @@ void cUI::ToggleOn()
 
 void cUI::ToggleOff()
 {
+	if (m_parentUI != nullptr)
+	{
+		if (m_parentUI->m_isActive == false) return;
+	}
 	for (auto &i : m_ToggleOff)
 	{
 		i();
