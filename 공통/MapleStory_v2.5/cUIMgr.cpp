@@ -770,7 +770,7 @@ void cUIMgr::AddScrollBar(string _name, wstring _barBitmap, wstring _handleBitma
 	UI->m_isActive = _isActive;
 	UI->m_RayCast = _isRayCast;
 
-	UI->m_Value = _value;
+	UI->m_Value = _value;	
 
 	cUI *UI_handle = new cUI;
 
@@ -784,9 +784,12 @@ void cUIMgr::AddScrollBar(string _name, wstring _barBitmap, wstring _handleBitma
 	D2D1_RECT_F rectBar = UI->m_Renderer.GetImgRT();
 	D2D1_RECT_F rectHandle = UI_handle->m_Renderer.GetImgRT();	
 
-	float maxRange = (rectBar.bottom - rectHandle.bottom) * _scale.y * 2.0f ;
+	float maxRange = (rectBar.bottom - rectHandle.bottom) * 2.0f ;
 
-	float pos = - maxRange * (_value + 0.5f);
+	float pos =  -maxRange * (0.5f - _value);
+
+	UI_handle->m_MinPos = -maxRange * 0.5f;
+	UI_handle->m_MaxPos = maxRange * 0.5f;
 
 	UI_handle->m_Transform.SetPos({0, pos});
 

@@ -112,15 +112,14 @@ void ServerScene::Init(HWND hWnd)
 	auto tabBar_off = [](void) { UI_MGR->FindUI("ÅÇ¹Ù")->m_isActive = false; };
 
 	UI_MGR->AddEvent("ÅÇ¹Ù´İ±â", Event_OnMouseClick, tabBar_off);
+
+	UI_MGR->AddScrollBar("½ºÅ©·Ñ¹Ù", L"Scrollbar", L"ScrollHandle", { 200,100 }, 0.9f, { 0.8f, 1.2f });
 	
+	UI_MGR->SetParent("ÅÇ¹Ù", "½ºÅ©·Ñ¹Ù");
+	
+	////////////////////////////////////////////////////////////////////////
 
-//////////////////////////////////////////////////////////////////////////
-
-
-	UI_MGR->AddScrollBar("½ºÅ©·Ñ¹Ù", L"Scrollbar", L"ScrollHandle", { 300,600 });
-
-
-
+	
 	m_player.m_Renderer.AddBitmap(IMG_MGR->GetImage(L"test2"));
 
 

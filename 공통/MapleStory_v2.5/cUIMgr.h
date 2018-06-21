@@ -102,7 +102,7 @@ public:
 	void AddToggleGroup(string _name, D2D1_POINT_2F _pos, vector<cUI*> _Toggles);
 
 	void AddScrollBar(string _name, wstring _barBitmap, wstring _handleBitmap, D2D1_POINT_2F _pos, float _value = 0.0f, D2D1_POINT_2F _scale = { 1.0f, 1.0f },
-		         float _alpha = 1.0f, bool _isActive = true, bool _isRayCast = false);
+		         float _alpha = 1.0f, bool _isActive = true, bool _isRayCast = true);
 
 	void	Update(float _DelayTime = 0);
 	void	Render();

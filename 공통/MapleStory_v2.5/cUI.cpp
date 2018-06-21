@@ -53,7 +53,6 @@ void cUI::OnMouseDown()
 
 	m_isClicked = true;
 
-
 	UI_MGR->DrawFirst(this);
 
 	if (m_Type == UI_TOGGLE)
@@ -70,12 +69,46 @@ void cUI::OnMouseDown()
 		i();
 	}
 
-	if (m_UseDrag == true)
-	{
-		m_ClickPos = m_Transform.GetPos();
+	m_ClickPos = m_Transform.GetPos();
 
-		m_ClickPos.x -= (float)UI_MGR->GetMousePoint().x;
-		m_ClickPos.y -= (float)UI_MGR->GetMousePoint().y;
+
+	if (m_parentUI != nullptr)
+	{
+		m_ClickPos.x *= m_parentUI->m_Transform.m_matSRT.m11;
+		m_ClickPos.y *= m_parentUI->m_Transform.m_matSRT.m22;
+	}
+
+
+
+	m_ClickPos.x -= (float)UI_MGR->GetMousePoint().x;
+	m_ClickPos.y -= (float)UI_MGR->GetMousePoint().y;
+
+	float posY = m_Transform.m_matSRT.dy;
+
+	if (m_Type == UI_SCROLLBAR)
+	{
+		D2D1_POINT_2F sonPos = m_SonUI[0]->m_Transform.GetPos();
+
+		if (posY - (float)UI_MGR->GetMousePoint().y > 0)
+		{
+			m_Value -= 0.3f;
+
+			if (m_Value < 0.0f)
+			{
+				m_Value = 0.0f;
+			}
+		}
+		else
+		{
+			m_Value += 0.3f;
+
+			if (m_Value > 1.0f)
+			{
+				m_Value = 1.0f;
+			}
+		}
+		sonPos.y = m_SonUI[0]->m_MinPos + (m_SonUI[0]->m_MaxPos * 2.0f) * m_Value;
+		m_SonUI[0]->m_Transform.SetPos(sonPos);
 	}
 
 }
@@ -165,12 +198,46 @@ void cUI::OnMouseDrag()
 	if (m_isClicked == false)	return;
 	if (m_UseDrag == false)	return;
 
-	POINT moustPos = UI_MGR->GetMousePoint();
+	POINT mousePos = UI_MGR->GetMousePoint();
 
-	float x = (float)moustPos.x + m_ClickPos.x;
-	float y = (float)moustPos.y + m_ClickPos.y;
 
-	m_Transform.SetPos(x, y);
+	float y = (float)mousePos.y + m_ClickPos.y;
+
+	if (m_parentUI != nullptr)
+	{
+		y /= m_parentUI->m_Transform.m_matSRT.m22;
+	}
+
+
+	if (m_Type == UI_SCROLLBAR_HANDLE)
+	{
+		float x = m_Transform.GetPos().x;
+
+		if (y < m_MinPos)
+		{
+			y = m_MinPos;
+		}
+
+		if (y > m_MaxPos)
+		{
+			y = m_MaxPos;
+		}
+		m_Transform.SetPos(x, y);		
+
+		m_parentUI->m_Value = (y + m_MaxPos) / (m_MaxPos * 2.0f);
+
+	}
+	else
+	{
+		float x = (float)mousePos.x + m_ClickPos.x;
+
+		if (m_parentUI != nullptr)
+		{
+			x /= m_parentUI->m_Transform.m_matSRT.m11;
+		}
+
+		m_Transform.SetPos(x, y);
+	}
 
 	for (auto &i : m_OnMouseDrag)
 	{
