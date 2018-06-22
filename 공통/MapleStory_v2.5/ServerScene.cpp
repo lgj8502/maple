@@ -113,10 +113,27 @@ void ServerScene::Init(HWND hWnd)
 
 	UI_MGR->AddEvent("탭바닫기", Event_OnMouseClick, tabBar_off);
 
+	// 스크롤바 추가
 	UI_MGR->AddScrollBar("스크롤바", L"Scrollbar", L"ScrollHandle", { 200,100 }, 0.9f, { 0.8f, 1.2f });
-	
+
 	UI_MGR->SetParent("탭바", "스크롤바");
-	
+
+	UI_MGR->AddText("스크롤값", "값", { 0, 110 }, ColorF(1, 1, 1));
+
+	UI_MGR->SetParent("탭바", "스크롤값");
+
+
+	auto scrollvalue = [](void) { 
+		char value[5] = "";
+
+		sprintf_s(value, 5, "%.2f", UI_MGR->FindUI("스크롤바")->m_Value);
+
+		UI_MGR->FindUI("스크롤값")->m_Text = value;
+	  };
+
+	UI_MGR->AddEvent("스크롤값", Event_Update, scrollvalue);
+
+
 	////////////////////////////////////////////////////////////////////////
 
 	

@@ -54,6 +54,7 @@ public:
 	vector<FUNC> m_OnMouseDrag;
 	vector<FUNC> m_ToggleOn;
 	vector<FUNC> m_ToggleOff;
+	vector<FUNC> m_Update;
 
 public:
 	cUI();
@@ -61,6 +62,8 @@ public:
 
 	// UI_TEXT ¿ë
 	void TextRender();
+
+	void AddUpdate();
 
 	void OnMouseDown();
 	void OnMouseUp();

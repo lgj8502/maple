@@ -41,6 +41,14 @@ void cUI::TextRender()
 	IMG_MGR->GetBrush()->SetColor(oldColor);
 }
 
+void cUI::AddUpdate()
+{
+	for (auto &i : m_Update)
+	{
+		i();
+	}
+}
+
 void cUI::OnMouseDown()
 {
 	if (m_parentUI != nullptr)
@@ -64,10 +72,6 @@ void cUI::OnMouseDown()
 		}
 	}
 
-	for (auto &i : m_OnMouseDown)
-	{
-		i();
-	}
 
 	m_ClickPos = m_Transform.GetPos();
 
@@ -78,16 +82,16 @@ void cUI::OnMouseDown()
 		m_ClickPos.y *= m_parentUI->m_Transform.m_matSRT.m22;
 	}
 
-
-
 	m_ClickPos.x -= (float)UI_MGR->GetMousePoint().x;
 	m_ClickPos.y -= (float)UI_MGR->GetMousePoint().y;
 
-	float posY = m_Transform.m_matSRT.dy;
+	
 
 	if (m_Type == UI_SCROLLBAR)
 	{
 		D2D1_POINT_2F sonPos = m_SonUI[0]->m_Transform.GetPos();
+
+		float posY = m_SonUI[0]->m_Transform.m_matSRT.dy;
 
 		if (posY - (float)UI_MGR->GetMousePoint().y > 0)
 		{
@@ -109,6 +113,11 @@ void cUI::OnMouseDown()
 		}
 		sonPos.y = m_SonUI[0]->m_MinPos + (m_SonUI[0]->m_MaxPos * 2.0f) * m_Value;
 		m_SonUI[0]->m_Transform.SetPos(sonPos);
+	}
+
+	for (auto &i : m_OnMouseDown)
+	{
+		i();
 	}
 
 }

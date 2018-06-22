@@ -358,6 +358,8 @@ void cUIMgr::AddEvent(string _name, eEvent_Type _Type, FUNC _func)
 		break;
 	case Event_ToggleOff:		FindUI(_name)->m_ToggleOff.push_back(_func);
 		break;
+	case Event_Update:		    FindUI(_name)->m_Update.push_back(_func);
+		break;
 
 	default: 
 	{
@@ -775,7 +777,7 @@ void cUIMgr::AddScrollBar(string _name, wstring _barBitmap, wstring _handleBitma
 	cUI *UI_handle = new cUI;
 
 	UI_handle->m_Type = UI_SCROLLBAR_HANDLE;
-	UI_handle->m_Name = _name + "_Handle";
+	UI_handle->m_Name = _name + "_H";
 
 	AddBitmap = IMG_MGR->GetImage(_handleBitmap);
 
@@ -812,6 +814,10 @@ void cUIMgr::Update(float _DelayTime)
 		if (i->m_isActive == false) continue;
 
 		i->Update(_DelayTime);
+
+		i->AddUpdate();
+
+		
 	}
 }
 

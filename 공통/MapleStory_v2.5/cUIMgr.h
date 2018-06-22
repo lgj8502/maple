@@ -29,6 +29,7 @@ enum eEvent_Type
 	Event_OnMouseDrag,
 	Event_ToggleOn,
 	Event_ToggleOff,
+	Event_Update,
 };
 
 class cUIMgr : public TemplateSingleton<cUIMgr>
