@@ -33,9 +33,16 @@ public:
 
 	void	SetScale(float _x, float _y)
 	{
-		m_Scale.x = _x / 2;
-		m_Scale.y = _y / 2;
+		m_Scale.x = _x;
+		m_Scale.y = _y;
 	}
+	D2D1_POINT_2F GetScale()
+	{
+		return m_Scale;
+	}
+
+	
+
 	void	SetPos(float _x, float _y)
 	{
 		m_Pos.x = _x;
@@ -54,6 +61,7 @@ public:
 	{
 		return m_Angle;
 	}
+
 };
 
 

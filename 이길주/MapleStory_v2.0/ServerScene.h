@@ -2,6 +2,7 @@
 
 #include "TEST.h"
 #include "cUI.h"
+#include "cPlayer.h"
 
 class ServerScene : public Scene
 {
@@ -11,7 +12,13 @@ class ServerScene : public Scene
 
 	TEST m_test;
 
+	cPlayer m_player;
 
+	bool m_isClicked = false;
+
+	//  IME ¿ë
+	string m_szBuf;
+	char m_szMixingString[3] = "";
 
 public:
 

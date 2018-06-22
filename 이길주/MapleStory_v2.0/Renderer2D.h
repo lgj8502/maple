@@ -16,7 +16,7 @@ class Renderer2D
 	
 private:
 
-	D2D1_RECT_F				m_ImgRT = {};	
+	vector<D2D1_RECT_F>		m_ImgRTList;
 
 	vector<ID2D1Bitmap*>    m_BitmapList;
 
@@ -29,6 +29,7 @@ public:
 	void Render(Matrix3x2F _mat, ID2D1RenderTarget *_pRT);
 
 	void AddBitmap(ID2D1Bitmap* _bitmap);
+	void ChangeBitmap(size_t _index);
 
 	inline void ClearBitmap()
 	{
@@ -42,11 +43,12 @@ public:
 
 	inline void SetImgRT(D2D1_RECT_F _rt)
 	{
-		m_ImgRT = _rt;
+		m_ImgRTList[m_BitmapIndex] = _rt;
+
 	}
 	inline D2D1_RECT_F GetImgRT()
 	{
-		return m_ImgRT;
+		return m_ImgRTList[m_BitmapIndex];
 	}
 
 
