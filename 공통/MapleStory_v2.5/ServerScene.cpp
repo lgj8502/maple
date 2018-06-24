@@ -14,7 +14,7 @@ void ServerScene::Init(HWND hWnd)
 
 	UI_MGR->AddImage("플레이어", L"test1", { 300,300 }, { 0.3f, 0.3f });
 
-	UI_MGR->AddText("Son", "자식", { 30,0 }, ColorF(ColorF::Black), L"고딕", 50.0f);
+	UI_MGR->AddText("Son", "자식", { 100, 0 }, ColorF(ColorF::Black), L"고딕", 100.0f);
 
 	UI_MGR->SetParent("플레이어", "Son");
 
@@ -113,12 +113,13 @@ void ServerScene::Init(HWND hWnd)
 
 	UI_MGR->AddEvent("탭바닫기", Event_OnMouseClick, tabBar_off);
 
-	// 스크롤바 추가
+
+	////////////////// 스크롤바 추가 ////////////////////////////////////
 	UI_MGR->AddScrollBar("스크롤바", L"Scrollbar", L"ScrollHandle", { 200,100 }, 0.9f, { 0.8f, 1.2f });
 
 	UI_MGR->SetParent("탭바", "스크롤바");
 
-	UI_MGR->AddText("스크롤값", "값", { 0, 110 }, ColorF(1, 1, 1));
+	UI_MGR->AddText("스크롤값", "값", { -20, 140 }, ColorF(ColorF::White));
 
 	UI_MGR->SetParent("탭바", "스크롤값");
 
@@ -134,19 +135,24 @@ void ServerScene::Init(HWND hWnd)
 	UI_MGR->AddEvent("스크롤값", Event_Update, scrollvalue);
 
 
-	////////////////////////////////////////////////////////////////////////
+	////////////////// 인풋 필드 //////////////////////////////////////////////////////
 
 	
+	UI_MGR->AddInputField("인풋필드", L"InputField", { 200,400 }, { 0.5f , 0.7f });
+
+	UI_MGR->FindUI("인풋필드")->m_UseDrag = true;
+
+	//vUI.clear();
+	//vUI.push_back(UI_MGR->FindUI("인풋필드"));
+
+	//UI_MGR->AddPanel("판넬", { 200,200 }, vUI);
+
 	m_player.m_Renderer.AddBitmap(IMG_MGR->GetImage(L"test2"));
-
-
-
+	
 }
 
 void ServerScene::Update(float _DelayTime)
 {
-
-
 	UI_MGR->Update(_DelayTime);
 
 	m_player.Update(_DelayTime);
@@ -154,13 +160,16 @@ void ServerScene::Update(float _DelayTime)
 
 void ServerScene::Render()
 {
-
-
 	UI_MGR->Render();
 
 	m_player.Render();
+}
 
+void ServerScene::SendText()
+{
+	string sText = m_szBuf + m_szMixingString;
 
+	UI_MGR->m_text = sText;
 }
 
 LRESULT ServerScene::MyWndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
@@ -179,7 +188,7 @@ LRESULT ServerScene::MyWndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM l
 		else
 		{
 			UI_MGR->OnMouseOver(m_MousePos);
-			UI_MGR->OnMouseExit(m_MousePos);			
+			UI_MGR->OnMouseExit(m_MousePos);
 		}
 
 	}break;
@@ -201,7 +210,114 @@ LRESULT ServerScene::MyWndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM l
 		m_isClicked = false;
 
 	}break;
+
+	// IME 용
+
+	case WM_CHAR:
+	{
+		if (UI_MGR->m_InputFiled == nullptr) break;
+
+
+
+		char cWord = (char)wParam;
+
+		//	백스페이스 버튼 클릭
+		if (cWord == VK_BACK &&
+			m_szMixingString[0] == NULL)
+		{
+			int nLen = m_szBuf.length();
+
+			if (nLen > 0)
+			{
+				//	지워야할 문자가 조합체 인경우
+				if (m_szBuf[nLen - 1] < 0)
+				{
+					m_szBuf = m_szBuf.substr(0, nLen - 2);
+				}
+
+				//	일반 문자를 지울 경우
+				else
+				{
+					m_szBuf = m_szBuf.substr(0, nLen - 1);
+				}
+			}
+		}
+		//	엔터
+		else if (cWord == VK_RETURN)
+		{
+			//CheckText = m_szBuf;
+			m_szBuf = "";
+			m_szMixingString[0] = NULL;
+
+		}
+		else
+		{
+			if (m_szBuf.size() > m_maxText)
+			{
+				break;
+			}
+
+			m_szBuf += (char)wParam;
+		}
+
+		SendText();
+
+
+	}break;
+
+	//	조합이 완전히 끝난 경우 조합중인 문자열을 비운다.
+	case WM_IME_ENDCOMPOSITION:
+	{
+		if (UI_MGR->m_InputFiled == nullptr) break;
+
+		if (m_szBuf.size() >= m_maxText)
+		{
+			break;
+		}
+
+		m_szMixingString[0] = NULL;
+
+		SendText();
 	}
+	break;
+
+	//	IME 안에 있는 조합에 대한 내용을 얻을 수 있다.
+	case WM_IME_COMPOSITION:
+	{
+		if (UI_MGR->m_InputFiled == nullptr) break;
+
+		if (m_szBuf.size() >= m_maxText)
+		{
+			break;
+		}
+		//	조합중일 경우 현재 조합중인 단어를 얻어온다.
+		if (lParam & GCS_COMPSTR)
+		{
+			m_szMixingString[0] = CHAR(wParam >> 8);
+			m_szMixingString[1] = CHAR(wParam);
+		}
+
+		//	조합이 끝난 경우	WM_IME_CHAR 와 같은 역활
+		else if (lParam & GCS_RESULTSTR)
+		{
+			char szFinalString[3];
+
+			szFinalString[0] = CHAR(wParam >> 8);
+			szFinalString[1] = CHAR(wParam);
+			szFinalString[2] = NULL;
+
+			//	완성된 문자열을 추가 한다.
+			m_szBuf += szFinalString;
+		}
+		SendText();
+		//	기본 IME 에게 전달하지 않기 위해 바로 프로시저를 끝낸다.
+		return 0;
+	}
+	break;
+
+	}
+
+
 
 	return (DefWindowProcA(hWnd, iMessage, wParam, lParam));
 }

@@ -46,13 +46,18 @@ class cUIMgr : public TemplateSingleton<cUIMgr>
 
 	cUI* m_ClickedUI = nullptr;
 
+	float m_time = 0.0f;
+
 private:
 
 	bool	RayCastCheck(POINT _Ray, D2D1_RECT_F _object);
 	void	Destroy();
-	
 
 public:
+
+	// IME ¿ë
+	cUI* m_InputFiled = nullptr;
+	string m_text;
 
 	~cUIMgr();
 
@@ -82,7 +87,7 @@ public:
 	void SetParent(cUI* _Parent, cUI* _Son);
 
 	void AddText(string _name, string _text, D2D1_POINT_2F _pos, D2D1_COLOR_F _FontColor = ColorF(1, 1, 1), wstring _FontName = L"°íµñ", 
-		         float _FontSize = 20.0f,  bool _isActive = true, bool _isRayCast = false);
+		         float _FontSize = 40.0f,  bool _isActive = true, bool _isRayCast = false);
 
 	void AddImage(string _name, wstring _bitmapName, D2D1_POINT_2F _pos, D2D1_POINT_2F _scale = { 1.0f, 1.0f }, 
 		         float _alpha = 1.0f, bool _isActive = true, bool _isRayCast = false);
@@ -104,6 +109,11 @@ public:
 
 	void AddScrollBar(string _name, wstring _barBitmap, wstring _handleBitmap, D2D1_POINT_2F _pos, float _value = 0.0f, D2D1_POINT_2F _scale = { 1.0f, 1.0f },
 		         float _alpha = 1.0f, bool _isActive = true, bool _isRayCast = true);
+
+	void AddInputField(string _name, wstring _bitmapName, D2D1_POINT_2F _pos, D2D1_POINT_2F _scale = { 1.0f, 1.0f }, D2D1_COLOR_F _FontColor = ColorF(ColorF::White),
+		wstring _FontName = L"°íµñ",  float _alpha = 0.7f, float _FontSize = 30.0f, bool _isActive = true, bool _isRayCast = true);
+
+	void AddPanel(string _name, D2D1_POINT_2F _pos, vector<cUI*> _list);
 
 	void	Update(float _DelayTime = 0);
 	void	Render();

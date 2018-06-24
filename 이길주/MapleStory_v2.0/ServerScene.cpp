@@ -136,7 +136,7 @@ void ServerScene::Init(HWND hWnd)
 
 	//////////////¿Œ«≤« µÂ øπΩ√//////////////////////////////////////////////////////////
 
-	UI_MGR->AddInputField("¿Œ«≤« µÂ", L"InputField", { 300,600 }, { 0.5 , 1 }, ColorF(ColorF::White), L"±º∏≤", 20.0f, 0.7f);
+	//UI_MGR->AddInputField("¿Œ«≤« µÂ", L"InputField", { 300,600 }, { 0.5 , 1 }, ColorF(ColorF::White), L"±º∏≤", 20.0f, 0.7f);
 
 
 
