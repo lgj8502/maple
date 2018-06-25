@@ -354,23 +354,23 @@ void cUIMgr::AddEvent(string _name, eEvent_Type _Type, FUNC _func)
 
 	switch (_Type)
 	{
-	case Event_OnMouseDown:		FindUI(_name)->m_OnMouseDown.push_back(_func);
+	case ADDEVENT_OnMouseDown:		FindUI(_name)->m_OnMouseDown.push_back(_func);
 		break;
-	case Event_OnMouseUP:		FindUI(_name)->m_OnMouseUp.push_back(_func);
+	case ADDEVENT_OnMouseUP:		FindUI(_name)->m_OnMouseUp.push_back(_func);
 		break;
-	case Event_OnMouseClick:	FindUI(_name)->m_OnMouseClick.push_back(_func);
+	case ADDEVENT_OnMouseClick:	FindUI(_name)->m_OnMouseClick.push_back(_func);
 		break;
-	case Event_OnMouseOver:     FindUI(_name)->m_OnMouseOver.push_back(_func);
+	case ADDEVENT_OnMouseOver:     FindUI(_name)->m_OnMouseOver.push_back(_func);
 		break;
-	case Event_OnMouseExit:		FindUI(_name)->m_OnMouseExit.push_back(_func);
+	case ADDEVENT_OnMouseExit:		FindUI(_name)->m_OnMouseExit.push_back(_func);
 		break;
-	case Event_OnMouseDrag:     FindUI(_name)->m_OnMouseDrag.push_back(_func);
+	case ADDEVENT_OnMouseDrag:     FindUI(_name)->m_OnMouseDrag.push_back(_func);
 		break;
-	case Event_ToggleOn :		FindUI(_name)->m_ToggleOn.push_back(_func);
+	case ADDEVENT_ToggleOn :		FindUI(_name)->m_ToggleOn.push_back(_func);
 		break;
-	case Event_ToggleOff:		FindUI(_name)->m_ToggleOff.push_back(_func);
+	case ADDEVENT_ToggleOff:		FindUI(_name)->m_ToggleOff.push_back(_func);
 		break;
-	case Event_Update:		    FindUI(_name)->m_Update.push_back(_func);
+	case ADDEVENT_Update:		    FindUI(_name)->m_Update.push_back(_func);
 		break;
 
 	default: 

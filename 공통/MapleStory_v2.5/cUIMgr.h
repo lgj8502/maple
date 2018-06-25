@@ -21,15 +21,15 @@ enum eUI_Type
 
 enum eEvent_Type
 {
-	Event_OnMouseDown,
-	Event_OnMouseUP,
-	Event_OnMouseClick,
-	Event_OnMouseOver,
-	Event_OnMouseExit,
-	Event_OnMouseDrag,
-	Event_ToggleOn,
-	Event_ToggleOff,
-	Event_Update,
+	ADDEVENT_OnMouseDown,
+	ADDEVENT_OnMouseUP,
+	ADDEVENT_OnMouseClick,
+	ADDEVENT_OnMouseOver,
+	ADDEVENT_OnMouseExit,
+	ADDEVENT_OnMouseDrag,
+	ADDEVENT_ToggleOn,
+	ADDEVENT_ToggleOff,
+	ADDEVENT_Update,
 };
 
 class cUIMgr : public TemplateSingleton<cUIMgr>
