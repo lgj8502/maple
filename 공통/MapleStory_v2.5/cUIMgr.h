@@ -57,6 +57,7 @@ public:
 
 	// IME ¿ë
 	cUI* m_InputFiled = nullptr;
+	bool m_isChating = false;
 	string m_text;
 
 	~cUIMgr();

@@ -59,22 +59,6 @@ void cUI::OnMouseDown()
 
 	UI_MGR->DrawFirst(this);
 
-	if (m_Type == UI_INPUTFIELD)
-	{
-		UI_MGR->m_InputFiled = this;
-		return;
-	}
-	else
-	{
-		if (UI_MGR->m_InputFiled != nullptr)
-		{
-			UI_MGR->m_InputFiled->m_FontColor.a = 0.0f;
-
-			UI_MGR->m_InputFiled = nullptr;
-		}
-		
-	}
-
 	if (m_Type == UI_TOGGLE)
 	{
 		if (m_isOn == true)
@@ -97,7 +81,19 @@ void cUI::OnMouseDown()
 	m_ClickPos.x -= (float)UI_MGR->GetMousePoint().x;
 	m_ClickPos.y -= (float)UI_MGR->GetMousePoint().y;
 
-	
+	if (m_Type == UI_INPUTFIELD)
+	{
+		UI_MGR->m_isChating = true;
+		UI_MGR->m_InputFiled = this;
+	}
+	else
+	{
+		if (UI_MGR->m_isChating == true)
+		{
+			UI_MGR->m_isChating = false;
+		}
+
+	}	
 
 	if (m_Type == UI_SCROLLBAR)
 	{

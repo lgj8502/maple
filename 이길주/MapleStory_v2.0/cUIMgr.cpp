@@ -130,6 +130,7 @@ void cUIMgr::OnMouseDown(POINT _mousePos)
 		cUI* UI = (*Iter);
 
 		if (UI->m_RayCast == false) continue;
+		if (FindParent(UI)->m_isActive == false) continue;
 
 		D2D1_RECT_F rect = UI->m_Renderer.GetImgRT();
 		D2D1_POINT_2F Scale = UI->GetUIScale();
@@ -192,7 +193,12 @@ void cUIMgr::OnMouseDown(POINT _mousePos)
 		return;		
 	}
 
-	m_isTyping = false;
+	if (UI_MGR->m_isChating == true)
+	{
+		//UI_MGR->m_InputFiled->m_FontColor.a = 0.0f;
+		UI_MGR->m_isChating = false;
+	}
+
 }
 
 void cUIMgr::OnMouseUp(POINT _mousePos)
@@ -210,6 +216,7 @@ void cUIMgr::OnMouseUp(POINT _mousePos)
 		cUI* UI = (*Iter);
 
 		if (UI->m_RayCast == false) continue;
+		if (FindParent(UI)->m_isActive == false) continue;
 
 		D2D1_RECT_F rect = UI->m_Renderer.GetImgRT();
 		D2D1_POINT_2F Scale = UI->GetUIScale();
@@ -254,6 +261,7 @@ void cUIMgr::OnMouseOver(POINT _mousePos)
 		cUI* UI = (*Iter);
 
 		if (UI->m_RayCast == false) continue;
+		if (FindParent(UI)->m_isActive == false) continue;
 
 		D2D1_RECT_F rect = UI->m_Renderer.GetImgRT();
 		D2D1_POINT_2F Scale = UI->GetUIScale();
@@ -271,6 +279,9 @@ void cUIMgr::OnMouseOver(POINT _mousePos)
 		{		
 
 			UI->OnMouseOver();
+			
+
+
 
 			return;
 		}
@@ -311,6 +322,7 @@ void cUIMgr::OnMouseExit(POINT _mousePos)
 		cUI* UI = (*Iter);
 
 		if (UI->m_RayCast == false) continue;
+		if (FindParent(UI)->m_isActive == false) continue;
 
 		D2D1_RECT_F rect = UI->m_Renderer.GetImgRT();
 		D2D1_POINT_2F Scale = UI->GetUIScale();
@@ -331,8 +343,6 @@ void cUIMgr::OnMouseExit(POINT _mousePos)
 		}
 	}
 }
-
-
 
 void cUIMgr::AddEvent(string _name, eEvent_Type _Type, FUNC _func)
 {
@@ -428,30 +438,6 @@ void cUIMgr::SetParent(string _Parent, string _Son)
 
 	SonUI->m_Transform.m_pParent = &(ParentUI->m_Transform);
 
-
-	//m_UIList.remove(SonUI);
-
-	//list<cUI*>::iterator Iter;
-
-	//Iter = m_UIList.begin();
-
-	//for (auto &i : m_UIList)
-	//{
-	//	if ((*Iter)->m_Name == _Parent)
-	//	{
-	//		break;
-	//	}
-
-	//	Iter++;
-	//}
-	//
-	//m_UIList.insert(Iter, SonUI);
-
-
-
-
-
-
 }
 
 void cUIMgr::SetParent(cUI * _Parent, cUI * _Son)
@@ -506,23 +492,6 @@ void cUIMgr::SetParent(cUI * _Parent, cUI * _Son)
 
 	_Son->m_Transform.m_pParent = &(_Parent->m_Transform);
 
-	//m_UIList.remove(_Parent);
-
-	//list<cUI*>::iterator Iter;
-
-	//Iter = m_UIList.begin();
-
-	//for (auto &i : m_UIList)
-	//{
-	//	if (*Iter == _Son)
-	//	{
-	//		break;
-	//	}
-
-	//	Iter++;
-	//}
-	//
-	//m_UIList.insert(Iter, _Parent);
 }
 
 void cUIMgr::AddText(string _name, string _text, D2D1_POINT_2F _pos, D2D1_COLOR_F _FontColor, wstring _FontName,
@@ -774,14 +743,12 @@ void cUIMgr::AddScrollBar(string _name, wstring _barBitmap, wstring _handleBitma
 	UI->m_isActive = _isActive;
 	UI->m_RayCast = _isRayCast;
 
-	UI->m_Value = _value;
-
-	m_UIList.push_back(UI);
+	UI->m_Value = _value;	
 
 	cUI *UI_handle = new cUI;
 
 	UI_handle->m_Type = UI_SCROLLBAR_HANDLE;
-	UI_handle->m_Name = _name + "_S";
+	UI_handle->m_Name = _name + "_H";
 
 	AddBitmap = IMG_MGR->GetImage(_handleBitmap);
 
@@ -802,13 +769,12 @@ void cUIMgr::AddScrollBar(string _name, wstring _barBitmap, wstring _handleBitma
 	UI_handle->m_RayCast = true;
 	UI_handle->m_UseDrag = true;
 
-	m_UIList.push_back(UI_handle);
-
 	SetParent(UI, UI_handle);
+
 }
 
-void cUIMgr::AddInputField(string _name, wstring _bitmapName, D2D1_POINT_2F _pos, D2D1_POINT_2F _scale, D2D1_COLOR_F _FontColor, 
-	                        wstring _FontName ,	float _FontSize , float _alpha, bool _isActive, bool _isRayCast)
+void cUIMgr::AddInputField(string _name, wstring _bitmapName, D2D1_POINT_2F _pos, D2D1_POINT_2F _scale, D2D1_COLOR_F _FontColor, wstring _FontName, 
+	                       float _alpha, float _FontSize, bool _isActive, bool _isRayCast)
 {
 	if (FindUI(_name) != nullptr)
 	{
@@ -832,27 +798,61 @@ void cUIMgr::AddInputField(string _name, wstring _bitmapName, D2D1_POINT_2F _pos
 	UI->m_isActive = _isActive;
 	UI->m_RayCast = _isRayCast;
 
+	UI->m_Text = "│";
+	UI->m_FontSize = _FontSize;
+	UI->m_FontColor = ColorF(1,1,1,0);
+	UI->m_FontName = _FontName;
+	UI->m_Font.SetFont(UI->m_FontName.c_str());
+
 	m_UIList.push_back(UI);
+
+	m_InputFiled = UI;
 
 	cUI *UI_Text = new cUI;
 
 	UI_Text->m_Type = UI_TEXT;
 	UI_Text->m_Name = _name + "_S";
-	UI_Text->m_Text = "텍스트";
+	UI_Text->m_Text = "";
 	UI_Text->m_FontSize = _FontSize;
 	UI_Text->m_FontColor = _FontColor;
 	UI_Text->m_FontName = _FontName;
 
-	UI_Text->m_Font.SetFont(UI_Text->m_FontName.c_str());
-	UI_Text->m_Font.m_WidthAlignment = DWRITE_TEXT_ALIGNMENT_LEADING;	
 
-	UI_Text->m_Transform.SetPos( (UI->m_Renderer.GetImgRT().left) * _scale.x + 10, 0);
+	UI_Text->m_Font.SetFont(UI_Text->m_FontName.c_str());
+
+	UI_Text->m_Transform.SetPos((UI->m_Renderer.GetImgRT().left) * _scale.x + 10, 0);
 
 	m_UIList.push_back(UI_Text);
 
 
 	SetParent(UI, UI_Text);
+}
 
+void cUIMgr::AddPanel(string _name, D2D1_POINT_2F _pos, vector<cUI*> _list)
+{
+	if (FindUI(_name) != nullptr)
+	{
+		MK_LOG("UI 이름 중복 : UI 생성 실패");
+
+		return;
+	}
+
+	cUI *UI = new cUI;
+
+	UI->m_Type = UI_PANEL;
+	UI->m_Name = _name;
+
+	UI->m_Transform.SetPos(_pos);
+
+	UI->m_RayCast = false;
+
+	m_UIList.push_back(UI);
+
+
+	for (auto &i : _list)
+	{
+		SetParent(UI, i);
+	}
 }
 
 void cUIMgr::Update(float _DelayTime)
@@ -868,10 +868,31 @@ void cUIMgr::Update(float _DelayTime)
 
 		i->Update(_DelayTime);
 
-		i->AddUpdate();
-
-		
+		i->AddUpdate();		
 	}
+
+	if (m_isChating == true)
+	{
+		m_InputFiled->m_SonUI[0]->m_Text = m_text;
+
+		m_time += _DelayTime;
+
+		m_InputFiled->m_FontColor.a = 1.0f;
+
+		if (m_time > 0.5f)
+		{
+			m_InputFiled->m_FontColor.a = 0.0f;
+		}
+
+		if (m_time > 1.0f)
+		{
+			m_InputFiled->m_FontColor.a = 1.0f;
+
+			m_time = 0.0f;
+		}
+
+
+	}	
 }
 
 void cUIMgr::Render()
@@ -883,13 +904,17 @@ void cUIMgr::Render()
 			if (FindParent(i)->m_isActive == false) continue;
 		}
 
-		if (i->m_isActive == false) continue;
-
-		i->Render();
+		if (i->m_isActive == false) continue;		
 
 		if (i->m_Type == UI_TEXT)
 		{
 			i->TextRender();
+			continue;
 		}
+
+		i->Render();
+
+		if (i->m_Type == UI_INPUTFIELD && m_isChating == true ) i->TextRender();
 	}
 }
+

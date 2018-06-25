@@ -156,6 +156,14 @@ void ServerScene::Update(float _DelayTime)
 	UI_MGR->Update(_DelayTime);
 
 	m_player.Update(_DelayTime);
+
+	if (GetAsyncKeyState(VK_RETURN) & 0x8000)
+	{
+		if (UI_MGR->m_isChating == false)
+		{
+			UI_MGR->m_isChating = true;
+		}
+	}
 }
 
 void ServerScene::Render()
@@ -215,7 +223,7 @@ LRESULT ServerScene::MyWndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM l
 
 	case WM_CHAR:
 	{
-		if (UI_MGR->m_InputFiled == nullptr) break;
+		if (UI_MGR->m_isChating == false) break;
 
 
 
@@ -268,7 +276,7 @@ LRESULT ServerScene::MyWndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM l
 	//	조합이 완전히 끝난 경우 조합중인 문자열을 비운다.
 	case WM_IME_ENDCOMPOSITION:
 	{
-		if (UI_MGR->m_InputFiled == nullptr) break;
+		if (UI_MGR->m_isChating == false) break;
 
 		if (m_szBuf.size() >= m_maxText)
 		{
@@ -284,7 +292,7 @@ LRESULT ServerScene::MyWndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM l
 	//	IME 안에 있는 조합에 대한 내용을 얻을 수 있다.
 	case WM_IME_COMPOSITION:
 	{
-		if (UI_MGR->m_InputFiled == nullptr) break;
+		if (UI_MGR->m_isChating == false) break;
 
 		if (m_szBuf.size() >= m_maxText)
 		{

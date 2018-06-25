@@ -15,28 +15,29 @@ void cUI::TextRender()
 {
 	if (m_isActive == false) return;
 
-	if (m_parentUI != nullptr)
-	{
-		if (m_parentUI->m_isActive == false) return;
-	}
-
 	D2D1_COLOR_F oldColor = IMG_MGR->GetBrush()->GetColor();
 
 	IMG_MGR->GetBrush()->SetColor(m_FontColor);
 
-	if (m_Transform.m_pParent != nullptr)
+	D2D1_POINT_2F pos = {};
+
+	pos = m_Transform.GetPos();
+
+	if (m_parentUI != nullptr)
 	{
-		D2D1_POINT_2F pos = m_Transform.m_pParent->GetPos();
-
-		pos.x += m_Transform.GetPos().x;
-		pos.y += m_Transform.GetPos().y;
-
-		m_Font.TextRender(m_pRT, IMG_MGR->GetBrush(), m_FontSize, pos, m_Text.c_str());
+		pos.x /= m_parentUI->m_Transform.m_matSRT.m11;
+		pos.y /= m_parentUI->m_Transform.m_matSRT.m22;
 	}
-	else
+
+	if (m_Type == UI_INPUTFIELD )
 	{
-		m_Font.TextRender(m_pRT, IMG_MGR->GetBrush(), m_FontSize, m_Transform.GetPos(), m_Text.c_str());
-	}	
+
+		pos.x = m_Renderer.GetImgRT().left + 5 + (m_SonUI[0]->m_Font.m_Metrics.width);
+		pos.y = 0;
+
+	}
+
+	m_Font.TextLayOut(m_pRT, IMG_MGR->GetBrush(), m_FontSize, pos, m_Text.c_str());		
 
 	IMG_MGR->GetBrush()->SetColor(oldColor);
 }
@@ -51,13 +52,8 @@ void cUI::AddUpdate()
 
 void cUI::OnMouseDown()
 {
-	if (m_parentUI != nullptr)
-	{
-		if (m_parentUI->m_isActive == false) UI_MGR->m_isTyping = false; return;
-	}
-
-	if (m_isActive == false) UI_MGR->m_isTyping = false; return;
-	if (m_RayCast == false)	 UI_MGR->m_isTyping = false; return;
+	if (m_isActive == false) return;
+	if (m_RayCast == false)	return;
 
 	m_isClicked = true;
 
@@ -68,7 +64,6 @@ void cUI::OnMouseDown()
 		if (m_isOn == true)
 		{
 			ToggleOn();
-			UI_MGR->m_isTyping = false;
 			return;
 		}
 	}
@@ -86,7 +81,19 @@ void cUI::OnMouseDown()
 	m_ClickPos.x -= (float)UI_MGR->GetMousePoint().x;
 	m_ClickPos.y -= (float)UI_MGR->GetMousePoint().y;
 
-	
+	if (m_Type == UI_INPUTFIELD)
+	{
+		UI_MGR->m_isChating = true;
+		UI_MGR->m_InputFiled = this;
+	}
+	else
+	{
+		if (UI_MGR->m_isChating == true)
+		{
+			UI_MGR->m_isChating = false;
+		}
+
+	}	
 
 	if (m_Type == UI_SCROLLBAR)
 	{
@@ -116,10 +123,7 @@ void cUI::OnMouseDown()
 		m_SonUI[0]->m_Transform.SetPos(sonPos);
 	}
 
-	if (m_Type == UI_INPUTFIELD)
-	{
-		UI_MGR->m_isTyping = true;
-	}
+
 
 	for (auto &i : m_OnMouseDown)
 	{
@@ -130,11 +134,6 @@ void cUI::OnMouseDown()
 
 void cUI::OnMouseUp()
 {
-	if (m_parentUI != nullptr)
-	{
-		if (m_parentUI->m_isActive == false) return;
-	}
-
 	if (m_isActive == false) return;
 	if (m_RayCast == false)	return;
 
@@ -148,10 +147,7 @@ void cUI::OnMouseUp()
 
 void cUI::OnMouseClick()
 {
-	if (m_parentUI != nullptr)
-	{
-		if (m_parentUI->m_isActive == false) return;
-	}
+
 	if (m_isActive == false) return;
 	if (m_RayCast == false)	return;
 
@@ -166,10 +162,7 @@ void cUI::OnMouseClick()
 
 void cUI::OnMouseOver()
 {
-	if (m_parentUI != nullptr)
-	{
-		if (m_parentUI->m_isActive == false) return;
-	}
+
 	if (m_isActive == false) return;
 	if (m_RayCast == false)	return;
 
@@ -185,10 +178,7 @@ void cUI::OnMouseOver()
 
 void cUI::OnMouseExit()
 {
-	if (m_parentUI != nullptr)
-	{
-		if (m_parentUI->m_isActive == false) return;
-	}
+
 	if (m_isActive == false) return;
 	if (m_RayCast == false)	return;
 
@@ -204,10 +194,7 @@ void cUI::OnMouseExit()
 
 void cUI::OnMouseDrag()
 {
-	if (m_parentUI != nullptr)
-	{
-		if (m_parentUI->m_isActive == false) return;
-	}
+
 	if (m_isActive == false) return;
 	if (m_RayCast == false)	return;
 	if (m_isClicked == false)	return;

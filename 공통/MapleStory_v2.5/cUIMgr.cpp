@@ -193,10 +193,10 @@ void cUIMgr::OnMouseDown(POINT _mousePos)
 		return;		
 	}
 
-	if (UI_MGR->m_InputFiled != nullptr)
+	if (UI_MGR->m_isChating == true)
 	{
-		UI_MGR->m_InputFiled->m_FontColor.a = 0.0f;
-		UI_MGR->m_InputFiled = nullptr;
+		//UI_MGR->m_InputFiled->m_FontColor.a = 0.0f;
+		UI_MGR->m_isChating = false;
 	}
 
 }
@@ -803,11 +803,10 @@ void cUIMgr::AddInputField(string _name, wstring _bitmapName, D2D1_POINT_2F _pos
 	UI->m_FontColor = ColorF(1,1,1,0);
 	UI->m_FontName = _FontName;
 	UI->m_Font.SetFont(UI->m_FontName.c_str());
-	//UI->m_Font.m_WidthAlignment = DWRITE_TEXT_ALIGNMENT_CENTER;
-	//UI->m_Font.m_HeightAlignment = DWRITE_PARAGRAPH_ALIGNMENT_CENTER;
-
 
 	m_UIList.push_back(UI);
+
+	m_InputFiled = UI;
 
 	cUI *UI_Text = new cUI;
 
@@ -820,8 +819,7 @@ void cUIMgr::AddInputField(string _name, wstring _bitmapName, D2D1_POINT_2F _pos
 
 
 	UI_Text->m_Font.SetFont(UI_Text->m_FontName.c_str());
-	//UI_Text->m_Font.m_WidthAlignment = DWRITE_TEXT_ALIGNMENT_LEADING;
-	//UI_Text->m_Font.m_HeightAlignment = DWRITE_PARAGRAPH_ALIGNMENT_CENTER;
+
 	UI_Text->m_Transform.SetPos((UI->m_Renderer.GetImgRT().left) * _scale.x + 10, 0);
 
 	m_UIList.push_back(UI_Text);
@@ -873,7 +871,7 @@ void cUIMgr::Update(float _DelayTime)
 		i->AddUpdate();		
 	}
 
-	if (m_InputFiled != nullptr)
+	if (m_isChating == true)
 	{
 		m_InputFiled->m_SonUI[0]->m_Text = m_text;
 
@@ -916,7 +914,7 @@ void cUIMgr::Render()
 
 		i->Render();
 
-		if (i->m_Type == UI_INPUTFIELD) i->TextRender();
+		if (i->m_Type == UI_INPUTFIELD && m_isChating == true ) i->TextRender();
 	}
 }
 
