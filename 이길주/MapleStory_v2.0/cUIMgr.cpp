@@ -354,23 +354,23 @@ void cUIMgr::AddEvent(string _name, eEvent_Type _Type, FUNC _func)
 
 	switch (_Type)
 	{
-	case Event_OnMouseDown:		FindUI(_name)->m_OnMouseDown.push_back(_func);
+	case ADDEVENT_OnMouseDown:		FindUI(_name)->m_OnMouseDown.push_back(_func);
 		break;
-	case Event_OnMouseUP:		FindUI(_name)->m_OnMouseUp.push_back(_func);
+	case ADDEVENT_OnMouseUP:		FindUI(_name)->m_OnMouseUp.push_back(_func);
 		break;
-	case Event_OnMouseClick:	FindUI(_name)->m_OnMouseClick.push_back(_func);
+	case ADDEVENT_OnMouseClick:	FindUI(_name)->m_OnMouseClick.push_back(_func);
 		break;
-	case Event_OnMouseOver:     FindUI(_name)->m_OnMouseOver.push_back(_func);
+	case ADDEVENT_OnMouseOver:     FindUI(_name)->m_OnMouseOver.push_back(_func);
 		break;
-	case Event_OnMouseExit:		FindUI(_name)->m_OnMouseExit.push_back(_func);
+	case ADDEVENT_OnMouseExit:		FindUI(_name)->m_OnMouseExit.push_back(_func);
 		break;
-	case Event_OnMouseDrag:     FindUI(_name)->m_OnMouseDrag.push_back(_func);
+	case ADDEVENT_OnMouseDrag:     FindUI(_name)->m_OnMouseDrag.push_back(_func);
 		break;
-	case Event_ToggleOn :		FindUI(_name)->m_ToggleOn.push_back(_func);
+	case ADDEVENT_ToggleOn :		FindUI(_name)->m_ToggleOn.push_back(_func);
 		break;
-	case Event_ToggleOff:		FindUI(_name)->m_ToggleOff.push_back(_func);
+	case ADDEVENT_ToggleOff:		FindUI(_name)->m_ToggleOff.push_back(_func);
 		break;
-	case Event_Update:		    FindUI(_name)->m_Update.push_back(_func);
+	case ADDEVENT_Update:		    FindUI(_name)->m_Update.push_back(_func);
 		break;
 
 	default: 
@@ -695,7 +695,7 @@ void cUIMgr::AddToggle(string _name, wstring _bitmapName, D2D1_RECT_F _rect, flo
 
 
 
-void cUIMgr::AddToggleGroup(string _name, D2D1_POINT_2F _pos, vector<cUI*> _Toggles)
+void cUIMgr::AddToggleGroup(string _name, D2D1_POINT_2F _pos, int _count, cUI* _UI, ...)
 {
 	if (FindUI(_name) != nullptr)
 	{
@@ -711,10 +711,15 @@ void cUIMgr::AddToggleGroup(string _name, D2D1_POINT_2F _pos, vector<cUI*> _Togg
 
 	m_UIList.push_back(UI);
 
-	for (auto &i : _Toggles)
+	va_list arglist;
+	va_start(arglist, _count);
+
+	for (int i = 0; i < _count; i++)
 	{
-		SetParent(UI, i);
+		SetParent(UI, va_arg(arglist, cUI*));
 	}
+
+	va_end(arglist);
 
 
 }
@@ -828,7 +833,7 @@ void cUIMgr::AddInputField(string _name, wstring _bitmapName, D2D1_POINT_2F _pos
 	SetParent(UI, UI_Text);
 }
 
-void cUIMgr::AddPanel(string _name, D2D1_POINT_2F _pos, vector<cUI*> _list)
+void cUIMgr::AddPanel(string _name, D2D1_POINT_2F _pos,  int _count, cUI* _UI, ...)
 {
 	if (FindUI(_name) != nullptr)
 	{
@@ -848,11 +853,17 @@ void cUIMgr::AddPanel(string _name, D2D1_POINT_2F _pos, vector<cUI*> _list)
 
 	m_UIList.push_back(UI);
 
+	va_list arglist;
+	va_start(arglist, _count);
 
-	for (auto &i : _list)
+	for (int i = 0; i < _count; i++)
 	{
-		SetParent(UI, i);
+		SetParent(UI, va_arg(arglist, cUI*));
 	}
+
+	va_end(arglist);
+
+
 }
 
 void cUIMgr::Update(float _DelayTime)

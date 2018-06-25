@@ -21,15 +21,15 @@ enum eUI_Type
 
 enum eEvent_Type
 {
-	Event_OnMouseDown,
-	Event_OnMouseUP,
-	Event_OnMouseClick,
-	Event_OnMouseOver,
-	Event_OnMouseExit,
-	Event_OnMouseDrag,
-	Event_ToggleOn,
-	Event_ToggleOff,
-	Event_Update,
+	ADDEVENT_OnMouseDown,
+	ADDEVENT_OnMouseUP,
+	ADDEVENT_OnMouseClick,
+	ADDEVENT_OnMouseOver,
+	ADDEVENT_OnMouseExit,
+	ADDEVENT_OnMouseDrag,
+	ADDEVENT_ToggleOn,
+	ADDEVENT_ToggleOff,
+	ADDEVENT_Update,
 };
 
 class cUIMgr : public TemplateSingleton<cUIMgr>
@@ -106,7 +106,7 @@ public:
 	void AddToggle(string _name, wstring _bitmapName, D2D1_RECT_F _rect,
 		float _alpha = 1.0f, bool _isActive = true, bool _isRayCast = true);
 
-	void AddToggleGroup(string _name, D2D1_POINT_2F _pos, vector<cUI*> _Toggles);
+	void AddToggleGroup(string _name, D2D1_POINT_2F _pos, int _count, cUI* _UI, ...);
 
 	void AddScrollBar(string _name, wstring _barBitmap, wstring _handleBitmap, D2D1_POINT_2F _pos, float _value = 0.0f, D2D1_POINT_2F _scale = { 1.0f, 1.0f },
 		         float _alpha = 1.0f, bool _isActive = true, bool _isRayCast = true);
@@ -114,7 +114,7 @@ public:
 	void AddInputField(string _name, wstring _bitmapName, D2D1_POINT_2F _pos, D2D1_POINT_2F _scale = { 1.0f, 1.0f }, D2D1_COLOR_F _FontColor = ColorF(ColorF::White),
 		wstring _FontName = L"°íµñ",  float _alpha = 0.7f, float _FontSize = 30.0f, bool _isActive = true, bool _isRayCast = true);
 
-	void AddPanel(string _name, D2D1_POINT_2F _pos, vector<cUI*> _list);
+	void AddPanel(string _name, D2D1_POINT_2F _pos, int _count ,cUI* _UI, ...);
 
 	void	Update(float _DelayTime = 0);
 	void	Render();

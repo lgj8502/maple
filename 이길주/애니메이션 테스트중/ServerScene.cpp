@@ -146,7 +146,7 @@ void ServerScene::Update(float _DelayTime)
 {
 	UI_MGR->Update(_DelayTime);
 
-	m_player.Update(_DelayTime);
+	m_player.Update(_DelayTime);	
 
 	if (GetAsyncKeyState(VK_RETURN) & 0x8000)
 	{

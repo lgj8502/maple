@@ -29,9 +29,9 @@ void ServerScene::Init(HWND hWnd)
 	auto Func3 = [](void) { UI_MGR->FindUI("플레이어")->m_Renderer.ChangeBitmap(0); };
 
 
-	//UI_MGR->AddEvent("플레이어", Event_OnMouseDown, Func1);
-	UI_MGR->AddEvent("플레이어", Event_OnMouseOver, Func2);
-	UI_MGR->AddEvent("플레이어", Event_OnMouseExit, Func3);
+	//UI_MGR->AddEvent("플레이어", ADDEVENT_OnMouseDown, Func1);
+	UI_MGR->AddEvent("플레이어", ADDEVENT_OnMouseOver, Func2);
+	UI_MGR->AddEvent("플레이어", ADDEVENT_OnMouseExit, Func3);
 
 
 	UI_MGR->AddButton("베라서버", L"bera", { 100,500 }, { 1.0f, 1.0f });
@@ -54,22 +54,16 @@ void ServerScene::Init(HWND hWnd)
 	auto tog2_1 = [](void) { UI_MGR->FindUI("토글2")->m_Renderer.ChangeBitmap(1); };
 	auto tog2_2 = [](void) { UI_MGR->FindUI("토글2")->m_Renderer.ChangeBitmap(0); };
 
-	UI_MGR->AddEvent("토글1", Event_ToggleOn, tog1_1);
-	UI_MGR->AddEvent("토글1", Event_ToggleOff, tog1_2);
-	UI_MGR->AddEvent("토글2", Event_ToggleOn, tog2_1);
-	UI_MGR->AddEvent("토글2", Event_ToggleOff, tog2_2);
+	UI_MGR->AddEvent("토글1", ADDEVENT_ToggleOn, tog1_1);
+	UI_MGR->AddEvent("토글1", ADDEVENT_ToggleOff, tog1_2);
+	UI_MGR->AddEvent("토글2", ADDEVENT_ToggleOn, tog2_1);
+	UI_MGR->AddEvent("토글2", ADDEVENT_ToggleOff, tog2_2);
 
 	// 토글1 버튼은 활성화
 	UI_MGR->FindUI("토글1")->m_isOn = true;
 	UI_MGR->FindUI("토글1")->m_Renderer.ChangeBitmap(1);
 
-	// 토글 그룹 지정
-	vector<cUI*> vUI;
-
-	vUI.push_back(UI_MGR->FindUI("토글1"));
-	vUI.push_back(UI_MGR->FindUI("토글2"));
-
-	UI_MGR->AddToggleGroup("토글그룹", { 0, 0 }, vUI);
+	UI_MGR->AddToggleGroup("토글그룹", { 0, 0 }, 2, UI_MGR->FindUI("토글1"), UI_MGR->FindUI("토글2"));
 
 	// 탭바 몸체 추가
 	UI_MGR->AddImage("탭바", L"TabBar", { 600,200 }, { 0.5f, 0.5f });
@@ -95,11 +89,11 @@ void ServerScene::Init(HWND hWnd)
 	auto tog2_3 = [](void) { UI_MGR->FindUI("오른쪽")->m_isActive = true; };
 	auto tog2_4 = [](void) { UI_MGR->FindUI("오른쪽")->m_isActive = false; };
 
-	UI_MGR->AddEvent("토글1", Event_ToggleOn, tog1_3);
-	UI_MGR->AddEvent("토글1", Event_ToggleOff, tog1_4);
+	UI_MGR->AddEvent("토글1", ADDEVENT_ToggleOn, tog1_3);
+	UI_MGR->AddEvent("토글1", ADDEVENT_ToggleOff, tog1_4);
 
-	UI_MGR->AddEvent("토글2", Event_ToggleOn, tog2_3);
-	UI_MGR->AddEvent("토글2", Event_ToggleOff, tog2_4);
+	UI_MGR->AddEvent("토글2", ADDEVENT_ToggleOn, tog2_3);
+	UI_MGR->AddEvent("토글2", ADDEVENT_ToggleOff, tog2_4);
 
 	UI_MGR->FindUI("오른쪽")->m_isActive = false;
 
@@ -111,7 +105,7 @@ void ServerScene::Init(HWND hWnd)
 
 	auto tabBar_off = [](void) { UI_MGR->FindUI("탭바")->m_isActive = false; };
 
-	UI_MGR->AddEvent("탭바닫기", Event_OnMouseClick, tabBar_off);
+	UI_MGR->AddEvent("탭바닫기", ADDEVENT_OnMouseClick, tabBar_off);
 
 
 	////////////////// 스크롤바 추가 ////////////////////////////////////
@@ -132,7 +126,7 @@ void ServerScene::Init(HWND hWnd)
 		UI_MGR->FindUI("스크롤값")->m_Text = value;
 	  };
 
-	UI_MGR->AddEvent("스크롤값", Event_Update, scrollvalue);
+	UI_MGR->AddEvent("스크롤값", ADDEVENT_Update, scrollvalue);
 
 
 	////////////////// 인풋 필드 //////////////////////////////////////////////////////
@@ -142,10 +136,7 @@ void ServerScene::Init(HWND hWnd)
 
 	UI_MGR->FindUI("인풋필드")->m_UseDrag = true;
 
-	//vUI.clear();
-	//vUI.push_back(UI_MGR->FindUI("인풋필드"));
-
-	//UI_MGR->AddPanel("판넬", { 200,200 }, vUI);
+	UI_MGR->AddPanel("판넬", { 200,200 }, 1 ,UI_MGR->FindUI("인풋필드"));
 
 	m_player.m_Renderer.AddBitmap(IMG_MGR->GetImage(L"test2"));
 	
