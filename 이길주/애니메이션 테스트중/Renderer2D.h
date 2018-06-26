@@ -63,7 +63,9 @@ public:
 	void AddBitmap(ID2D1Bitmap* _bitmap);
 	void ChangeBitmap(size_t _index);
 
-	void AddAnimation(int _state, int _start, int _count, vector<float> _timelist);
+	//void AddAnimation(int _state, int _start, int _count, vector<float> _timelist);
+
+	void AddAnimation(int _state, int _start, int _end, double _time, ...);
 
 	void AniUpdate(float _DelayTime = 0.0f);
 

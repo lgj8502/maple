@@ -2,10 +2,10 @@
 
 enum ePlayerState
 {
-	PS_IDLE,
-	PS_MOVE,
-	PS_JUMP,
-	PS_ATTACK,
+	PLAYER_IDLE,
+	PLAYER_MOVE,
+	PLAYER_JUMP,
+	PLAYER_ATTACK,
 
 };
 

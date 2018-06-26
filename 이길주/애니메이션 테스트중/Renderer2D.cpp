@@ -58,18 +58,28 @@ void Renderer2D::ChangeBitmap(size_t _index)
 
 	m_BitmapIndex = _index;
 }
-
-void Renderer2D::AddAnimation(int _state, int _start, int _count, vector<float> _timelist)
+//void Renderer2D::AddAnimation(int _state, int _start, int _count, vector<float> _timelist)
+void Renderer2D::AddAnimation(int _state, int _start, int _end, double _time, ...)
 {
 	Ani_Info Ani;
 
 	Ani.m_FrameStart = _start;
 
-	Ani.m_FrameEnd = _start + _count -1 ;
+	Ani.m_FrameEnd = _end ;
 
-	Ani.m_Count = _count;
+	Ani.m_Count = _end - _start + 1;
 
-	Ani.m_Timer = _timelist;
+	va_list arglist;
+	va_start(arglist, _end);
+
+	for (int i = 0; i < Ani.m_Count; i++)
+	{
+		Ani.m_Timer.push_back((float)va_arg(arglist, double));		
+	}
+
+	va_end(arglist);
+
+	//Ani.m_Timer = _timelist;
 
 	float result = 0.0f;
 

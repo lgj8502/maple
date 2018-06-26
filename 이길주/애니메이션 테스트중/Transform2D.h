@@ -36,6 +36,12 @@ public:
 		m_Scale.x = _x;
 		m_Scale.y = _y;
 	}
+
+	void	SetScale(D2D1_POINT_2F _scale)
+	{
+		m_Scale = _scale;
+	}
+
 	D2D1_POINT_2F GetScale()
 	{
 		return m_Scale;

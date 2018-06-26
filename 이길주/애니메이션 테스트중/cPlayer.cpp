@@ -4,17 +4,21 @@
 
 cPlayer::cPlayer()
 {
+	m_Renderer.m_State = PLAYER_IDLE;
+
 	m_Renderer.AddBitmap(IMG_MGR->GetImage(L"IDLE1"));
 	m_Renderer.AddBitmap(IMG_MGR->GetImage(L"IDLE2"));
 
-	m_Renderer.m_State = PS_IDLE;
+	m_Renderer.AddAnimation(PLAYER_IDLE, 0, 1, 0.5, 0.5);
 
-	vector<float> timelist;
+	m_Renderer.AddBitmap(IMG_MGR->GetImage(L"Move1"));
+	m_Renderer.AddBitmap(IMG_MGR->GetImage(L"Move2"));
+	m_Renderer.AddBitmap(IMG_MGR->GetImage(L"Move3"));
 
-	timelist.push_back(0.5f);
-	timelist.push_back(0.5f);
 
-	m_Renderer.AddAnimation(PS_IDLE, 0, 2, timelist);
+	m_Renderer.AddAnimation(PLAYER_MOVE, 2, 4, 0.2, 0.2, 0.2);
+
+
 
 	m_Transform.SetPos({ 300,500 });
 

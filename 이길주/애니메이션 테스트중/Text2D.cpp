@@ -171,8 +171,8 @@ VOID Text2D::TextLayOut(ID2D1RenderTarget *_pRT, ID2D1Brush *_pBrush, D2D1_POINT
 		wBuf,
 		lstrlenW(wBuf),
 		m_pTextFormat,
-		WIN_WIDTH,
-		WIN_HEIGHT,
+		(float)WIN_WIDTH,
+		(float)WIN_HEIGHT,
 		&m_pTextLayOut);
 
 	_Pos.y -= WIN_HEIGHT / 2;
@@ -220,8 +220,8 @@ VOID Text2D::TextLayOut(ID2D1RenderTarget * _pRT, ID2D1Brush * _pBrush, float _S
 		wBuf,
 		lstrlenW(wBuf),
 		m_pTextFormat,
-		WIN_WIDTH,
-		WIN_HEIGHT,
+		(float)WIN_WIDTH,
+		(float)WIN_HEIGHT,
 		&m_pTextLayOut);
 
 	DWRITE_TEXT_RANGE range;

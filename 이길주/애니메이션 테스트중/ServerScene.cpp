@@ -152,7 +152,54 @@ void ServerScene::Update(float _DelayTime)
 		{
 			UI_MGR->m_isChating = true;
 		}
-	}	
+	}
+
+	if (GetAsyncKeyState(VK_LEFT) & 0x8000)
+	{
+		D2D1_POINT_2F scale = m_player.m_Transform.GetScale();
+
+		if (scale.x < 0)
+		{
+			scale.x *= -1;
+			m_player.m_Transform.SetScale(scale.x, scale.y);
+		}
+
+
+
+		D2D1_POINT_2F pos = m_player.m_Transform.GetPos();
+
+		pos.x--;
+
+		m_player.m_Transform.SetPos(pos);
+
+
+		m_player.m_Renderer.m_State = PLAYER_MOVE;
+	}
+
+	if (GetAsyncKeyState(VK_RIGHT) & 0x8000)
+	{
+		D2D1_POINT_2F scale = m_player.m_Transform.GetScale();
+
+		if (scale.x > 0)
+		{
+			scale.x *= -1;
+			m_player.m_Transform.SetScale(scale.x, scale.y);
+		}
+
+		D2D1_POINT_2F pos = m_player.m_Transform.GetPos();
+
+		pos.x++;
+
+		m_player.m_Transform.SetPos(pos);
+
+		m_player.m_Renderer.m_State = PLAYER_MOVE;
+	}
+
+	if (GetAsyncKeyState(VK_DOWN) & 0x8000)
+	{
+		m_player.m_Renderer.m_State = PLAYER_IDLE;
+	}
+
 	
 }
 
