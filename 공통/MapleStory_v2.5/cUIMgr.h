@@ -51,7 +51,7 @@ class cUIMgr : public TemplateSingleton<cUIMgr>
 private:
 
 	bool	RayCastCheck(POINT _Ray, D2D1_RECT_F _object);
-	void	Destroy();
+
 
 public:
 
@@ -59,6 +59,8 @@ public:
 	cUI* m_InputFiled = nullptr;
 	bool m_isChating = false;
 	string m_text;
+
+	void	Destroy();
 
 	~cUIMgr();
 
@@ -112,12 +114,12 @@ public:
 		         float _alpha = 1.0f, bool _isActive = true, bool _isRayCast = true);
 
 	void AddInputField(string _name, wstring _bitmapName, D2D1_POINT_2F _pos, D2D1_POINT_2F _scale = { 1.0f, 1.0f }, D2D1_COLOR_F _FontColor = ColorF(ColorF::White),
-		wstring _FontName = L"°íµñ",  float _alpha = 0.7f, float _FontSize = 30.0f, bool _isActive = true, bool _isRayCast = true);
+		wstring _FontName = L"°íµñ",  float _alpha = 1.0f, float _FontSize = 30.0f, bool _isActive = true, bool _isRayCast = true);
 
 	void AddPanel(string _name, D2D1_POINT_2F _pos, int _count ,cUI* _UI, ...);
 
-	void	Update(float _DelayTime = 0);
-	void	Render();
+	void Update(float _DelayTime = 0);
+	void Render();
 
 
 };

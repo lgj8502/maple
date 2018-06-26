@@ -17,8 +17,6 @@ void Renderer2D::Render(Matrix3x2F _mat, ID2D1RenderTarget *_pRT)
 {	
 	if (m_BitmapList[m_BitmapIndex] == nullptr)	return;
 
-
-
 	_pRT->SetTransform(_mat);
 
 	_pRT->DrawBitmap(

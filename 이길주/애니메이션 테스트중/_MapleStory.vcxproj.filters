@@ -49,9 +49,6 @@
     <Filter Include="소스 파일\D2D\Object2D">
       <UniqueIdentifier>{d81dbf17-6352-48e5-a346-8d97341448c1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\D2D\TEST">
-      <UniqueIdentifier>{70d48ddb-bd13-4870-9f54-b423f88feaab}</UniqueIdentifier>
-    </Filter>
     <Filter Include="소스 파일\Manager">
       <UniqueIdentifier>{730d9e8a-7717-4579-821e-9409f582c06d}</UniqueIdentifier>
     </Filter>
@@ -122,9 +119,6 @@
     </ClInclude>
     <ClInclude Include="Renderer2D.h">
       <Filter>소스 파일\D2D\Object2D</Filter>
-    </ClInclude>
-    <ClInclude Include="TEST.h">
-      <Filter>소스 파일\D2D\TEST</Filter>
     </ClInclude>
     <ClInclude Include="cLogMgr.h">
       <Filter>소스 파일\Manager</Filter>
@@ -199,9 +193,6 @@
     </ClCompile>
     <ClCompile Include="Renderer2D.cpp">
       <Filter>소스 파일\D2D\Object2D</Filter>
-    </ClCompile>
-    <ClCompile Include="TEST.cpp">
-      <Filter>소스 파일\D2D\TEST</Filter>
     </ClCompile>
     <ClCompile Include="cLogMgr.cpp">
       <Filter>소스 파일\Manager</Filter>

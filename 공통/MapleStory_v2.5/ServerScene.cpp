@@ -137,8 +137,6 @@ void ServerScene::Init(HWND hWnd)
 	UI_MGR->FindUI("ÀÎÇ²ÇÊµå")->m_UseDrag = true;
 
 	UI_MGR->AddPanel("ÆÇ³Ú", { 200,200 }, 1 ,UI_MGR->FindUI("ÀÎÇ²ÇÊµå"));
-
-	m_player.m_Renderer.AddBitmap(IMG_MGR->GetImage(L"test2"));
 	
 }
 
@@ -146,7 +144,7 @@ void ServerScene::Update(float _DelayTime)
 {
 	UI_MGR->Update(_DelayTime);
 
-	m_player.Update(_DelayTime);
+	m_player.Update(_DelayTime);	
 
 	if (GetAsyncKeyState(VK_RETURN) & 0x8000)
 	{
@@ -155,6 +153,54 @@ void ServerScene::Update(float _DelayTime)
 			UI_MGR->m_isChating = true;
 		}
 	}
+
+	if (GetAsyncKeyState(VK_LEFT) & 0x8000)
+	{
+		D2D1_POINT_2F scale = m_player.m_Transform.GetScale();
+
+		if (scale.x < 0)
+		{
+			scale.x *= -1;
+			m_player.m_Transform.SetScale(scale.x, scale.y);
+		}
+
+
+
+		D2D1_POINT_2F pos = m_player.m_Transform.GetPos();
+
+		pos.x--;
+
+		m_player.m_Transform.SetPos(pos);
+
+
+		m_player.m_Renderer.m_State = PLAYER_MOVE;
+	}
+
+	if (GetAsyncKeyState(VK_RIGHT) & 0x8000)
+	{
+		D2D1_POINT_2F scale = m_player.m_Transform.GetScale();
+
+		if (scale.x > 0)
+		{
+			scale.x *= -1;
+			m_player.m_Transform.SetScale(scale.x, scale.y);
+		}
+
+		D2D1_POINT_2F pos = m_player.m_Transform.GetPos();
+
+		pos.x++;
+
+		m_player.m_Transform.SetPos(pos);
+
+		m_player.m_Renderer.m_State = PLAYER_MOVE;
+	}
+
+	if (GetAsyncKeyState(VK_DOWN) & 0x8000)
+	{
+		m_player.m_Renderer.m_State = PLAYER_IDLE;
+	}
+
+	
 }
 
 void ServerScene::Render()

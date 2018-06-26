@@ -58,6 +58,8 @@ void SceneMgr::ChangeScene(int _Type)
 {
 	m_Type		= _Type;
 	m_IsChange	= true;
+
+	UI_MGR->Destroy();
 }
 
 LRESULT SceneMgr::MyWndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)

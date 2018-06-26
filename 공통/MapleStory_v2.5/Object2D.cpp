@@ -9,6 +9,12 @@ Object2D::Object2D()
 void Object2D::Update(float _DelayTime)
 {
 	m_Transform.UpdateMatrix(m_pRT);
+
+
+	if (m_Renderer.m_State != -1)
+	{
+		m_Renderer.AniUpdate(_DelayTime);
+	}
 }
 
 void Object2D::Render()
