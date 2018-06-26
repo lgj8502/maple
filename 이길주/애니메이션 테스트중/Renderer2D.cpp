@@ -59,40 +59,50 @@ void Renderer2D::ChangeBitmap(size_t _index)
 	m_BitmapIndex = _index;
 }
 
-void Renderer2D::AddAnimation(int _state, int _start, int _end, float _time, ...)
+void Renderer2D::AddAnimation(int _state, int _start, int _count, vector<float> _timelist)
 {
 	Ani_Info Ani;
 
 	Ani.m_FrameStart = _start;
 
-	Ani.m_FrameEnd = _end;
+	Ani.m_FrameEnd = _start + _count -1 ;
 
-	Ani.m_Count = _end - _start + 1;
+	Ani.m_Count = _count;
 
-	va_list arglist;
-	va_start(arglist, _end);
+	Ani.m_Timer = _timelist;
 
-	for (int i = 0; i < Ani.m_Count; i++)
+	float result = 0.0f;
+
+	for (auto &i : Ani.m_Timer)
 	{
-		Ani.m_Timer.push_back(va_arg(arglist, float));
+		result += i;
 	}
 
-	va_end(arglist);
+	Ani.m_TotalTime = result;
 
 	m_AniList.insert(pair<int, Ani_Info>(_state, Ani));
 }
 
 void Renderer2D::AniUpdate(float _DelayTime)
 {
-	m_BitmapIndex = m_AniList[m_state].m_FrameStart;
+	int NowState = m_State;
+
+	if (NowState != m_OldState)
+	{
+		m_CountTime = 0.0f;
+	}
 
 	m_CountTime += _DelayTime;
 
-	if (m_CountTime > m_AniList[m_state].m_Timer[0])
+	if (m_CountTime >= m_AniList[NowState].m_TotalTime)
 	{
-		m_BitmapIndex++;
-
+		m_CountTime = 0.0f;
 	}
+
+	m_BitmapIndex = m_AniList[NowState].CurrentIndex(m_CountTime);
+	//m_BitmapIndex = 1;
+
+	m_OldState = NowState;
 }
 
 

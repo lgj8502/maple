@@ -137,8 +137,6 @@ void ServerScene::Init(HWND hWnd)
 	UI_MGR->FindUI("ÀÎÇ²ÇÊµå")->m_UseDrag = true;
 
 	UI_MGR->AddPanel("ÆÇ³Ú", { 200,200 }, 1 ,UI_MGR->FindUI("ÀÎÇ²ÇÊµå"));
-
-	m_player.m_Renderer.AddBitmap(IMG_MGR->GetImage(L"test2"));
 	
 }
 
@@ -154,7 +152,8 @@ void ServerScene::Update(float _DelayTime)
 		{
 			UI_MGR->m_isChating = true;
 		}
-	}
+	}	
+	
 }
 
 void ServerScene::Render()
