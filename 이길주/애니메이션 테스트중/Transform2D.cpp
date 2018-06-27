@@ -31,6 +31,33 @@ void Transform2D::UpdateMatrix(ID2D1RenderTarget * _pRT)
 	}
 }
 
+void Transform2D::VelocityTrans(float _time)
+{
+	Translate(m_velocityX * _time, 0);
+
+	if (m_velocityX < 0 && m_Scale.x < 0)
+	{
+		m_Scale.x *= -1;
+	}
+
+	if (m_velocityX > 0 && m_Scale.x > 0)
+	{
+		m_Scale.x *= -1;
+	}
+}
+
+void Transform2D::Gravity(float _DelayTime)
+{
+	//m_gravityTime += _DelayTime;
+
+	m_velocityY += 9.81f * _DelayTime * 100.0f;
+
+	Translate(0, m_velocityY * _DelayTime);
+
+}
+
+
+
 Transform2D::Transform2D()
 {
 }

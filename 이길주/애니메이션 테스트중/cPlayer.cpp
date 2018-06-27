@@ -18,15 +18,45 @@ cPlayer::cPlayer()
 
 	m_Renderer.AddAnimation(PLAYER_MOVE, 2, 4, 0.2, 0.2, 0.2);
 
+	m_Transform.m_gravity = true;
 
-
-	m_Transform.SetPos({ 300,500 });
-
+	m_Transform.SetPos({ 300,100 });	
 }
 
 
 cPlayer::~cPlayer()
 {
+}
+
+void cPlayer::LeftMove(float _DelayTime)
+{
+	m_Transform.m_velocityX = -m_MoveSpeed;
+
+	m_Transform.VelocityTrans(_DelayTime);
+
+	m_Renderer.m_State = PLAYER_MOVE;
+
+}
+
+void cPlayer::RightMove(float _DelayTime)
+{
+	m_Transform.m_velocityX = +m_MoveSpeed;
+
+	m_Transform.VelocityTrans(_DelayTime);
+
+	m_Renderer.m_State = PLAYER_MOVE;
+}
+
+void cPlayer::JumpMove(float _DelayTime)
+{
+
+}
+
+void cPlayer::NotMove()
+{
+	m_Transform.m_velocityX = 0.0f;
+
+	m_Renderer.m_State = PLAYER_IDLE;
 }
 
 

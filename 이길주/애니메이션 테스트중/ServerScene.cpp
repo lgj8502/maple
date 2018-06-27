@@ -144,9 +144,11 @@ void ServerScene::Update(float _DelayTime)
 {
 	UI_MGR->Update(_DelayTime);
 
-	m_player.Update(_DelayTime);	
+	m_player.Update(_DelayTime);
 
-	if (GetAsyncKeyState(VK_RETURN) & 0x8000)
+
+
+	if (OnceKeyDown(VK_RETURN))
 	{
 		if (UI_MGR->m_isChating == false)
 		{
@@ -154,51 +156,30 @@ void ServerScene::Update(float _DelayTime)
 		}
 	}
 
-	if (GetAsyncKeyState(VK_LEFT) & 0x8000)
+	if (StayKeyDown(VK_LEFT))
+	{	
+		m_player.LeftMove(_DelayTime);
+
+
+	}
+	if (OnceKeyUp(VK_LEFT) || OnceKeyUp(VK_RIGHT))
 	{
-		D2D1_POINT_2F scale = m_player.m_Transform.GetScale();
-
-		if (scale.x < 0)
-		{
-			scale.x *= -1;
-			m_player.m_Transform.SetScale(scale.x, scale.y);
-		}
-
-
-
-		D2D1_POINT_2F pos = m_player.m_Transform.GetPos();
-
-		pos.x--;
-
-		m_player.m_Transform.SetPos(pos);
-
-
-		m_player.m_Renderer.m_State = PLAYER_MOVE;
+		m_player.NotMove();
 	}
 
-	if (GetAsyncKeyState(VK_RIGHT) & 0x8000)
+	if (StayKeyDown(VK_RIGHT))
 	{
-		D2D1_POINT_2F scale = m_player.m_Transform.GetScale();
+		m_player.RightMove(_DelayTime);
 
-		if (scale.x > 0)
-		{
-			scale.x *= -1;
-			m_player.m_Transform.SetScale(scale.x, scale.y);
-		}
-
-		D2D1_POINT_2F pos = m_player.m_Transform.GetPos();
-
-		pos.x++;
-
-		m_player.m_Transform.SetPos(pos);
-
-		m_player.m_Renderer.m_State = PLAYER_MOVE;
 	}
 
-	if (GetAsyncKeyState(VK_DOWN) & 0x8000)
+	if (OnceKeyDown(VK_SPACE))
 	{
-		m_player.m_Renderer.m_State = PLAYER_IDLE;
+		m_player.m_Transform.SetPos(300, 100);
+
+		m_player.m_Transform.m_velocityY = 0;
 	}
+
 
 	
 }

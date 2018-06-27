@@ -14,11 +14,23 @@ protected:
 	Matrix3x2F		m_matRot = Matrix3x2F::Identity();
 	Matrix3x2F		m_matTrans = Matrix3x2F::Identity();
 
+	float			m_gravityTime = 0.0f;
+
 public:
 
 	Matrix3x2F		m_matSRT = Matrix3x2F::Identity();
 
 	Transform2D		*m_pParent = nullptr;
+
+	bool			m_gravity = false;
+
+	bool			m_isCrashed = false;
+
+	float			m_velocityX = 0.0f;
+	float			m_velocityY = 0.0f;
+
+	bool			m_isMoving = false;
+
 
 protected:
 	//	방향 갱신
@@ -30,6 +42,8 @@ public:
 
 	//	행렬 갱신
 	void	UpdateMatrix(ID2D1RenderTarget *_pRT = nullptr);
+
+	void	Gravity(float _DelayTime);
 
 	void	SetScale(float _x, float _y)
 	{
@@ -71,6 +85,9 @@ public:
 		m_Pos.x += _x;
 		m_Pos.y += _y;
 	}
+
+	void VelocityTrans(float _time);
+
 
 };
 

@@ -15,6 +15,11 @@ void Object2D::Update(float _DelayTime)
 	{
 		m_Renderer.AniUpdate(_DelayTime);
 	}
+
+	if (m_Transform.m_gravity == true)
+	{
+		m_Transform.Gravity(_DelayTime);
+	}
 }
 
 void Object2D::Render()

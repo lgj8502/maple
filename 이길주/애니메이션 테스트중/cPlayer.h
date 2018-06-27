@@ -11,11 +11,19 @@ enum ePlayerState
 
 class cPlayer : public Object2D
 {
-	float m_MoveSpeed = 1.0f;
-
 public:
+	
+	float  m_MoveSpeed = 200.0f;
+
 	cPlayer();
 	~cPlayer();
+	
+	void LeftMove(float _DelayTime);
+	void RightMove(float _DelayTime);
+
+	void JumpMove(float _DelayTime);
+
+	void NotMove();
 
 };
 
