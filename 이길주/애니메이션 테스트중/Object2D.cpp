@@ -20,6 +20,7 @@ void Object2D::Update(float _DelayTime)
 	{
 		m_Transform.Gravity(_DelayTime);
 	}
+
 }
 
 void Object2D::Render()

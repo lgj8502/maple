@@ -48,11 +48,11 @@ void Transform2D::VelocityTrans(float _time)
 
 void Transform2D::Gravity(float _DelayTime)
 {
-	//m_gravityTime += _DelayTime;
-
 	m_velocityY += 9.81f * _DelayTime * 100.0f;
 
 	Translate(0, m_velocityY * _DelayTime);
+
+	MK_LOG("%f", m_velocityY);
 
 }
 

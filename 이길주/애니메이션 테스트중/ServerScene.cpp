@@ -164,7 +164,7 @@ void ServerScene::Update(float _DelayTime)
 	}
 	if (OnceKeyUp(VK_LEFT) || OnceKeyUp(VK_RIGHT))
 	{
-		m_player.NotMove();
+		m_player.m_Transform.m_velocityX = 0.0f;
 	}
 
 	if (StayKeyDown(VK_RIGHT))
@@ -180,6 +180,10 @@ void ServerScene::Update(float _DelayTime)
 		m_player.m_Transform.m_velocityY = 0;
 	}
 
+	if (OnceKeyDown(VK_F1))
+	{
+		m_player.JumpMove();
+	}
 
 	
 }
