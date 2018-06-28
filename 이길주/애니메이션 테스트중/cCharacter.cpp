@@ -1,57 +1,18 @@
 #include "stdafx.h"
-#include "cPlayer.h"
+#include "cCharacter.h"
 
 
-cPlayer::cPlayer()
+cCharacter::cCharacter()
 {
 
-
-	//m_Renderer.m_State = PLAYER_IDLE;
-
-	for (int i = 0; i < PART_END; i++)
-	{
-		m_Parts[i] = {};
-	}
-
-
-	/*m_Parts[PART_HEAD].m_Renderer.AddBitmap(IMG_MGR->GetImage(L"HEAD"));
-	m_Parts[PART_BODY].m_Renderer.AddBitmap(IMG_MGR->GetImage(L"Body1_IDLE"));
-	m_Parts[PART_ARM].m_Renderer.AddBitmap(IMG_MGR->GetImage(L"Arm1_IDLE"));*/
-	Object2D object;
-
-
-
-	m_PartList.insert(pair<ePlayerParts, Object2D>(PART_HEAD, object));
-
-	//m_Renderer.AddBitmap(IMG_MGR->GetImage(L"IDLE1"));
-	//m_Renderer.AddBitmap(IMG_MGR->GetImage(L"IDLE2"));
-
-	//m_Renderer.AddAnimation(PLAYER_IDLE, 0, 1, 0.5, 0.5);
-
-	//m_Renderer.AddBitmap(IMG_MGR->GetImage(L"Move1"));
-	//m_Renderer.AddBitmap(IMG_MGR->GetImage(L"Move2"));
-	//m_Renderer.AddBitmap(IMG_MGR->GetImage(L"Move3"));
-
-
-	//m_Renderer.AddAnimation(PLAYER_MOVE, 2, 4, 0.2, 0.2, 0.2);
-
-	//m_Renderer.AddBitmap(IMG_MGR->GetImage(L"FLY1"));
-	//m_Renderer.AddBitmap(IMG_MGR->GetImage(L"FLY2"));
-
-	//m_Renderer.AddAnimation(PLAYER_JUMP, 5, 6, 0.2, 10);
-
-	//m_Transform.m_gravity = true;
-
-	m_Transform.SetPos({ 300,100 });	
 }
 
 
-cPlayer::~cPlayer()
+cCharacter::~cCharacter()
 {
-	
 }
 
-void cPlayer::LeftMove(float _DelayTime)
+void cCharacter::LeftMove(float _DelayTime)
 {
 	m_Transform.m_velocityX = -m_MoveSpeed;
 
@@ -63,7 +24,7 @@ void cPlayer::LeftMove(float _DelayTime)
 	}
 }
 
-void cPlayer::RightMove(float _DelayTime)
+void cCharacter::RightMove(float _DelayTime)
 {
 	m_Transform.m_velocityX = +m_MoveSpeed;
 
@@ -75,12 +36,12 @@ void cPlayer::RightMove(float _DelayTime)
 	}
 }
 
-void cPlayer::JumpMove()
+void cCharacter::JumpMove()
 {
 	m_isJumping = true;
 }
 
-void cPlayer::Update(float _DelayTime)
+void cCharacter::Update(float _DelayTime)
 {
 	Object2D::Update(_DelayTime);
 
@@ -130,11 +91,6 @@ void cPlayer::Update(float _DelayTime)
 		MK_LOG("%f", m_Transform.m_velocityY);
 
 	}
-
-}
-
-void cPlayer::Rander()
-{
 
 }
 

@@ -1,6 +1,5 @@
 #pragma once
 
-#include <map>
 enum ePlayerState
 {
 	PLAYER_IDLE,
@@ -27,31 +26,27 @@ enum ePlayerParts
 	PART_WEAPON,
 
 	PART_END,
-
 };
 
-class cPlayer : public Object2D
+class cCharacter : public Object2D
 {
 	float  m_MoveSpeed = 200.0f;
 	bool   m_isJumping = false;
 	bool   m_JumpStart = false;
 
-	map< ePlayerParts ,Object2D> m_PartList;
 
-	Object2D m_Parts[PART_END];
 
 public:
 
-	cPlayer();
-	~cPlayer();
-	
+	cCharacter();
+	~cCharacter();
+
 	void LeftMove(float _DelayTime);
 	void RightMove(float _DelayTime);
 
 	void JumpMove();
 
 	void Update(float _DelayTime = 0.0f);
-	void Rander();
 
 
 };

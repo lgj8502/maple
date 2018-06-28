@@ -180,12 +180,10 @@ void ServerScene::Update(float _DelayTime)
 		m_player.m_Transform.m_velocityY = 0;
 	}
 
-	if (OnceKeyDown(VK_F1))
+	if (OnceKeyDown(VK_MENU))
 	{
 		m_player.JumpMove();
-	}
-
-	
+	}	
 }
 
 void ServerScene::Render()
@@ -223,6 +221,15 @@ LRESULT ServerScene::MyWndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM l
 
 	}break;
 
+
+	case WM_SYSKEYDOWN:
+	{
+		if (wParam == VK_MENU)
+		{
+			return 0;
+		}
+	}break;
+
 	case WM_LBUTTONDOWN:
 	{
 		MK_LOG("%d, %d Å¬¸¯", m_MousePos.x, m_MousePos.y);
@@ -232,6 +239,7 @@ LRESULT ServerScene::MyWndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM l
 		m_isClicked = true;
 
 	}break;
+
 
 	case WM_LBUTTONUP:
 	{
@@ -246,8 +254,7 @@ LRESULT ServerScene::MyWndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM l
 	case WM_CHAR:
 	{
 		if (UI_MGR->m_isChating == false) break;
-
-
+		
 
 		char cWord = (char)wParam;
 
