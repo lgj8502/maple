@@ -10,6 +10,11 @@ void Transform2D::UpdateDir()
 
 void Transform2D::UpdateMatrix(ID2D1RenderTarget * _pRT)
 {
+	if (m_isAniTrans == true && m_PosIndex != -1)
+	{
+		SetPos(m_PosList[m_PosIndex]);
+	}
+
 	//	행렬계산
 	m_matScale = Matrix3x2F::Scale(m_Scale.x, m_Scale.y);
 	m_matRot = Matrix3x2F::Rotation(m_Angle, m_Pivot);
@@ -52,7 +57,73 @@ void Transform2D::Gravity(float _DelayTime)
 
 	Translate(0, m_velocityY * _DelayTime);
 
-	MK_LOG("%f", m_velocityY);
+}
+
+void Transform2D::AddTransAnimation(int _state, int _start, int _end, double _time, ...)
+{
+	AniTrans_Info Ani;
+
+	Ani.m_FrameStart = _start;
+
+	Ani.m_FrameEnd = _end;
+
+	Ani.m_Count = _end - _start + 1;
+
+	va_list arglist;
+	va_start(arglist, _end);
+
+	for (int i = 0; i < Ani.m_Count; i++)
+	{
+		Ani.m_Timer.push_back((float)va_arg(arglist, double));
+	}
+
+	va_end(arglist);
+
+	//Ani.m_Timer = _timelist;
+
+	float result = 0.0f;
+
+	for (auto &i : Ani.m_Timer)
+	{
+		result += i;
+	}
+
+	Ani.m_TotalTime = result;
+
+	m_AniTransList.insert(pair<int, AniTrans_Info>(_state, Ani));
+
+	m_isAniTrans = true;
+}
+
+void Transform2D::AddAniPos(D2D1_POINT_2F _pos)
+{
+	m_PosList.push_back(_pos);
+}
+
+void Transform2D::AniTransUpdate(float _DelayTime)
+{
+	if (m_AniTransList.find(m_State) == m_AniTransList.end())
+	{
+		return;
+	}
+
+	int NowState = m_State;
+
+	if (NowState != m_OldState)
+	{
+		m_CountTime = 0.0f;
+	}
+
+	m_CountTime += _DelayTime;
+
+	if (m_CountTime >= m_AniTransList[NowState].m_TotalTime)
+	{
+		m_CountTime = 0.0f;
+	}
+
+	m_PosIndex = m_AniTransList[NowState].CurrentIndex(m_CountTime);
+
+	m_OldState = NowState;
 
 }
 

@@ -138,6 +138,9 @@
     <ClInclude Include="cCharacter.h">
       <Filter>소스 파일\Player</Filter>
     </ClInclude>
+    <ClInclude Include="PlayerTest.h">
+      <Filter>소스 파일\Player</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MK_KeyMgr.cpp">
@@ -210,6 +213,9 @@
       <Filter>소스 파일\Player</Filter>
     </ClCompile>
     <ClCompile Include="cCharacter.cpp">
+      <Filter>소스 파일\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerTest.cpp">
       <Filter>소스 파일\Player</Filter>
     </ClCompile>
   </ItemGroup>

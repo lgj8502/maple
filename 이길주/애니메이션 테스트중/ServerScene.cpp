@@ -8,6 +8,7 @@ ServerScene::~ServerScene()
 
 void ServerScene::Init(HWND hWnd)
 {
+	IMG_MGR->FileFindDir(ImgDir);
 
 	UI_MGR->AddImage("ServerMain", L"ServerMain", { 0,0,1200,800 });
 
@@ -158,27 +159,27 @@ void ServerScene::Update(float _DelayTime)
 
 	if (StayKeyDown(VK_LEFT))
 	{	
-		m_player.LeftMove(_DelayTime);
+		m_player.LeftWalk(_DelayTime);
 
 
 	}
 	if (OnceKeyUp(VK_LEFT) || OnceKeyUp(VK_RIGHT))
 	{
-		m_player.m_Transform.m_velocityX = 0.0f;
+		m_player.StopWalk();
 	}
 
 	if (StayKeyDown(VK_RIGHT))
 	{
-		m_player.RightMove(_DelayTime);
+		m_player.RightWalk(_DelayTime);
 
 	}
 
-	if (OnceKeyDown(VK_SPACE))
-	{
-		m_player.m_Transform.SetPos(300, 100);
+	//if (OnceKeyDown(VK_SPACE))
+	//{
+	//	m_player.m_Transform.SetPos(300, 100);
 
-		m_player.m_Transform.m_velocityY = 0;
-	}
+	//	m_player.m_Transform.m_velocityY = 0;
+	//}
 
 	if (OnceKeyDown(VK_MENU))
 	{

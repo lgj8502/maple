@@ -27,6 +27,8 @@ private:
 
 	BOOL AddImg(LPCWSTR _FilePath);
 
+	BOOL AddImg(LPCWSTR _FilePath, map<wstring, ImgInfo> &_Imglist);
+
 	ID2D1Bitmap *ImageAsBitmap(LPCWSTR _FilePath);
 
 
@@ -37,6 +39,7 @@ public:
 	void Init(ID2D1RenderTarget *_pRT);
 
 	void FileFindDir(wstring _Path);
+	void FileFindDir_Take(wstring _Path, map<wstring, ImgInfo> &_Imglist);
 
 	inline void SetBrush(ID2D1SolidColorBrush *_pBrush)
 	{

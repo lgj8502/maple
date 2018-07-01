@@ -1,12 +1,17 @@
 #pragma once
 #include "cUI.h"
 #include "cPlayer.h"
+#include "PlayerTest.h"
+
+CONST LPCWSTR ImgDir = L".\\Img\\ServerScene\\";
 
 class ServerScene : public Scene
 {
 	POINT m_MousePos = { 0,0 };
 
-	cPlayer m_player;
+	//cPlayer m_player;
+
+	PlayerTest m_player;
 
 	bool m_isClicked = false;
 

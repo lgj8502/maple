@@ -4,7 +4,7 @@
 
 Renderer2D::Renderer2D()
 {
-	m_BitmapList.push_back(nullptr);
+
 }
 
 
@@ -15,7 +15,7 @@ Renderer2D::~Renderer2D()
 
 void Renderer2D::Render(Matrix3x2F _mat, ID2D1RenderTarget *_pRT)
 {	
-	if (m_BitmapList[m_BitmapIndex] == nullptr)	return;
+	if (m_HaveBitmap == false)	return;
 
 	_pRT->SetTransform(_mat);
 
@@ -27,14 +27,9 @@ void Renderer2D::Render(Matrix3x2F _mat, ID2D1RenderTarget *_pRT)
 
 void Renderer2D::AddBitmap(ID2D1Bitmap* _bitmap)
 {
-	if (m_BitmapList[m_BitmapIndex] == nullptr)
-	{
-		m_BitmapList.clear();
-	}
-
 	m_BitmapList.push_back(_bitmap);	
 
-	auto Size = m_BitmapList[m_BitmapIndex]->GetSize();
+	auto Size = m_BitmapList.back()->GetSize();
 
 	D2D1_RECT_F ImgRT;
 
@@ -44,7 +39,10 @@ void Renderer2D::AddBitmap(ID2D1Bitmap* _bitmap)
 	ImgRT.bottom = Size.height / 2;
 
 	m_ImgRTList.push_back(ImgRT);
+
+	m_HaveBitmap = true;
 }
+
 
 void Renderer2D::ChangeBitmap(size_t _index)
 {
@@ -89,10 +87,16 @@ void Renderer2D::AddAnimation(int _state, int _start, int _end, double _time, ..
 	Ani.m_TotalTime = result;
 
 	m_AniList.insert(pair<int, Ani_Info>(_state, Ani));
+
 }
 
 void Renderer2D::AniUpdate(float _DelayTime)
 {
+	if (m_AniList.find(m_State) == m_AniList.end())
+	{
+		return;
+	}
+
 	int NowState = m_State;
 
 	if (NowState != m_OldState)
@@ -108,9 +112,9 @@ void Renderer2D::AniUpdate(float _DelayTime)
 	}
 
 	m_BitmapIndex = m_AniList[NowState].CurrentIndex(m_CountTime);
-	//m_BitmapIndex = 1;
 
 	m_OldState = NowState;
+
 }
 
 

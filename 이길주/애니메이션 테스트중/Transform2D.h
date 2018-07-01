@@ -1,4 +1,32 @@
 #pragma once
+
+#include <vector>
+#include <map>
+
+struct AniTrans_Info
+{
+	int m_FrameStart = 0;
+	int m_FrameEnd = 0;
+	int m_Count = 0;
+	float m_TotalTime = 0.0f;
+	vector<float> m_Timer;
+
+	int CurrentIndex(float _time)
+	{
+		for (int i = 0; i < m_Count; i++)
+		{
+			_time -= m_Timer[i];
+
+			if (_time < 0)
+			{
+				return i + m_FrameStart;
+			}
+		}
+
+		return -1;
+	}
+};
+
 class Transform2D
 {
 
@@ -14,7 +42,17 @@ protected:
 	Matrix3x2F		m_matRot = Matrix3x2F::Identity();
 	Matrix3x2F		m_matTrans = Matrix3x2F::Identity();
 
+
+
 	float			m_gravityTime = 0.0f;
+
+	// Ani 용
+	int				m_PosIndex = -1;
+	float			m_CountTime = 0.0f;
+	vector<D2D1_POINT_2F> m_PosList;
+	map< int, AniTrans_Info> m_AniTransList;
+
+
 
 public:
 
@@ -31,6 +69,10 @@ public:
 
 	bool			m_isMoving = false;
 
+	int				m_State = -1;
+	int				m_OldState = -1;
+
+	bool			m_isAniTrans = false;
 
 protected:
 	//	방향 갱신
@@ -44,6 +86,11 @@ public:
 	void	UpdateMatrix(ID2D1RenderTarget *_pRT = nullptr);
 
 	void	Gravity(float _DelayTime);
+
+	void	AddTransAnimation(int _state, int _start, int _end, double _time, ...);
+
+	void	AddAniPos(D2D1_POINT_2F _pos);
+	void	AniTransUpdate(float _DelayTime);
 
 	void	SetScale(float _x, float _y)
 	{
