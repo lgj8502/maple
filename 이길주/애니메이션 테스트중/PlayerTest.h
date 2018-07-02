@@ -16,6 +16,7 @@ enum ePlayerState
 enum ePlayerParts
 {
 	PART_ORIGIN,
+	PART_CENTER,
 	//////////////
 	PART_BACKSHIELD,
 	PART_BODY,
@@ -65,6 +66,13 @@ private:
 	map<wstring, ImgInfo>	m_PantsList;
 	map<wstring, ImgInfo>	m_ShoesList;
 
+	void SettingBase();
+	void SettingHair();
+	void SettingFace();
+	void SettingCoat();
+	void SettingPants();
+	void SettingShoes();
+
 
 public:
 
@@ -106,19 +114,12 @@ public:
 
 	void JumpMove();
 
-	void ChangeCoat(wstring _num);
-
-	void GetBaseBitmap();
-
-	void GetHairBitmap();
-
-	void GetFaceBitmap();
-
-	void GetCoatBitmap();
-
-	void GetPantsBitmap();
-
-	void GetShoesBitmap();
+	void ChangeBase(size_t _itemNo);
+	void ChangeHair(size_t _itemNo);
+	void ChangeFace(size_t _itemNo);
+	void ChangeCoat(size_t _itemNo);
+	void ChangePants(size_t _itemNo);
+	void ChangeShoes(size_t _itemNo);
 
 	void LoadImg(char *_path, size_t _ItemNo, map<wstring, ImgInfo> &_BotmapList);
 

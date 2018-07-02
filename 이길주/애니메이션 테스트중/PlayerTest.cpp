@@ -7,14 +7,15 @@
 PlayerTest::PlayerTest()
 {
 
-	GetBaseBitmap();
-	GetHairBitmap();
-	GetFaceBitmap();
-	GetCoatBitmap();
-	GetPantsBitmap();
-	GetShoesBitmap();
+	SettingBase();
+	SettingHair();
+	SettingFace();
+	SettingCoat();
+	SettingPants();
+	SettingShoes();
 
-	SetParent(PART_ORIGIN, PART_BODY);
+	SetParent(PART_ORIGIN, PART_CENTER);
+
 
 	m_Parts[PART_ORIGIN].m_Transform.SetPos({ 300,500});
 	m_Parts[PART_ORIGIN].m_Transform.m_gravity = true;
@@ -37,23 +38,20 @@ PlayerTest::PlayerTest()
 	m_Parts[PART_FACE].m_Transform.SetPos({ -3,5 });
 	m_Parts[PART_HAIR].m_Transform.SetPos({ 0,-9 });
 
-	SetParent(PART_ORIGIN, PART_BODY);
-	SetParent(PART_ORIGIN, PART_HEAD);
-	SetParent(PART_ORIGIN, PART_ARM);
+	SetParent(PART_CENTER, PART_BODY);
+	SetParent(PART_CENTER, PART_HEAD);
+	SetParent(PART_CENTER, PART_ARM);
 	SetParent(PART_HEAD, PART_FACE);
 	SetParent(PART_HEAD, PART_HAIR);
 	SetParent(PART_BODY, PART_COAT);
 	SetParent(PART_ARM, PART_COATARM);
-	SetParent(PART_ORIGIN, PART_PANTS);
-	SetParent(PART_ORIGIN, PART_SHOES);
-	SetParent(PART_ORIGIN, PART_HAND);
-	SetParent(PART_HEAD, PART_FACE);
-	SetParent(PART_HEAD, PART_HAIR);
-
-	///////// 비트맵 교체 애니메이션 //////////////
+	SetParent(PART_CENTER, PART_PANTS);
+	SetParent(PART_CENTER, PART_SHOES);
+	SetParent(PART_CENTER, PART_HAND);
 
 #pragma region IDLE
 
+	///////// 비트맵 교체 애니메이션 //////////////
 	m_Parts[PART_HEAD].m_Renderer.AddAnimation(PLAYER_IDLE, 0, 0, 2);
 	m_Parts[PART_BODY].m_Renderer.AddAnimation(PLAYER_IDLE, 0, 3, 0.5, 0.5, 0.5, 0.5);
 	m_Parts[PART_ARM].m_Renderer.AddAnimation(PLAYER_IDLE, 0, 3, 0.5, 0.5, 0.5, 0.5);
@@ -67,7 +65,7 @@ PlayerTest::PlayerTest()
 
 	m_Parts[PART_ARM].m_Transform.AddAniPos({ 9, -5 });
 	m_Parts[PART_ARM].m_Transform.AddAniPos({ 10, -5 });
-	m_Parts[PART_ARM].m_Transform.AddAniPos({ 11, -5 });
+	m_Parts[PART_ARM].m_Transform.AddAniPos({ 10.5f, -5 });
 	m_Parts[PART_ARM].m_Transform.AddAniPos({ 10, -5 });
 	m_Parts[PART_ARM].m_Transform.AddTransAnimation(PLAYER_IDLE, 0, 3, 0.5, 0.5, 0.5, 0.5);
 
@@ -85,7 +83,7 @@ PlayerTest::PlayerTest()
 
 	m_Parts[PART_COATARM].m_Transform.AddAniPos({ -1, -3 });
 	m_Parts[PART_COATARM].m_Transform.AddAniPos({ -1, -3 });
-	m_Parts[PART_COATARM].m_Transform.AddAniPos({ -1, -3 });
+	m_Parts[PART_COATARM].m_Transform.AddAniPos({ -0.5f, -3 });
 	m_Parts[PART_COATARM].m_Transform.AddAniPos({ -1, -3 });
 	m_Parts[PART_COATARM].m_Transform.AddTransAnimation(PLAYER_IDLE, 0, 3, 0.5, 0.5, 0.5, 0.5);
 
@@ -105,6 +103,7 @@ PlayerTest::PlayerTest()
 
 #pragma region WALK
 
+	///////// 비트맵 교체 애니메이션 //////////////
 	m_Parts[PART_BODY].m_Renderer.AddAnimation(PLAYER_WALK, 4, 7, 0.2, 0.2, 0.2, 0.2);
 	m_Parts[PART_ARM].m_Renderer.AddAnimation(PLAYER_WALK, 4, 7, 0.2, 0.2, 0.2, 0.2);
 	m_Parts[PART_COAT].m_Renderer.AddAnimation(PLAYER_WALK, 4, 7, 0.2, 0.2, 0.2, 0.2);
@@ -114,32 +113,39 @@ PlayerTest::PlayerTest()
 	m_Parts[PART_HAND].m_Renderer.AddAnimation(PLAYER_WALK, 0, 0, 0.8);	
 	
 	//////////////  이동 애니메이션 /////////////////////////////////////
+
+	m_Parts[PART_CENTER].m_Transform.AddAniPos({ 0, 0 });
+	m_Parts[PART_CENTER].m_Transform.AddAniPos({ 0, 1 });
+	m_Parts[PART_CENTER].m_Transform.AddAniPos({ 0, 0 });
+	m_Parts[PART_CENTER].m_Transform.AddAniPos({ 0, 1 });
+
+	m_Parts[PART_CENTER].m_Transform.AddTransAnimation(PLAYER_WALK, 0, 3, 0.2, 0.2, 0.2, 0.2);
 	
 	m_Parts[PART_HEAD].m_Transform.AddAniPos({ 1, -30 });
-	m_Parts[PART_HEAD].m_Transform.AddAniPos({ 1, -29 });
 	m_Parts[PART_HEAD].m_Transform.AddAniPos({ 1, -30 });
-	m_Parts[PART_HEAD].m_Transform.AddAniPos({ 1, -29 });
+	m_Parts[PART_HEAD].m_Transform.AddAniPos({ 1, -30 });
+	m_Parts[PART_HEAD].m_Transform.AddAniPos({ 1, -30 });
 	
 	m_Parts[PART_HEAD].m_Transform.AddTransAnimation(PLAYER_WALK, 0, 3, 0.2, 0.2, 0.2, 0.2);
 	
 	m_Parts[PART_ARM].m_Transform.AddAniPos({ 11, -5 });
-	m_Parts[PART_ARM].m_Transform.AddAniPos({ 5, -4 });
+	m_Parts[PART_ARM].m_Transform.AddAniPos({ 5, -5 });
 	m_Parts[PART_ARM].m_Transform.AddAniPos({ 11, -5 });
-	m_Parts[PART_ARM].m_Transform.AddAniPos({ 11, -4 });
+	m_Parts[PART_ARM].m_Transform.AddAniPos({ 11, -5 });
 	
 	m_Parts[PART_ARM].m_Transform.AddTransAnimation(PLAYER_WALK, 4, 7, 0.2, 0.2, 0.2, 0.2);
 	
 	m_Parts[PART_BODY].m_Transform.AddAniPos({ 0, 0 });
-	m_Parts[PART_BODY].m_Transform.AddAniPos({ 2, 1 });
+	m_Parts[PART_BODY].m_Transform.AddAniPos({ 2, 0 });
 	m_Parts[PART_BODY].m_Transform.AddAniPos({ 0, 0 });
-	m_Parts[PART_BODY].m_Transform.AddAniPos({ 0, 1 });
+	m_Parts[PART_BODY].m_Transform.AddAniPos({ 0, 0 });
 	
 	m_Parts[PART_BODY].m_Transform.AddTransAnimation(PLAYER_WALK, 4, 7, 0.2, 0.2, 0.2, 0.2);
 	
 	m_Parts[PART_COAT].m_Transform.AddAniPos({ 1, -5 });
-	m_Parts[PART_COAT].m_Transform.AddAniPos({ 1, -4 });
 	m_Parts[PART_COAT].m_Transform.AddAniPos({ 1, -5 });
-	m_Parts[PART_COAT].m_Transform.AddAniPos({ 1, -4 });
+	m_Parts[PART_COAT].m_Transform.AddAniPos({ 1, -5 });
+	m_Parts[PART_COAT].m_Transform.AddAniPos({ 1, -5 });
 	m_Parts[PART_COAT].m_Transform.AddTransAnimation(PLAYER_IDLE, 4, 7, 0.5, 0.5, 0.5, 0.5);
 	
 	m_Parts[PART_COATARM].m_Transform.AddAniPos({ 0, -5 });
@@ -150,16 +156,16 @@ PlayerTest::PlayerTest()
 	m_Parts[PART_COATARM].m_Transform.AddTransAnimation(PLAYER_WALK, 4, 7, 0.2, 0.2, 0.2, 0.2);
 	
 	m_Parts[PART_PANTS].m_Transform.AddAniPos({ 3, 5 });
-	m_Parts[PART_PANTS].m_Transform.AddAniPos({ 3, 6 });
+	m_Parts[PART_PANTS].m_Transform.AddAniPos({ 3, 5 });
 	m_Parts[PART_PANTS].m_Transform.AddAniPos({ 5, 5 });
-	m_Parts[PART_PANTS].m_Transform.AddAniPos({ 5, 6 });
+	m_Parts[PART_PANTS].m_Transform.AddAniPos({ 5, 5 });
 	
 	m_Parts[PART_PANTS].m_Transform.AddTransAnimation(PLAYER_WALK, 4, 7, 0.2, 0.2, 0.2, 0.2);
 	
 	m_Parts[PART_SHOES].m_Transform.AddAniPos({ 8, 12 });
-	m_Parts[PART_SHOES].m_Transform.AddAniPos({ 2, 13 });
+	m_Parts[PART_SHOES].m_Transform.AddAniPos({ 2, 12 });
 	m_Parts[PART_SHOES].m_Transform.AddAniPos({ 6, 12 });
-	m_Parts[PART_SHOES].m_Transform.AddAniPos({ 2, 13 });
+	m_Parts[PART_SHOES].m_Transform.AddAniPos({ 2, 12 });
 	
 	m_Parts[PART_SHOES].m_Transform.AddTransAnimation(PLAYER_WALK, 4, 7, 0.2, 0.2, 0.2, 0.2);
 
@@ -167,6 +173,7 @@ PlayerTest::PlayerTest()
 
 #pragma region JUMP
 
+	///////// 비트맵 교체 애니메이션 //////////////
 m_Parts[PART_BODY].m_Renderer.AddAnimation(PLAYER_JUMP, 8, 8, 1);
 m_Parts[PART_ARM].m_Renderer.AddAnimation(PLAYER_JUMP, 8, 8, 1);
 m_Parts[PART_COAT].m_Renderer.AddAnimation(PLAYER_JUMP, 8, 8, 1);
@@ -336,12 +343,49 @@ void PlayerTest::JumpMove()
 	m_isJumping = true;
 }
 
-void PlayerTest::ChangeCoat(wstring _num)
+void PlayerTest::ChangeBase(size_t _itemNo)
 {
+	m_Base = _itemNo;
 
+	SettingBase();
 }
 
-void PlayerTest::GetBaseBitmap()
+void PlayerTest::ChangeHair(size_t _itemNo)
+{
+	m_Hair = _itemNo;
+
+	SettingHair();
+}
+
+void PlayerTest::ChangeFace(size_t _itemNo)
+{
+	m_Face = _itemNo;
+
+	SettingFace();
+}
+
+void PlayerTest::ChangeCoat(size_t _itemNo)
+{
+	m_Coat = _itemNo;
+
+	SettingCoat();
+}
+
+void PlayerTest::ChangePants(size_t _itemNo)
+{
+	m_Pants = _itemNo;
+
+	SettingPants();
+}
+
+void PlayerTest::ChangeShoes(size_t _itemNo)
+{
+	m_Shoes = _itemNo;
+
+	SettingShoes();
+}
+
+void PlayerTest::SettingBase()
 {
 	m_Parts[PART_HEAD].m_Renderer.ClearBitmap();
 	m_Parts[PART_BODY].m_Renderer.ClearBitmap();
@@ -376,10 +420,9 @@ void PlayerTest::GetBaseBitmap()
 
 	m_Parts[PART_HAND].m_Renderer.AddBitmap(m_BaseList[L"Hand_hide"].m_Bitmap);
 	m_Parts[PART_HAND].m_Renderer.AddBitmap(m_BaseList[L"Hand"].m_Bitmap);
-
 }
 
-void PlayerTest::GetHairBitmap()
+void PlayerTest::SettingHair()
 {
 	m_Parts[PART_HAIR].m_Renderer.ClearBitmap();
 
@@ -389,7 +432,7 @@ void PlayerTest::GetHairBitmap()
 	m_Parts[PART_HAIR].m_Renderer.AddBitmap(m_HairList[L"backDefault.backHair"].m_Bitmap);
 }
 
-void PlayerTest::GetFaceBitmap()
+void PlayerTest::SettingFace()
 {
 	m_Parts[PART_FACE].m_Renderer.ClearBitmap();
 
@@ -400,7 +443,7 @@ void PlayerTest::GetFaceBitmap()
 	m_Parts[PART_FACE].m_Renderer.AddBitmap(m_FaceList[L"blink.2.face"].m_Bitmap);
 }
 
-void PlayerTest::GetCoatBitmap()
+void PlayerTest::SettingCoat()
 {
 	m_Parts[PART_COAT].m_Renderer.ClearBitmap();
 	m_Parts[PART_COATARM].m_Renderer.ClearBitmap();
@@ -429,7 +472,7 @@ void PlayerTest::GetCoatBitmap()
 
 }
 
-void PlayerTest::GetPantsBitmap()
+void PlayerTest::SettingPants()
 {
 	m_Parts[PART_PANTS].m_Renderer.ClearBitmap();
 
@@ -446,7 +489,7 @@ void PlayerTest::GetPantsBitmap()
 	m_Parts[PART_PANTS].m_Renderer.AddBitmap(m_PantsList[L"jump.0.pants"].m_Bitmap);
 }
 
-void PlayerTest::GetShoesBitmap()
+void PlayerTest::SettingShoes()
 {
 	m_Parts[PART_SHOES].m_Renderer.ClearBitmap();
 
@@ -462,6 +505,8 @@ void PlayerTest::GetShoesBitmap()
 
 void PlayerTest::LoadImg(char *_path, size_t _ItemNo, map<wstring, ImgInfo> &_BotmapList)
 {
+	_BotmapList.clear();
+
 	USES_CONVERSION;
 
 	ostringstream addText;
@@ -475,4 +520,9 @@ void PlayerTest::LoadImg(char *_path, size_t _ItemNo, map<wstring, ImgInfo> &_Bo
 	LPCWSTR Dir = A2W(Str.c_str());
 
 	IMG_MGR->FileFindDir_Take(Dir, _BotmapList);
+
+	if (_BotmapList.size() == 0)
+	{
+		MK_LOG(" 경로 : %S , Img 로드 실패", _path);
+	}
 }

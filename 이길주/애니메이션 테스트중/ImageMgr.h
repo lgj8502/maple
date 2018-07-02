@@ -41,6 +41,11 @@ public:
 	void FileFindDir(wstring _Path);
 	void FileFindDir_Take(wstring _Path, map<wstring, ImgInfo> &_Imglist);
 
+	inline void ClearImgList()
+	{
+		m_Imglist.clear();
+	}
+
 	inline void SetBrush(ID2D1SolidColorBrush *_pBrush)
 	{
 		m_pBrush = _pBrush;

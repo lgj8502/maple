@@ -60,6 +60,7 @@ void SceneMgr::ChangeScene(int _Type)
 	m_IsChange	= true;
 
 	UI_MGR->Destroy();
+	IMG_MGR->ClearImgList();
 }
 
 LRESULT SceneMgr::MyWndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)

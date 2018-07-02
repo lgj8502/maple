@@ -129,9 +129,6 @@
     <ClInclude Include="cUIMgr.h">
       <Filter>소스 파일\Manager</Filter>
     </ClInclude>
-    <ClInclude Include="cPlayer.h">
-      <Filter>소스 파일\Player</Filter>
-    </ClInclude>
     <ClInclude Include="TemplateSingleton.h">
       <Filter>소스 파일\Manager</Filter>
     </ClInclude>
@@ -208,9 +205,6 @@
     </ClCompile>
     <ClCompile Include="cUIMgr.cpp">
       <Filter>소스 파일\Manager</Filter>
-    </ClCompile>
-    <ClCompile Include="cPlayer.cpp">
-      <Filter>소스 파일\Player</Filter>
     </ClCompile>
     <ClCompile Include="cCharacter.cpp">
       <Filter>소스 파일\Player</Filter>

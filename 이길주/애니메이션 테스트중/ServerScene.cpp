@@ -3,7 +3,7 @@
 
 ServerScene::~ServerScene()
 {
-	
+
 }
 
 void ServerScene::Init(HWND hWnd)
@@ -22,8 +22,6 @@ void ServerScene::Init(HWND hWnd)
 	UI_MGR->FindUI("플레이어")->m_RayCast = true;
 
 	UI_MGR->BitMapAdd("플레이어", L"test2");	
-
-	
 
 	auto Func1 = [](void) { UI_MGR->FindUI("플레이어")->m_Transform.SetPos({ 500,500 }); };
 	auto Func2 = [](void) { UI_MGR->FindUI("플레이어")->m_Renderer.ChangeBitmap(1); };
@@ -138,12 +136,16 @@ void ServerScene::Init(HWND hWnd)
 	UI_MGR->FindUI("인풋필드")->m_UseDrag = true;
 
 	UI_MGR->AddPanel("판넬", { 200,200 }, 1 ,UI_MGR->FindUI("인풋필드"));
+
+	m_monster.Init();
 	
 }
 
 void ServerScene::Update(float _DelayTime)
 {
 	UI_MGR->Update(_DelayTime);
+
+	m_monster.Update(_DelayTime);
 
 	m_player.Update(_DelayTime);
 
@@ -161,11 +163,11 @@ void ServerScene::Update(float _DelayTime)
 	{	
 		m_player.LeftWalk(_DelayTime);
 
-
 	}
 	if (OnceKeyUp(VK_LEFT) || OnceKeyUp(VK_RIGHT))
 	{
 		m_player.StopWalk();
+		
 	}
 
 	if (StayKeyDown(VK_RIGHT))
@@ -174,12 +176,29 @@ void ServerScene::Update(float _DelayTime)
 
 	}
 
-	//if (OnceKeyDown(VK_SPACE))
-	//{
-	//	m_player.m_Transform.SetPos(300, 100);
+	if (OnceKeyDown(VK_F1))
+	{
+		m_player.ChangeCoat(101);
+	}
 
-	//	m_player.m_Transform.m_velocityY = 0;
-	//}
+	if (OnceKeyDown(VK_F2))
+	{
+		m_player.ChangeCoat(100);
+	}
+
+	if (StayKeyDown(VK_F3))
+	{
+		m_monster.LeftMove(_DelayTime);
+	}
+	if (StayKeyDown(VK_F4))
+	{
+		m_monster.RightMove(_DelayTime);
+	}
+
+	if (OnceKeyUp(VK_F3) || OnceKeyUp(VK_F4))
+	{
+		m_monster.StopMove();
+	}
 
 	if (OnceKeyDown(VK_MENU))
 	{
@@ -190,6 +209,8 @@ void ServerScene::Update(float _DelayTime)
 void ServerScene::Render()
 {
 	UI_MGR->Render();
+
+	m_monster.Render();
 
 	m_player.Render();
 }

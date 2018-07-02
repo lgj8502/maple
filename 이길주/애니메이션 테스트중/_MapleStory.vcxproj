@@ -146,7 +146,6 @@
     <ClInclude Include="BufferType.h" />
     <ClInclude Include="cCharacter.h" />
     <ClInclude Include="cLogMgr.h" />
-    <ClInclude Include="cPlayer.h" />
     <ClInclude Include="cTimer.h" />
     <ClInclude Include="cUI.h" />
     <ClInclude Include="cUIMgr.h" />
@@ -175,7 +174,6 @@
     <ClCompile Include="BufferType.cpp" />
     <ClCompile Include="cCharacter.cpp" />
     <ClCompile Include="cLogMgr.cpp" />
-    <ClCompile Include="cPlayer.cpp" />
     <ClCompile Include="cTimer.cpp" />
     <ClCompile Include="cUI.cpp" />
     <ClCompile Include="cUIMgr.cpp" />
