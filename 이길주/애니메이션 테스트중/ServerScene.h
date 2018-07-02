@@ -20,6 +20,7 @@ class ServerScene : public Scene
 	string m_szBuf;
 	char m_szMixingString[3] = "";
 	size_t m_maxText = 70;
+	string m_oldText = "";
 
 public:
 

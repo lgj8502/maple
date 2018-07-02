@@ -32,7 +32,7 @@ void cUI::TextRender()
 	if (m_Type == UI_INPUTFIELD )
 	{
 
-		pos.x = m_Renderer.GetImgRT().left + 5 + (m_SonUI[0]->m_Font.m_Metrics.width);
+		pos.x = m_Renderer.GetImgRT().left + (10 / m_Transform.GetScale().x) + (m_SonUI[0]->m_Font.m_Metrics.width);
 		pos.y = 0;
 
 	}
@@ -59,6 +59,12 @@ void cUI::OnMouseDown()
 
 	UI_MGR->DrawFirst(this);
 
+	if (UI_MGR->m_InputField != nullptr)
+	{
+		UI_MGR->m_InputField->m_SonUI[0]->m_isTyping = false;
+		UI_MGR->m_ExitField = true;
+	}
+
 	if (m_Type == UI_TOGGLE)
 	{
 		if (m_isOn == true)
@@ -84,16 +90,34 @@ void cUI::OnMouseDown()
 	if (m_Type == UI_INPUTFIELD)
 	{
 		UI_MGR->m_isChating = true;
-		UI_MGR->m_InputFiled = this;
+
+		if (UI_MGR->m_InputField != this)
+		{
+
+			if (UI_MGR->m_InputField != nullptr)
+			{
+				UI_MGR->m_InputField->m_FontColor.a = 0.0f;
+			}
+
+			UI_MGR->m_InputField = this;
+
+			UI_MGR->m_InputField->m_SonUI[0]->m_isTyping = false;
+			UI_MGR->m_ExitField = true;
+		}
 	}
 	else
 	{
 		if (UI_MGR->m_isChating == true)
 		{
 			UI_MGR->m_isChating = false;
+
+			if (UI_MGR->m_InputField != nullptr)
+			{
+				UI_MGR->m_InputField->m_FontColor.a = 0.0f;
+			}
 		}
 
-	}	
+	}
 
 	if (m_Type == UI_SCROLLBAR)
 	{

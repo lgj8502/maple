@@ -35,7 +35,7 @@ void cCharacter::Init()
 
 	m_Transform.m_gravity = false;
 
-	m_Transform.SetPos({ 300,400 });
+	m_Transform.SetPos({ 400,400 });
 }
 
 void cCharacter::LeftMove(float _DelayTime)

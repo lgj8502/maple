@@ -33,7 +33,7 @@ void ServerScene::Init(HWND hWnd)
 	UI_MGR->AddEvent("플레이어", ADDEVENT_OnMouseExit, Func3);
 
 
-	UI_MGR->AddButton("베라서버", L"bera", { 100,500 }, { 1.0f, 1.0f });
+	UI_MGR->AddButton("베라서버", L"bera", { 100,600 }, { 1.0f, 1.0f });
 
 	UI_MGR->FindUI("베라서버")->m_UseDrag = true;
 
@@ -132,10 +132,11 @@ void ServerScene::Init(HWND hWnd)
 
 	
 	UI_MGR->AddInputField("인풋필드", L"InputField", { 200,400 }, { 0.5f , 0.7f });
+	UI_MGR->AddInputField("인풋필드2", L"InputField", { 200,500 }, { 0.5f , 0.7f });
 
-	UI_MGR->FindUI("인풋필드")->m_UseDrag = true;
+	//UI_MGR->FindUI("인풋필드")->m_UseDrag = true;
 
-	UI_MGR->AddPanel("판넬", { 200,200 }, 1 ,UI_MGR->FindUI("인풋필드"));
+	//UI_MGR->AddPanel("판넬", { 200,200 }, 1 ,UI_MGR->FindUI("인풋필드"));
 
 	m_monster.Init();
 	
@@ -143,6 +144,15 @@ void ServerScene::Init(HWND hWnd)
 
 void ServerScene::Update(float _DelayTime)
 {
+	if (UI_MGR->m_ExitField == true)
+	{
+		m_szBuf = "";
+		m_szMixingString[0] = NULL;
+
+		UI_MGR->m_ExitField = false;
+
+	}
+
 	UI_MGR->Update(_DelayTime);
 
 	m_monster.Update(_DelayTime);
@@ -217,9 +227,17 @@ void ServerScene::Render()
 
 void ServerScene::SendText()
 {
+
+	if (UI_MGR->m_InputField->m_SonUI[0]->m_isTyping == false)
+	{
+		m_oldText = UI_MGR->m_InputField->m_SonUI[0]->m_Text;
+
+		UI_MGR->m_InputField->m_SonUI[0]->m_isTyping = true;
+	}
+
 	string sText = m_szBuf + m_szMixingString;
 
-	UI_MGR->m_text = sText;
+	UI_MGR->m_InputField->m_SonUI[0]->m_Text = m_oldText + sText;
 }
 
 LRESULT ServerScene::MyWndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
@@ -307,6 +325,10 @@ LRESULT ServerScene::MyWndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM l
 			//CheckText = m_szBuf;
 			m_szBuf = "";
 			m_szMixingString[0] = NULL;
+
+			m_oldText = "";
+
+			UI_MGR->m_InputField->m_SonUI[0]->m_Text = "";
 
 		}
 		else
