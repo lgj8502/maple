@@ -232,12 +232,16 @@ void ServerScene::SendText()
 	{
 		m_oldText = UI_MGR->m_InputField->m_SonUI[0]->m_Text;
 
+		string temp = m_szBuf;		
+
+		m_szBuf = m_oldText + temp;
+
 		UI_MGR->m_InputField->m_SonUI[0]->m_isTyping = true;
 	}
 
 	string sText = m_szBuf + m_szMixingString;
 
-	UI_MGR->m_InputField->m_SonUI[0]->m_Text = m_oldText + sText;
+	UI_MGR->m_InputField->m_SonUI[0]->m_Text = sText;
 }
 
 LRESULT ServerScene::MyWndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
