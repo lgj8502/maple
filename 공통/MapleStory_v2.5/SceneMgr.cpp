@@ -1,8 +1,10 @@
 #include "stdafx.h"
 #include "SceneMgr.h"
-#include "ServerScene.h"
 #include "LobbyScene.h"
 #include "IngameScene.h"
+#include "LoginScene.h"
+#include "ChannelScene.h"
+#include "CreateScene0.h"
 
 void SceneMgr::SetScene()
 {
@@ -10,13 +12,18 @@ void SceneMgr::SetScene()
 
 	switch (m_Type)
 	{
-	case SCENE_SERVER:
-		m_pScene = new ServerScene;
+	case SCENE_LOGIN:
+		m_pScene = new LoginScene;
+		break;
+	case SCENE_CHANNEL:
+		m_pScene = new ChannelScene;
 		break;
 	case SCENE_LOBBY:
 		m_pScene = new LobbyScene;
 		break;
-
+	case SCENE_CREATE0:
+		m_pScene = new CreateScene0;
+		break;
 	case SCENE_INGAME:
 		m_pScene = new IngameScene;
 		break;
@@ -60,6 +67,7 @@ void SceneMgr::ChangeScene(int _Type)
 	m_IsChange	= true;
 
 	UI_MGR->Destroy();
+	IMG_MGR->ClearImgList();
 }
 
 LRESULT SceneMgr::MyWndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)

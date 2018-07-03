@@ -48,10 +48,11 @@ private:
 	map <int, Ani_Info>		m_AniList;
 	int						m_OldState		= -1;
 	float					m_CountTime		= 0.0f;
-	//int						m_StartIndex	= -1;
+
 public:
 
 	int						m_State = -1;
+	bool					m_HaveBitmap = false;
 
 public:
 
@@ -61,9 +62,8 @@ public:
 	void Render(Matrix3x2F _mat, ID2D1RenderTarget *_pRT);
 
 	void AddBitmap(ID2D1Bitmap* _bitmap);
-	void ChangeBitmap(size_t _index);
 
-	//void AddAnimation(int _state, int _start, int _count, vector<float> _timelist);
+	void ChangeBitmap(size_t _index);
 
 	void AddAnimation(int _state, int _start, int _end, double _time, ...);
 
@@ -72,6 +72,9 @@ public:
 	inline void ClearBitmap()
 	{
 		m_BitmapList.clear();
+		m_ImgRTList.clear();
+
+		m_BitmapIndex = 0;
 	}
 
 	inline void EraseBitmap(int _index)

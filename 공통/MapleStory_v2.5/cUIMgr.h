@@ -56,9 +56,9 @@ private:
 public:
 
 	// IME ¿ë
-	cUI* m_InputFiled = nullptr;
+	cUI* m_InputField = nullptr;
 	bool m_isChating = false;
-	string m_text;
+	bool m_ExitField = false;
 
 	void	Destroy();
 
