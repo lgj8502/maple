@@ -45,7 +45,6 @@ HRESULT D2D::Init2D(IDXGISwapChain * _pSwapChain)
 	//m_Font.SetFont(L"°íµñ");
 
 	IMG_MGR->Init(m_pRT);
-	IMG_MGR->FileFindDir(ImgDir);
 	IMG_MGR->SetBrush(m_pBrush);
 
 	return hr;

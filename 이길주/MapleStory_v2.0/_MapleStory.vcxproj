@@ -144,8 +144,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="BufferType.h" />
+    <ClInclude Include="cCharacter.h" />
+    <ClInclude Include="ChannelScene.h" />
     <ClInclude Include="cLogMgr.h" />
-    <ClInclude Include="cPlayer.h" />
+    <ClInclude Include="cMap.h" />
+    <ClInclude Include="cMapMgr.h" />
+    <ClInclude Include="CreateScene0.h" />
+    <ClInclude Include="cTestMap.h" />
     <ClInclude Include="cTimer.h" />
     <ClInclude Include="cUI.h" />
     <ClInclude Include="cUIMgr.h" />
@@ -155,25 +160,31 @@
     <ClInclude Include="ImageMgr.h" />
     <ClInclude Include="IngameScene.h" />
     <ClInclude Include="LobbyScene.h" />
+    <ClInclude Include="LoginScene.h" />
     <ClInclude Include="MK_KeyMgr.h" />
     <ClInclude Include="Object2D.h" />
     <ClInclude Include="Object3D.h" />
+    <ClInclude Include="PlayerTest.h" />
     <ClInclude Include="Renderer2D.h" />
     <ClInclude Include="RenderObject3D.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneMgr.h" />
-    <ClInclude Include="ServerScene.h" />
+    <ClInclude Include="SoundMgr.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="TemplateSingleton.h" />
-    <ClInclude Include="TEST.h" />
     <ClInclude Include="Text2D.h" />
     <ClInclude Include="Transform2D.h" />
     <ClInclude Include="Transform3D.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BufferType.cpp" />
+    <ClCompile Include="cCharacter.cpp" />
+    <ClCompile Include="ChannelScene.cpp" />
     <ClCompile Include="cLogMgr.cpp" />
-    <ClCompile Include="cPlayer.cpp" />
+    <ClCompile Include="cMap.cpp" />
+    <ClCompile Include="cMapMgr.cpp" />
+    <ClCompile Include="CreateScene0.cpp" />
+    <ClCompile Include="cTestMap.cpp" />
     <ClCompile Include="cTimer.cpp" />
     <ClCompile Include="cUI.cpp" />
     <ClCompile Include="cUIMgr.cpp" />
@@ -182,11 +193,12 @@
     <ClCompile Include="ImageMgr.cpp" />
     <ClCompile Include="IngameScene.cpp" />
     <ClCompile Include="LobbyScene.cpp" />
+    <ClCompile Include="LoginScene.cpp" />
     <ClCompile Include="Object2D.cpp" />
+    <ClCompile Include="PlayerTest.cpp" />
     <ClCompile Include="Renderer2D.cpp" />
     <ClCompile Include="SceneMgr.cpp" />
-    <ClCompile Include="ServerScene.cpp" />
-    <ClCompile Include="TEST.cpp" />
+    <ClCompile Include="SoundMgr.cpp" />
     <ClCompile Include="Text2D.cpp" />
     <ClCompile Include="Transform2D.cpp" />
     <ClCompile Include="WinMain.cpp">

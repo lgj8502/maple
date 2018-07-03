@@ -120,13 +120,10 @@ void cUIMgr::BitMapAdd(string _name, wstring _bitmapName)
 
 void cUIMgr::OnMouseDown(POINT _mousePos)
 {
-	list<cUI*>::iterator Iter;
+	list<cUI*>::reverse_iterator Iter;
 
-	for (Iter = m_UIList.end(); Iter != m_UIList.begin(); Iter--)
+	for (Iter = m_UIList.rbegin(); Iter != m_UIList.rend(); Iter++)
 	{
-
-		if (Iter == m_UIList.end()) continue;
-
 		cUI* UI = (*Iter);
 
 		if (UI->m_RayCast == false) continue;
@@ -207,11 +204,10 @@ void cUIMgr::OnMouseUp(POINT _mousePos)
 
 	m_ClickedUI->m_isClicked = false;
 
-	list<cUI*>::iterator Iter;
+	list<cUI*>::reverse_iterator Iter;
 
-	for (Iter = m_UIList.end(); Iter != m_UIList.begin(); Iter--)
+	for (Iter = m_UIList.rbegin(); Iter != m_UIList.rend(); Iter++)
 	{
-		if (Iter == m_UIList.end()) continue;
 
 		cUI* UI = (*Iter);
 
@@ -252,11 +248,10 @@ void cUIMgr::OnMouseOver(POINT _mousePos)
 {
 	m_MosuePoint = _mousePos;
 
-	list<cUI*>::iterator Iter;
+	list<cUI*>::reverse_iterator Iter;
 
-	for (Iter = m_UIList.end(); Iter != m_UIList.begin(); Iter--)
+	for (Iter = m_UIList.rbegin(); Iter != m_UIList.rend(); Iter++)
 	{
-		if (Iter == m_UIList.end()) continue;
 
 		cUI* UI = (*Iter);
 
@@ -292,11 +287,10 @@ void cUIMgr::OnMouseDrag(POINT _mousePos)
 {
 	m_MosuePoint = _mousePos;
 
-	list<cUI*>::iterator Iter;
+	list<cUI*>::reverse_iterator Iter;
 
-	for (Iter = m_UIList.end(); Iter != m_UIList.begin(); Iter--)
+	for (Iter = m_UIList.rbegin(); Iter != m_UIList.rend(); Iter++)
 	{
-		if (Iter == m_UIList.end()) continue;
 
 		if ((*Iter)->m_UseDrag == false) continue;
 
@@ -313,11 +307,10 @@ void cUIMgr::OnMouseDrag(POINT _mousePos)
 
 void cUIMgr::OnMouseExit(POINT _mousePos)
 {
-	list<cUI*>::iterator Iter;
+	list<cUI*>::reverse_iterator Iter;
 
-	for (Iter = m_UIList.end(); Iter != m_UIList.begin(); Iter--)
+	for (Iter = m_UIList.rbegin(); Iter != m_UIList.rend(); Iter++)
 	{
-		if (Iter == m_UIList.end()) continue;
 
 		cUI* UI = (*Iter);
 
@@ -803,15 +796,13 @@ void cUIMgr::AddInputField(string _name, wstring _bitmapName, D2D1_POINT_2F _pos
 	UI->m_isActive = _isActive;
 	UI->m_RayCast = _isRayCast;
 
-	UI->m_Text = "¦¢";
+	UI->m_Text = "l";
 	UI->m_FontSize = _FontSize;
 	UI->m_FontColor = ColorF(1,1,1,0);
 	UI->m_FontName = _FontName;
 	UI->m_Font.SetFont(UI->m_FontName.c_str());
 
 	m_UIList.push_back(UI);
-
-	m_InputFiled = UI;
 
 	cUI *UI_Text = new cUI;
 
@@ -884,26 +875,23 @@ void cUIMgr::Update(float _DelayTime)
 
 	if (m_isChating == true)
 	{
-		m_InputFiled->m_SonUI[0]->m_Text = m_text;
-
 		m_time += _DelayTime;
 
-		m_InputFiled->m_FontColor.a = 1.0f;
+		m_InputField->m_FontColor.a = 1.0f;
 
 		if (m_time > 0.5f)
 		{
-			m_InputFiled->m_FontColor.a = 0.0f;
+			m_InputField->m_FontColor.a = 0.0f;
 		}
 
 		if (m_time > 1.0f)
 		{
-			m_InputFiled->m_FontColor.a = 1.0f;
+			m_InputField->m_FontColor.a = 1.0f;
 
 			m_time = 0.0f;
 		}
+	}
 
-
-	}	
 }
 
 void cUIMgr::Render()

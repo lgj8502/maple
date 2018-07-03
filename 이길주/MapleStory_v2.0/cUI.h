@@ -42,6 +42,7 @@ public:
 	// UI_TEXT ¿ë
 	Text2D m_Font;
 	string m_Text = "";
+	bool   m_isTyping = false;
 	float m_FontSize = 20.0f;
 	D2D1_COLOR_F m_FontColor = ColorF(ColorF::White);
 	wstring m_FontName = L"°íµñ";

@@ -49,9 +49,6 @@
     <Filter Include="소스 파일\D2D\Object2D">
       <UniqueIdentifier>{d81dbf17-6352-48e5-a346-8d97341448c1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\D2D\TEST">
-      <UniqueIdentifier>{70d48ddb-bd13-4870-9f54-b423f88feaab}</UniqueIdentifier>
-    </Filter>
     <Filter Include="소스 파일\Manager">
       <UniqueIdentifier>{730d9e8a-7717-4579-821e-9409f582c06d}</UniqueIdentifier>
     </Filter>
@@ -60,6 +57,9 @@
     </Filter>
     <Filter Include="소스 파일\Player">
       <UniqueIdentifier>{e94a99f1-40c4-4f90-b73b-47f61f2d6788}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Map">
+      <UniqueIdentifier>{b091c4f4-c552-46a5-834e-b599857da0de}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -105,13 +105,7 @@
     <ClInclude Include="IngameScene.h">
       <Filter>소스 파일\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="LobbyScene.h">
-      <Filter>소스 파일\Scene</Filter>
-    </ClInclude>
     <ClInclude Include="Scene.h">
-      <Filter>소스 파일\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="ServerScene.h">
       <Filter>소스 파일\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Object2D.h">
@@ -123,9 +117,6 @@
     <ClInclude Include="Renderer2D.h">
       <Filter>소스 파일\D2D\Object2D</Filter>
     </ClInclude>
-    <ClInclude Include="TEST.h">
-      <Filter>소스 파일\D2D\TEST</Filter>
-    </ClInclude>
     <ClInclude Include="cLogMgr.h">
       <Filter>소스 파일\Manager</Filter>
     </ClInclude>
@@ -135,11 +126,38 @@
     <ClInclude Include="cUIMgr.h">
       <Filter>소스 파일\Manager</Filter>
     </ClInclude>
-    <ClInclude Include="cPlayer.h">
-      <Filter>소스 파일\Player</Filter>
-    </ClInclude>
     <ClInclude Include="TemplateSingleton.h">
       <Filter>소스 파일\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="cCharacter.h">
+      <Filter>소스 파일\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerTest.h">
+      <Filter>소스 파일\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="LoginScene.h">
+      <Filter>소스 파일\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundMgr.h">
+      <Filter>소스 파일\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="ChannelScene.h">
+      <Filter>소스 파일\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="LobbyScene.h">
+      <Filter>소스 파일\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="CreateScene0.h">
+      <Filter>소스 파일\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="cMap.h">
+      <Filter>소스 파일\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="cMapMgr.h">
+      <Filter>소스 파일\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="cTestMap.h">
+      <Filter>소스 파일\Map</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -185,12 +203,6 @@
     <ClCompile Include="IngameScene.cpp">
       <Filter>소스 파일\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="LobbyScene.cpp">
-      <Filter>소스 파일\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="ServerScene.cpp">
-      <Filter>소스 파일\Scene</Filter>
-    </ClCompile>
     <ClCompile Include="Object2D.cpp">
       <Filter>소스 파일\D2D\Object2D</Filter>
     </ClCompile>
@@ -199,9 +211,6 @@
     </ClCompile>
     <ClCompile Include="Renderer2D.cpp">
       <Filter>소스 파일\D2D\Object2D</Filter>
-    </ClCompile>
-    <ClCompile Include="TEST.cpp">
-      <Filter>소스 파일\D2D\TEST</Filter>
     </ClCompile>
     <ClCompile Include="cLogMgr.cpp">
       <Filter>소스 파일\Manager</Filter>
@@ -212,8 +221,35 @@
     <ClCompile Include="cUIMgr.cpp">
       <Filter>소스 파일\Manager</Filter>
     </ClCompile>
-    <ClCompile Include="cPlayer.cpp">
+    <ClCompile Include="cCharacter.cpp">
       <Filter>소스 파일\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerTest.cpp">
+      <Filter>소스 파일\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="LoginScene.cpp">
+      <Filter>소스 파일\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundMgr.cpp">
+      <Filter>소스 파일\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="ChannelScene.cpp">
+      <Filter>소스 파일\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="LobbyScene.cpp">
+      <Filter>소스 파일\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="CreateScene0.cpp">
+      <Filter>소스 파일\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="cMap.cpp">
+      <Filter>소스 파일\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="cMapMgr.cpp">
+      <Filter>소스 파일\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="cTestMap.cpp">
+      <Filter>소스 파일\Map</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -8,7 +8,16 @@ Object2D::Object2D()
 
 void Object2D::Update(float _DelayTime)
 {
+	m_Renderer.AniUpdate(_DelayTime);
+	m_Transform.AniTransUpdate(_DelayTime);
+
+	if (m_Transform.m_gravity == true)
+	{
+		m_Transform.Gravity(_DelayTime);
+	}
+
 	m_Transform.UpdateMatrix(m_pRT);
+
 }
 
 void Object2D::Render()
