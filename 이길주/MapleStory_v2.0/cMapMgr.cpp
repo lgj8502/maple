@@ -1,149 +1,183 @@
 #include "stdafx.h"
 #include "cMapMgr.h"
+#include "cErebMap.h"
 
 cMapMgr::~cMapMgr()
 {
-	Destroy();
+	delete m_pMap;
 }
 
 
+void cMapMgr::SetMap()
+{
+	delete m_pMap;
+
+	switch (m_MapName)
+	{
+	case MNAME_EREB:
+		m_pMap = new cErebMap;
+		break;
+
+	}
+
+	m_pMap->Init();
+
+	m_isChange = false;
+}
+
 void cMapMgr::AddTile(wstring _bitmapName, D2D1_POINT_2F _pos)
 {
-	cMap *MAP = new cMap;
+	cMapObj *MAP = new cMapObj;
 
 	ID2D1Bitmap* AddBitmap = IMG_MGR->GetImage(_bitmapName);
 
 	MAP->m_Renderer.AddBitmap(AddBitmap);
 
-	MAP->m_Transform.SetPos(_pos);
+	MAP->m_Transform.SetPos(_pos);	
 
-	m_Tile_List.push_back(MAP);
+	m_pMap->m_Tile_List.push_back(MAP);
+}
+
+void cMapMgr::AddFlatTileH(D2D1_POINT_2F _pos, int _count)
+{
+	srand(GetTickCount());
+
+	wstring Mapname = L"";
+
+	for (int i = 0; i < _count; i++)
+	{
+		int randum = rand() % 3;
+
+		switch (randum)
+		{
+		case 0: Mapname = L"enH0.0"; break;
+		case 1: Mapname = L"enH0.1"; break;
+		case 2: Mapname = L"enH0.2"; break;
+		}
+
+		cMapObj *MAP = new cMapObj;
+
+		ID2D1Bitmap* AddBitmap = m_pMap->m_MapImgList[Mapname].m_Bitmap;
+
+		MAP->m_Renderer.AddBitmap(AddBitmap);
+
+		MAP->m_Transform.SetPos(_pos.x + i * 90.0f, _pos.y);
+
+		m_pMap->m_Tile_List.push_back(MAP);
+	}
+}
+
+void cMapMgr::AddFlatTileM(D2D1_POINT_2F _pos, int _count)
+{
+	srand(GetTickCount());
+
+	wstring Mapname = L"";
+
+	for (int i = 0; i < _count; i++)
+	{
+		int randum = rand() % 6;
+
+		switch (randum)
+		{
+		case 0: Mapname = L"bsc.0"; break;
+		case 1: Mapname = L"bsc.1"; break;
+		case 2: Mapname = L"bsc.2"; break;
+		case 3: Mapname = L"bsc.3"; break;
+		case 4: Mapname = L"bsc.4"; break;
+		case 5: Mapname = L"bsc.5"; break;
+		}
+
+		cMapObj *MAP = new cMapObj;
+
+		ID2D1Bitmap* AddBitmap = m_pMap->m_MapImgList[Mapname].m_Bitmap;
+
+		MAP->m_Renderer.AddBitmap(AddBitmap);
+
+		MAP->m_Transform.SetPos(_pos.x + i * 90.0f, _pos.y);
+
+		m_pMap->m_Tile_List.push_back(MAP);
+	}
+}
+
+void cMapMgr::AddFlatTileL(D2D1_POINT_2F _pos, int _count)
+{
+	srand(GetTickCount());
+
+	wstring Mapname = L"";
+
+	for (int i = 0; i < _count; i++)
+	{
+		int randum = rand() % 3;
+
+		switch (randum)
+		{
+		case 0: Mapname = L"enH1.0"; break;
+		case 1: Mapname = L"enH1.1"; break;
+		case 2: Mapname = L"enH1.2"; break;
+		}
+
+		cMapObj *MAP = new cMapObj;
+
+		ID2D1Bitmap* AddBitmap = m_pMap->m_MapImgList[Mapname].m_Bitmap;
+
+		MAP->m_Renderer.AddBitmap(AddBitmap);
+
+		MAP->m_Transform.SetPos(_pos.x + i * 90.0f, _pos.y);
+
+		m_pMap->m_Tile_List.push_back(MAP);
+	}
 }
 
 void cMapMgr::Update(float _DelayTime)
 {
-	for (auto &i : m_BackGround1_List)
+	if (m_isChange == true)
 	{
-		i->Update(_DelayTime);
+		SetMap();
 	}
 
-	for (auto &i : m_BackGround2_List)
+	if (m_pMap != nullptr)
 	{
-		i->Update(_DelayTime);
-	}
-	for (auto &i : m_BackGround3_List)
-	{
-		i->Update(_DelayTime);
-	}
-
-	for (auto &i : m_BackGround4_List)
-	{
-		i->Update(_DelayTime);
-	}
-
-	for (auto &i : m_Scroll_List)
-	{
-		i->Update(_DelayTime);
-	}
-
-
-	for (auto &i : m_Tile_List)
-	{
-		i->Update(_DelayTime);
-	}
-
-	for (auto &i : m_Portal_List)
-	{
-		i->Update(_DelayTime);
-	}
-
-	for (auto &i : m_Ladder_List)
-	{
-		i->Update(_DelayTime);
-	}
-
-
-	for (auto &i : m_FrontObject_List)
-	{
-		i->Update(_DelayTime);
+		m_pMap->Update(_DelayTime);
 	}
 }
 
 void cMapMgr::BackRender()
 {
-	for (auto &i : m_BackGround1_List)
+	if (m_pMap != nullptr)
 	{
-		i->Render();
-	}
-
-	for (auto &i : m_Scroll_List)
-	{
-		i->Render();
-	}
-
-	for (auto &i : m_BackGround2_List)
-	{
-		i->Render();
-	}
-
-	for (auto &i : m_BackGround3_List)
-	{
-		i->Render();
-	}
-
-	for (auto &i : m_BackGround4_List)
-	{
-		i->Render();
-	}
-
-	for (auto &i : m_Tile_List)
-	{
-		i->Render();
+		m_pMap->BackRender();
 	}
 }
 
 void cMapMgr::FrontRender()
 {
-	for (auto &i : m_Portal_List)
+	if (m_pMap != nullptr)
 	{
-		i->Render();
-	}
-
-	for (auto &i : m_FrontObject_List)
-	{
-		i->Render();
+		m_pMap->FrontRender();
 	}
 }
 
 void cMapMgr::LadderRender()
 {
-	for (auto &i : m_Ladder_List)
+	if (m_pMap != nullptr)
 	{
-		i->Render();
+		m_pMap->LadderRender();
 	}
 }
 
-void cMapMgr::Destroy()
+void cMapMgr::PlayerMoveLeft(float _velocity, float _time)
 {
-	DeleteMapList(m_BackGround1_List);
-	DeleteMapList(m_BackGround2_List);
-	DeleteMapList(m_BackGround3_List);
-	DeleteMapList(m_BackGround4_List);
-	DeleteMapList(m_FrontObject_List);
-	DeleteMapList(m_Ladder_List);
-	DeleteMapList(m_Portal_List);
-	DeleteMapList(m_Scroll_List);
-	DeleteMapList(m_Tile_List);
-
-}
-
-void cMapMgr::DeleteMapList(vector<cMap*> _list)
-{
-	for (auto &i : _list)
+	if (m_pMap != nullptr)
 	{
-		i = {};
-		delete i;
-		i = nullptr;
+		m_pMap->PlayerMoveLeft(_velocity, _time);
 	}
-	_list.clear();
 }
+
+void cMapMgr::ChangeMap(int _MapName)
+{
+	m_MapName = _MapName;
+	m_isChange = true;
+
+
+}
+

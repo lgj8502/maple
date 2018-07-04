@@ -17,7 +17,7 @@ PlayerTest::PlayerTest()
 	SetParent(PART_ORIGIN, PART_CENTER);
 
 
-	m_Parts[PART_ORIGIN].m_Transform.SetPos({ 500,300});
+	m_Parts[PART_ORIGIN].m_Transform.SetPos({ 500,100});
 	m_Parts[PART_ORIGIN].m_Transform.m_gravity = true;
 
 
@@ -301,9 +301,28 @@ void PlayerTest::SetParent(ePlayerParts _Parent, ePlayerParts _Son)
 void PlayerTest::LeftWalk(float _DelayTime)
 {
 	m_Parts[PART_ORIGIN].m_Transform.m_velocityX = -m_MoveSpeed * m_MoveSpeedRatio * 0.01f;
-	
-	m_Parts[PART_ORIGIN].m_Transform.VelocityTrans(_DelayTime);
 
+	//if (MAP_MGR->m_LeftEnd == true && m_Parts[PART_ORIGIN].m_Transform.GetPos().x > 20.0f)
+	if (MAP_MGR->m_LeftEnd == true)
+	{	
+
+		m_Parts[PART_ORIGIN].m_Transform.VelocityTrans(_DelayTime);
+	}
+	else
+	{
+		if (m_Parts->m_Transform.GetScale().x < 0)
+		{
+			D2D1_POINT_2F scale = m_Parts->m_Transform.GetScale();
+
+			scale.x *= -1;
+
+			m_Parts->m_Transform.SetScale(scale);
+		}
+
+		MAP_MGR->PlayerMoveLeft(m_Parts[PART_ORIGIN].m_Transform.m_velocityX, _DelayTime);
+		
+	}
+	
 	for (int i = 0; i < PART_END; i++)
 	{
 		if (m_Parts[i].m_Renderer.m_State != PLAYER_JUMP)
@@ -318,9 +337,25 @@ void PlayerTest::LeftWalk(float _DelayTime)
 void PlayerTest::RightWalk(float _DelayTime)
 {
 
-	m_Parts[PART_ORIGIN].m_Transform.m_velocityX = +m_MoveSpeed * m_MoveSpeedRatio * 0.01f;
+	if (MAP_MGR->m_RightEnd == true && m_Parts[PART_ORIGIN].m_Transform.GetPos().x < WIN_WIDTH - 20.0f)
+	{
+		m_Parts[PART_ORIGIN].m_Transform.m_velocityX = +m_MoveSpeed * m_MoveSpeedRatio * 0.01f;
 
-	m_Parts[PART_ORIGIN].m_Transform.VelocityTrans(_DelayTime);
+		m_Parts[PART_ORIGIN].m_Transform.VelocityTrans(_DelayTime);
+
+	}
+	else
+	{
+		if (m_Parts->m_Transform.GetScale().x > 0)
+		{
+			D2D1_POINT_2F scale = m_Parts->m_Transform.GetScale();
+
+			scale.x *= -1;
+
+			m_Parts->m_Transform.SetScale(scale);
+		}
+	}
+
 
 	for (int i = 0; i < PART_END; i++)
 	{

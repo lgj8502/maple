@@ -148,9 +148,10 @@
     <ClInclude Include="ChannelScene.h" />
     <ClInclude Include="cLogMgr.h" />
     <ClInclude Include="cMap.h" />
+    <ClInclude Include="cMapObj.h" />
     <ClInclude Include="cMapMgr.h" />
     <ClInclude Include="CreateScene0.h" />
-    <ClInclude Include="cTestMap.h" />
+    <ClInclude Include="cErebMap.h" />
     <ClInclude Include="cTimer.h" />
     <ClInclude Include="cUI.h" />
     <ClInclude Include="cUIMgr.h" />
@@ -182,9 +183,10 @@
     <ClCompile Include="ChannelScene.cpp" />
     <ClCompile Include="cLogMgr.cpp" />
     <ClCompile Include="cMap.cpp" />
+    <ClCompile Include="cMapObj.cpp" />
     <ClCompile Include="cMapMgr.cpp" />
     <ClCompile Include="CreateScene0.cpp" />
-    <ClCompile Include="cTestMap.cpp" />
+    <ClCompile Include="cErebMap.cpp" />
     <ClCompile Include="cTimer.cpp" />
     <ClCompile Include="cUI.cpp" />
     <ClCompile Include="cUIMgr.cpp" />

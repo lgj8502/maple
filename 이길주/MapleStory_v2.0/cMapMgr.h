@@ -2,8 +2,10 @@
 
 #include "TemplateSingleton.h"
 
-#include "cMap.h"
+#include "cMapObj.h"
 #include <vector>
+
+class cMap;
 
 enum eMap_Type
 {
@@ -18,35 +20,52 @@ enum eMap_Type
 	MAP_FRONTOBJECT,
 };
 
+enum eMapName
+{
+	MNAME_EREB,
+	MNAME_ARCANA,
+
+
+
+	MNAME_NONE,
+
+};
+
 class cMapMgr : public TemplateSingleton<cMapMgr>
 {
 	BASESET(cMapMgr);
 
-
 public:
 	~cMapMgr();
 
-	vector<cMap*> m_BackGround1_List;
-	vector<cMap*> m_Scroll_List;
-	vector<cMap*> m_BackGround2_List;
-	vector<cMap*> m_BackGround3_List;
-	vector<cMap*> m_BackGround4_List;
-	vector<cMap*> m_Tile_List;
-	vector<cMap*> m_Portal_List;
-	vector<cMap*> m_FrontObject_List;
-	vector<cMap*> m_Ladder_List;
+	cMap *m_pMap = nullptr;
+
+	int m_MapName = MNAME_NONE;
+	bool m_isChange = false;
+
+	bool m_LeftEnd = false;
+	bool m_RightEnd = true;
+
+private:
+
+	void SetMap();
+
+public:
+
 
 	void AddTile(wstring _bitmapName, D2D1_POINT_2F _pos);
-	void AddFlatTileS(wstring _bitmapName, D2D1_POINT_2F _pos, int _count);
+	void AddFlatTileH(D2D1_POINT_2F _pos, int _count);
+	void AddFlatTileM(D2D1_POINT_2F _pos, int _count);
+	void AddFlatTileL(D2D1_POINT_2F _pos, int _count);
 
 	void Update(float _DelayTime = 0);
 	void BackRender();
 	void FrontRender();
 	void LadderRender();
 
-	void Destroy();
+	void PlayerMoveLeft(float _velocity, float _time);
 
-	void DeleteMapList(vector<cMap*> _list);
+	void ChangeMap(int _MapName);
 
 
 };

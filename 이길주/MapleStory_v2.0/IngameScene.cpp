@@ -10,8 +10,9 @@ void IngameScene::Init(HWND hWnd)
 {
 	IMG_MGR->FileFindDir(L".\\Img\\IngameScene\\");
 
-	MAP_MGR->AddTile(L"enH0.1", { 500,500 });
-	MAP_MGR->AddTile(L"enH0.2", { 590,500 });
+	MAP_MGR->ChangeMap(MNAME_EREB);
+
+	
 
 	m_monster.Init();
 
