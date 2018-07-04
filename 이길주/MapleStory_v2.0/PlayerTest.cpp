@@ -224,25 +224,6 @@ void PlayerTest::Update(float _DelayTime)
 		m_Parts[i].Update(_DelayTime);
 	}
 
-	// 충돌판정 구현 후 삭제 예정
-	if (m_Parts[0].m_Transform.GetPos().y > 700.0f)
-	{
-		m_Parts[0].m_Transform.m_gravity = false;
-
-		m_JumpStart = false;
-
-		m_Parts[0].m_Transform.m_velocityY = 0.0f;
-
-		for (int i = 0; i < PART_END; i++)
-		{
-			m_Parts[i].m_Renderer.m_State = PLAYER_IDLE;
-			m_Parts[i].m_Transform.m_State = PLAYER_IDLE;
-		}
-
-		m_Parts[0].m_Transform.Translate(0, -2);
-
-	}
-	//
 
 	if (m_Parts[PART_ORIGIN].m_Transform.m_velocityX == 0 && m_Parts[PART_ORIGIN].m_Transform.m_velocityY == 0)
 	{
@@ -283,6 +264,12 @@ void PlayerTest::Update(float _DelayTime)
 			m_Parts[0].m_Transform.Translate(0, m_Parts[0].m_Transform.m_velocityY * _DelayTime);
 		}
 	}
+
+
+	m_MapPos = m_Parts[0].m_Transform.GetPos();
+	m_MapPos.x -= MAP_MGR->m_pMap->m_LayOut1.m_Transform.GetPos().x;
+	m_MapPos.y -= MAP_MGR->m_pMap->m_LayOut1.m_Transform.GetPos().y;
+
 }
 
 void PlayerTest::Render()
@@ -302,10 +289,12 @@ void PlayerTest::LeftWalk(float _DelayTime)
 {
 	m_Parts[PART_ORIGIN].m_Transform.m_velocityX = -m_MoveSpeed * m_MoveSpeedRatio * 0.01f;
 
-	//if (MAP_MGR->m_LeftEnd == true && m_Parts[PART_ORIGIN].m_Transform.GetPos().x > 20.0f)
-	if (MAP_MGR->m_LeftEnd == true)
+	if (m_Parts[PART_ORIGIN].m_Transform.GetPos().x > WIN_WIDTH / 2)
+	{
+		m_Parts[PART_ORIGIN].m_Transform.VelocityTrans(_DelayTime);
+	}
+	else if (MAP_MGR->m_LeftEnd == true && m_Parts[PART_ORIGIN].m_Transform.GetPos().x > 20.0f)
 	{	
-
 		m_Parts[PART_ORIGIN].m_Transform.VelocityTrans(_DelayTime);
 	}
 	else
@@ -336,13 +325,15 @@ void PlayerTest::LeftWalk(float _DelayTime)
 
 void PlayerTest::RightWalk(float _DelayTime)
 {
+	m_Parts[PART_ORIGIN].m_Transform.m_velocityX = +m_MoveSpeed * m_MoveSpeedRatio * 0.01f;
 
-	if (MAP_MGR->m_RightEnd == true && m_Parts[PART_ORIGIN].m_Transform.GetPos().x < WIN_WIDTH - 20.0f)
+	if (m_Parts[PART_ORIGIN].m_Transform.GetPos().x < WIN_WIDTH / 2)
 	{
-		m_Parts[PART_ORIGIN].m_Transform.m_velocityX = +m_MoveSpeed * m_MoveSpeedRatio * 0.01f;
-
 		m_Parts[PART_ORIGIN].m_Transform.VelocityTrans(_DelayTime);
-
+	}
+	else if (MAP_MGR->m_RightEnd == true && m_Parts[PART_ORIGIN].m_Transform.GetPos().x < WIN_WIDTH - 20.0f)
+	{
+		m_Parts[PART_ORIGIN].m_Transform.VelocityTrans(_DelayTime);
 	}
 	else
 	{
@@ -354,8 +345,9 @@ void PlayerTest::RightWalk(float _DelayTime)
 
 			m_Parts->m_Transform.SetScale(scale);
 		}
-	}
 
+		MAP_MGR->PlayerMoveRight(m_Parts[PART_ORIGIN].m_Transform.m_velocityX, _DelayTime);
+	}
 
 	for (int i = 0; i < PART_END; i++)
 	{
@@ -560,4 +552,49 @@ void PlayerTest::LoadImg(char *_path, size_t _ItemNo, map<wstring, ImgInfo> &_Bo
 	{
 		MK_LOG(" 경로 : %S , Img 로드 실패", _path);
 	}
+}
+
+bool PlayerTest::CrashCheckMap(cMapObj * _obj)
+{
+	if (_obj->m_CrashCheck == false) return false;
+
+	float left = m_MapPos.x - 20.0f;
+	float right = m_MapPos.x + 20.0f;
+	float up = m_MapPos.y - 50.0f;
+	float down = m_MapPos.y + 17.5f;
+
+	D2D1_POINT_2F pos = _obj->m_Transform.GetPos();
+
+	D2D1_RECT_F rect = _obj->m_Renderer.GetImgRT();
+
+	rect.left += pos.x;
+	rect.right += pos.x;
+	rect.top += pos.y;
+	rect.bottom += pos.y;
+
+	if (right > rect.left && left < rect.right &&
+		up < rect.bottom && down > rect.top	)
+	{		
+		return true;
+	}
+	return false;
+}
+
+void PlayerTest::Landing()
+{	
+
+	m_Parts[0].m_Transform.m_gravity = false;
+
+	m_JumpStart = false;
+
+	m_Parts[0].m_Transform.m_velocityY = 0.0f;
+
+	for (int i = 0; i < PART_END; i++)
+	{
+		m_Parts[i].m_Renderer.m_State = PLAYER_IDLE;
+		m_Parts[i].m_Transform.m_State = PLAYER_IDLE;
+	}
+
+	//m_Parts[0].m_Transform.Translate(0, -2);	
+
 }

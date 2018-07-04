@@ -44,7 +44,7 @@ public:
 	bool m_isChange = false;
 
 	bool m_LeftEnd = false;
-	bool m_RightEnd = true;
+	bool m_RightEnd = false;
 
 private:
 
@@ -64,8 +64,11 @@ public:
 	void LadderRender();
 
 	void PlayerMoveLeft(float _velocity, float _time);
+	void PlayerMoveRight(float _velocity, float _time);
 
 	void ChangeMap(int _MapName);
+
+	void SetParent(cMapObj *_parent, cMapObj *_son);
 
 
 };

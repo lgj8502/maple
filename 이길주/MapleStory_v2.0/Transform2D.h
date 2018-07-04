@@ -134,7 +134,7 @@ public:
 	}
 
 	void VelocityTrans(float _time);
-
+	void VelocityTrans_Map(float _time);
 
 };
 

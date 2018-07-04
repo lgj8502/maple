@@ -37,7 +37,25 @@ void IngameScene::Update(float _DelayTime)
 	MAP_MGR->Update(_DelayTime);
 	m_player.Update(_DelayTime);
 
+	for (int i = 0; i < MAP_MGR->m_pMap->m_Tile_List.size(); i++)
+	{
+		if (m_player.CrashCheckMap(MAP_MGR->m_pMap->m_Tile_List[i]) == true)
+		{
+			float posY = MAP_MGR->m_pMap->m_Tile_List[i]->m_Transform.GetPos().y;
 
+			posY += MAP_MGR->m_pMap->m_Tile_List[i]->m_Renderer.GetImgRT().top;
+
+			if (m_player.GetMapPos().y < posY)
+			{
+				m_player.Landing();
+
+			}
+
+			//MK_LOG("%f", m_player.GetMapPos().y);
+		}
+	}
+
+	
 
 	if (OnceKeyDown(VK_RETURN))
 	{

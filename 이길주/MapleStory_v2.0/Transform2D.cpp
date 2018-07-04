@@ -51,6 +51,11 @@ void Transform2D::VelocityTrans(float _time)
 	}
 }
 
+void Transform2D::VelocityTrans_Map(float _time)
+{
+	Translate(m_velocityX * _time, 0);
+}
+
 void Transform2D::Gravity(float _DelayTime)
 {
 	m_velocityY += 9.81f * _DelayTime * 100.0f;

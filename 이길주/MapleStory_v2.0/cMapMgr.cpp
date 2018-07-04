@@ -33,9 +33,11 @@ void cMapMgr::AddTile(wstring _bitmapName, D2D1_POINT_2F _pos)
 
 	MAP->m_Renderer.AddBitmap(AddBitmap);
 
-	MAP->m_Transform.SetPos(_pos);	
+	MAP->m_Transform.SetPos(_pos);
 
 	m_pMap->m_Tile_List.push_back(MAP);
+
+	SetParent(&(m_pMap->m_LayOut1), MAP);
 }
 
 void cMapMgr::AddFlatTileH(D2D1_POINT_2F _pos, int _count)
@@ -61,9 +63,13 @@ void cMapMgr::AddFlatTileH(D2D1_POINT_2F _pos, int _count)
 
 		MAP->m_Renderer.AddBitmap(AddBitmap);
 
+		MAP->m_CrashCheck = true;
+
 		MAP->m_Transform.SetPos(_pos.x + i * 90.0f, _pos.y);
 
 		m_pMap->m_Tile_List.push_back(MAP);
+
+		SetParent(&(m_pMap->m_LayOut1), MAP);
 	}
 }
 
@@ -96,6 +102,8 @@ void cMapMgr::AddFlatTileM(D2D1_POINT_2F _pos, int _count)
 		MAP->m_Transform.SetPos(_pos.x + i * 90.0f, _pos.y);
 
 		m_pMap->m_Tile_List.push_back(MAP);
+
+		SetParent(&(m_pMap->m_LayOut1), MAP);
 	}
 }
 
@@ -125,6 +133,8 @@ void cMapMgr::AddFlatTileL(D2D1_POINT_2F _pos, int _count)
 		MAP->m_Transform.SetPos(_pos.x + i * 90.0f, _pos.y);
 
 		m_pMap->m_Tile_List.push_back(MAP);
+
+		SetParent(&(m_pMap->m_LayOut1), MAP);
 	}
 }
 
@@ -173,11 +183,24 @@ void cMapMgr::PlayerMoveLeft(float _velocity, float _time)
 	}
 }
 
+void cMapMgr::PlayerMoveRight(float _velocity, float _time)
+{
+	if (m_pMap != nullptr)
+	{
+		m_pMap->PlayerMoveRight(_velocity, _time);
+	}
+}
+
 void cMapMgr::ChangeMap(int _MapName)
 {
 	m_MapName = _MapName;
 	m_isChange = true;
 
 
+}
+
+void cMapMgr::SetParent(cMapObj *_parent, cMapObj *_son)
+{
+	_son->m_Transform.m_pParent = &(_parent->m_Transform);
 }
 

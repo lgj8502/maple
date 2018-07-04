@@ -57,7 +57,7 @@ private:
 
 	LPCWSTR m_ImgDir = L".\\Img\\Character\\";
 
-
+	D2D1_POINT_2F m_MapPos = {};
 
 	map<wstring, ImgInfo>	m_BaseList;
 	map<wstring, ImgInfo>	m_HairList;
@@ -123,6 +123,18 @@ public:
 
 	void LoadImg(char *_path, size_t _ItemNo, map<wstring, ImgInfo> &_BotmapList);
 
+	bool CrashCheckMap(cMapObj *_obj);
 
+	void Landing();
+
+	inline D2D1_POINT_2F GetMapPos()
+	{
+		return m_MapPos;
+	}
+
+	inline Object2D GetObject2D()
+	{
+		return m_Parts[0];
+	}
 };
 

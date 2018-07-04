@@ -18,9 +18,13 @@ public:
 	vector<cMapObj*> m_FrontObject_List;
 	vector<cMapObj*> m_Ladder_List;
 
-	D2D1_POINT_2F m_BG2_pos = {};
-	D2D1_POINT_2F m_BG3_pos = {};
-	D2D1_POINT_2F m_BG4_pos = {};
+	cMapObj m_LayOut1 = {};
+	cMapObj m_LayOut2 = {};
+	cMapObj m_LayOut3 = {};
+
+	D2D1_POINT_2F m_LayOut1_Size = {};
+	D2D1_POINT_2F m_LayOut2_Size = {};
+	D2D1_POINT_2F m_LayOut3_Size = {};	
 
 public:
 	virtual ~cMap() = default;
@@ -32,6 +36,7 @@ public:
 	void LadderRender() ;
 
 	void PlayerMoveLeft(float _velocity, float _time);
+	void PlayerMoveRight(float _velocity, float _time);
 
 	void Destroy();
 	void DeleteMapList(vector<cMapObj*> _list);
