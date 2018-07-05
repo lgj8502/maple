@@ -3,9 +3,12 @@
 
 void cMap::Update(float _DelayTime)
 {
-	m_LayOut1.Update(_DelayTime);
+
 	m_LayOut2.Update(_DelayTime);
 	m_LayOut3.Update(_DelayTime);
+	m_LayOut4.Update(_DelayTime);
+	m_LayOut5.Update(_DelayTime);
+	m_LayOut6.Update(_DelayTime);
 
 	for (auto &i : m_BackGround1_List)
 	{
@@ -25,7 +28,14 @@ void cMap::Update(float _DelayTime)
 	{
 		i->Update(_DelayTime);
 	}
-
+	for (auto &i : m_BackGround5_List)
+	{
+		i->Update(_DelayTime);
+	}
+	for (auto &i : m_BackGround6_List)
+	{
+		i->Update(_DelayTime);
+	}
 	for (auto &i : m_Scroll_List)
 	{
 		i->Update(_DelayTime);
@@ -82,6 +92,16 @@ void cMap::BackRender()
 		i->Render();
 	}
 
+	for (auto &i : m_BackGround5_List)
+	{
+		i->Render();
+	}	
+	
+	for (auto &i : m_BackGround6_List)
+	{
+		i->Render();
+	}
+
 	for (auto &i : m_Tile_List)
 	{
 		i->Render();
@@ -112,23 +132,46 @@ void cMap::LadderRender()
 void cMap::PlayerMoveLeft(float _velocity, float _time)
 {
 	
-	if (m_LayOut1.m_Transform.GetPos().x >= 0)
+	if (m_LayOut6.m_Transform.GetPos().x >= 0)
 	{
 
 		MAP_MGR->m_LeftEnd = true;
 	}
 	else
 	{
-		m_LayOut1.m_Transform.m_velocityX = -_velocity;
-		m_LayOut1.m_Transform.VelocityTrans_Map(_time);
+		float x = m_LayOut6_Size.x - WIN_WIDTH;
 
-		D2D1_POINT_2F pos = m_LayOut1.m_Transform.GetPos();
+		float dx = (m_LayOut2_Size.x - WIN_WIDTH) / x;
+
+		m_LayOut2.m_Transform.m_velocityX = -_velocity * dx;
+		m_LayOut2.m_Transform.VelocityTrans_Map(_time);
+
+		dx = (m_LayOut3_Size.x - WIN_WIDTH) / x;
+
+		m_LayOut3.m_Transform.m_velocityX = -_velocity * dx;
+		m_LayOut3.m_Transform.VelocityTrans_Map(_time);
+
+		dx = (m_LayOut4_Size.x - WIN_WIDTH) / x;
+
+		m_LayOut4.m_Transform.m_velocityX = -_velocity * dx;
+		m_LayOut4.m_Transform.VelocityTrans_Map(_time);
+
+		dx = (m_LayOut5_Size.x - WIN_WIDTH) / x;
+
+		m_LayOut5.m_Transform.m_velocityX = -_velocity * dx;
+		m_LayOut5.m_Transform.VelocityTrans_Map(_time);
+
+
+		m_LayOut6.m_Transform.m_velocityX = -_velocity;
+		m_LayOut6.m_Transform.VelocityTrans_Map(_time);
+
+		D2D1_POINT_2F pos = m_LayOut6.m_Transform.GetPos();
 
 		if (pos.x >= 0)
 		{
 			pos.x = 0;
 
-			m_LayOut1.m_Transform.SetPos(pos);
+			m_LayOut6.m_Transform.SetPos(pos);
 		}
 
 		MAP_MGR->m_RightEnd = false;
@@ -138,22 +181,44 @@ void cMap::PlayerMoveLeft(float _velocity, float _time)
 
 void cMap::PlayerMoveRight(float _velocity, float _time)
 {
-	if (m_LayOut1.m_Transform.GetPos().x <= WIN_WIDTH - m_LayOut1_Size.x)
+	if (m_LayOut6.m_Transform.GetPos().x <= WIN_WIDTH - m_LayOut6_Size.x)
 	{
 		MAP_MGR->m_RightEnd = true;
 	}
 	else
 	{
-		m_LayOut1.m_Transform.m_velocityX = -_velocity;
-		m_LayOut1.m_Transform.VelocityTrans_Map(_time);
+		float x = m_LayOut6_Size.x - WIN_WIDTH;
 
-		D2D1_POINT_2F pos = m_LayOut1.m_Transform.GetPos();
+		float dx = (m_LayOut2_Size.x - WIN_WIDTH) / x;
 
-		if (pos.x <= WIN_WIDTH - m_LayOut1_Size.x)
+		m_LayOut2.m_Transform.m_velocityX = -_velocity * dx;
+		m_LayOut2.m_Transform.VelocityTrans_Map(_time);
+
+		dx = (m_LayOut3_Size.x - WIN_WIDTH) / x;
+
+		m_LayOut3.m_Transform.m_velocityX = -_velocity * dx;
+		m_LayOut3.m_Transform.VelocityTrans_Map(_time);
+
+		dx = (m_LayOut4_Size.x - WIN_WIDTH) / x;
+
+		m_LayOut4.m_Transform.m_velocityX = -_velocity * dx;
+		m_LayOut4.m_Transform.VelocityTrans_Map(_time);
+
+		dx = (m_LayOut5_Size.x - WIN_WIDTH) / x;
+
+		m_LayOut5.m_Transform.m_velocityX = -_velocity * dx;
+		m_LayOut5.m_Transform.VelocityTrans_Map(_time);
+
+		m_LayOut6.m_Transform.m_velocityX = -_velocity;
+		m_LayOut6.m_Transform.VelocityTrans_Map(_time);
+
+		D2D1_POINT_2F pos = m_LayOut6.m_Transform.GetPos();
+
+		if (pos.x <= WIN_WIDTH - m_LayOut6_Size.x)
 		{
-			pos.x = WIN_WIDTH - m_LayOut1_Size.x;
+			pos.x = WIN_WIDTH - m_LayOut6_Size.x;
 
-			m_LayOut1.m_Transform.SetPos(pos);
+			m_LayOut6.m_Transform.SetPos(pos);
 		}
 
 		MAP_MGR->m_LeftEnd = false;
@@ -166,6 +231,7 @@ void cMap::Destroy()
 	DeleteMapList(m_BackGround2_List);
 	DeleteMapList(m_BackGround3_List);
 	DeleteMapList(m_BackGround4_List);
+	DeleteMapList(m_BackGround5_List);
 	DeleteMapList(m_FrontObject_List);
 	DeleteMapList(m_Ladder_List);
 	DeleteMapList(m_Portal_List);

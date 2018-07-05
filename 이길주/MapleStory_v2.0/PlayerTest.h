@@ -51,7 +51,7 @@ private:
 
 	// 기본 이동 속도
 	float	m_MoveSpeed = 200.0f;
-	float	m_JumpPower = 400.0f;
+	float	m_JumpPower = 500.0f;
 
 	// 지형과 충돌시 캐릭터가 땅에 박히는 현상 제거용
 	float	m_CrashHeight = 0.0f;

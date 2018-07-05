@@ -90,6 +90,33 @@ void Renderer2D::AddAnimation(int _state, int _start, int _end, double _time, ..
 
 }
 
+void Renderer2D::AddAnimation_const(int _state, int _start, int _end, float _time)
+{
+		Ani_Info Ani;
+
+	Ani.m_FrameStart = _start;
+
+	Ani.m_FrameEnd = _end ;
+
+	Ani.m_Count = _end - _start + 1;
+
+	for (int i = 0; i < Ani.m_Count; i++)
+	{
+		Ani.m_Timer.push_back(_time);
+	}
+
+	float result = 0.0f;
+
+	for (auto &i : Ani.m_Timer)
+	{
+		result += i;
+	}
+
+	Ani.m_TotalTime = result;
+
+	m_AniList.insert(pair<int, Ani_Info>(_state, Ani));
+}
+
 void Renderer2D::AniUpdate(float _DelayTime)
 {
 	if (m_AniList.find(m_State) == m_AniList.end())

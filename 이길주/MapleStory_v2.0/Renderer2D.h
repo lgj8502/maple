@@ -66,6 +66,7 @@ public:
 	void ChangeBitmap(size_t _index);
 
 	void AddAnimation(int _state, int _start, int _end, double _time, ...);
+	void AddAnimation_const(int _state, int _start, int _end, float _time);
 
 	void AniUpdate(float _DelayTime = 0.0f);
 

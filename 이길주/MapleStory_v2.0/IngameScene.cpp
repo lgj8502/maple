@@ -12,7 +12,7 @@ void IngameScene::Init(HWND hWnd)
 
 	MAP_MGR->ChangeMap(MNAME_EREB);	
 
-	m_monster.Init();
+	//m_monster.Init();
 
 }
 
@@ -29,7 +29,7 @@ void IngameScene::Update(float _DelayTime)
 
 	UI_MGR->Update(_DelayTime);
 
-	m_monster.Update(_DelayTime);
+	//m_monster.Update(_DelayTime);
 
 
 	MAP_MGR->Update(_DelayTime);
@@ -126,7 +126,7 @@ void IngameScene::Render()
 	UI_MGR->Render();
 
 	MAP_MGR->BackRender();
-	m_monster.Render();
+	//m_monster.Render();
 	m_player.Render();
 
 	MAP_MGR->LadderRender();

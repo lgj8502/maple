@@ -37,14 +37,12 @@ void cMapMgr::AddTile(wstring _bitmapName, D2D1_POINT_2F _pos)
 
 	m_pMap->m_Tile_List.push_back(MAP);
 
-	SetParent(&(m_pMap->m_LayOut1), MAP);
+	SetParent(&(m_pMap->m_LayOut6), MAP);
 }
 
 void cMapMgr::AddFlatTileH(D2D1_POINT_2F _pos, int _count)
 {
-	srand(GetTickCount());
-
-	wstring Mapname = L"edU.0";
+	wstring Mapname = L"edU.0";	
 
 	for (int i = 0; i < 2; i++)
 	{
@@ -66,7 +64,7 @@ void cMapMgr::AddFlatTileH(D2D1_POINT_2F _pos, int _count)
 		}
 
 		m_pMap->m_Tile_List.push_back(MAP);
-		SetParent(&(m_pMap->m_LayOut1), MAP);
+		SetParent(&(m_pMap->m_LayOut6), MAP);
 	}
 
 	for (int i = 0; i < _count; i++)
@@ -92,14 +90,12 @@ void cMapMgr::AddFlatTileH(D2D1_POINT_2F _pos, int _count)
 
 		m_pMap->m_Tile_List.push_back(MAP);	
 
-		SetParent(&(m_pMap->m_LayOut1), MAP);
+		SetParent(&(m_pMap->m_LayOut6), MAP);
 	}
 }
 
 void cMapMgr::AddFlatTileM(D2D1_POINT_2F _pos, int _count)
 {
-	srand(GetTickCount());
-
 	wstring Mapname = L"";
 
 	for (int i = 0; i < 2; i++)
@@ -131,7 +127,7 @@ void cMapMgr::AddFlatTileM(D2D1_POINT_2F _pos, int _count)
 		}
 
 		m_pMap->m_Tile_List.push_back(MAP);
-		SetParent(&(m_pMap->m_LayOut1), MAP);
+		SetParent(&(m_pMap->m_LayOut6), MAP);
 	}
 
 	for (int i = 0; i < _count; i++)
@@ -158,14 +154,12 @@ void cMapMgr::AddFlatTileM(D2D1_POINT_2F _pos, int _count)
 
 		m_pMap->m_Tile_List.push_back(MAP);
 
-		SetParent(&(m_pMap->m_LayOut1), MAP);
+		SetParent(&(m_pMap->m_LayOut6), MAP);
 	}
 }
 
 void cMapMgr::AddFlatTileL(D2D1_POINT_2F _pos, int _count)
 {
-	srand(GetTickCount());
-
 	wstring Mapname = L"edD.0";
 
 	for (int i = 0; i < 2; i++)
@@ -188,7 +182,7 @@ void cMapMgr::AddFlatTileL(D2D1_POINT_2F _pos, int _count)
 		}
 
 		m_pMap->m_Tile_List.push_back(MAP);
-		SetParent(&(m_pMap->m_LayOut1), MAP);
+		SetParent(&(m_pMap->m_LayOut6), MAP);
 	}
 
 	for (int i = 0; i < _count; i++)
@@ -212,7 +206,217 @@ void cMapMgr::AddFlatTileL(D2D1_POINT_2F _pos, int _count)
 
 		m_pMap->m_Tile_List.push_back(MAP);
 
-		SetParent(&(m_pMap->m_LayOut1), MAP);
+		SetParent(&(m_pMap->m_LayOut6), MAP);
+	}
+}
+
+void cMapMgr::AddBackGround1(wstring _bitmapName, D2D1_POINT_2F _pos)
+{
+	cMapObj *MAP = new cMapObj;
+
+	ID2D1Bitmap* AddBitmap = m_pMap->m_MapImgList[_bitmapName].m_Bitmap;
+
+	MAP->m_Renderer.AddBitmap(AddBitmap);
+
+	MAP->m_Transform.SetPos(_pos);
+
+	m_pMap->m_BackGround1_List.push_back(MAP);
+}
+
+void cMapMgr::AddBackGround1_Back1()
+{
+	cMapObj *MAP = new cMapObj;
+
+	ID2D1Bitmap* AddBitmap = m_pMap->m_MapImgList[L"back.1"].m_Bitmap;
+
+	MAP->m_Renderer.AddBitmap(AddBitmap);
+
+	MAP->m_Renderer.SetImgRT({ 0,0, WIN_WIDTH, WIN_HEIGHT });
+
+	m_pMap->m_BackGround1_List.push_back(MAP);
+}
+
+void cMapMgr::AddBackGround2(wstring _bitmapName, D2D1_POINT_2F _pos)
+{
+	cMapObj *MAP = new cMapObj;
+
+	ID2D1Bitmap* AddBitmap = m_pMap->m_MapImgList[_bitmapName].m_Bitmap;
+
+	MAP->m_Renderer.AddBitmap(AddBitmap);
+
+	MAP->m_Transform.SetPos(_pos);
+
+	m_pMap->m_BackGround2_List.push_back(MAP);
+
+	SetParent(&(m_pMap->m_LayOut2), MAP);
+}
+
+void cMapMgr::AddBackGround3(wstring _bitmapName, D2D1_POINT_2F _pos)
+{
+	cMapObj *MAP = new cMapObj;
+
+	ID2D1Bitmap* AddBitmap = m_pMap->m_MapImgList[_bitmapName].m_Bitmap;
+
+	MAP->m_Renderer.AddBitmap(AddBitmap);
+
+	_pos.y -= MAP->m_Renderer.GetImgRT().bottom;
+
+	MAP->m_Transform.SetPos(_pos);
+
+	m_pMap->m_BackGround3_List.push_back(MAP);
+
+	SetParent(&(m_pMap->m_LayOut3), MAP);
+}
+
+void cMapMgr::AddBackGround4(wstring _bitmapName, D2D1_POINT_2F _pos)
+{
+	cMapObj *MAP = new cMapObj;
+
+	ID2D1Bitmap* AddBitmap = m_pMap->m_MapImgList[_bitmapName].m_Bitmap;
+
+	MAP->m_Renderer.AddBitmap(AddBitmap);
+
+	_pos.y -= MAP->m_Renderer.GetImgRT().bottom;
+
+	MAP->m_Transform.SetPos(_pos);
+
+	m_pMap->m_BackGround4_List.push_back(MAP);
+
+	SetParent(&(m_pMap->m_LayOut4), MAP);
+}
+
+void cMapMgr::AddBackGround5(wstring _bitmapName, D2D1_POINT_2F _pos)
+{
+	cMapObj *MAP = new cMapObj;
+
+	ID2D1Bitmap* AddBitmap = m_pMap->m_MapImgList[_bitmapName].m_Bitmap;
+
+	MAP->m_Renderer.AddBitmap(AddBitmap);
+
+	_pos.y -= MAP->m_Renderer.GetImgRT().bottom;
+
+	MAP->m_Transform.SetPos(_pos);
+
+	m_pMap->m_BackGround5_List.push_back(MAP);
+
+	SetParent(&(m_pMap->m_LayOut5), MAP);
+}
+
+void cMapMgr::AddBackGround6(wstring _bitmapName, D2D1_POINT_2F _pos)
+{
+	cMapObj *MAP = new cMapObj;
+
+	ID2D1Bitmap* AddBitmap = m_pMap->m_MapImgList[_bitmapName].m_Bitmap;
+
+	MAP->m_Renderer.AddBitmap(AddBitmap);
+
+	_pos.y -= MAP->m_Renderer.GetImgRT().bottom;
+
+	MAP->m_Transform.SetPos(_pos);
+
+	m_pMap->m_BackGround6_List.push_back(MAP);
+
+	SetParent(&(m_pMap->m_LayOut6), MAP);
+}
+
+//void cMapMgr::AddAnimation(D2D1_POINT_2F _pos, eMap_Type _Type, float _time, int _count, wstring _bitmapName, ...)
+//{
+//	cMapObj *MAP = new cMapObj;
+//
+//	va_list arglist;
+//	va_start(arglist, _count);
+//
+//	for (int i = 0; i < _count; i++)
+//	{
+//		ID2D1Bitmap* AddBitmap = m_pMap->m_MapImgList[va_arg(arglist, wstring)].m_Bitmap;
+//		MAP->m_Renderer.AddBitmap(AddBitmap);
+//	}
+//
+//	va_end(arglist);	
+//
+//	_pos.y -= MAP->m_Renderer.GetImgRT().bottom;
+//
+//	MAP->m_Transform.SetPos(_pos);
+//
+//	MAP->m_Renderer.AddAnimation_const(0, 0, _count - 1, _time);
+//	MAP->m_Renderer.m_State = 0;
+//
+//	switch (_Type)
+//	{
+//	case MAP_BACKGROUND1: 	m_pMap->m_BackGround1_List.push_back(MAP); 
+//		break;
+//	case MAP_BACKGROUND2:	m_pMap->m_BackGround2_List.push_back(MAP); SetParent(&(m_pMap->m_LayOut2), MAP);
+//		break;
+//	case MAP_BACKGROUND3:	m_pMap->m_BackGround3_List.push_back(MAP); SetParent(&(m_pMap->m_LayOut3), MAP);
+//		break;
+//	case MAP_BACKGROUND4:	m_pMap->m_BackGround4_List.push_back(MAP); SetParent(&(m_pMap->m_LayOut4), MAP);
+//		break;
+//	case MAP_BACKGROUND5:	m_pMap->m_BackGround5_List.push_back(MAP); SetParent(&(m_pMap->m_LayOut5), MAP);
+//		break;
+//	case MAP_BACKGROUND6:	m_pMap->m_BackGround6_List.push_back(MAP); SetParent(&(m_pMap->m_LayOut6), MAP);
+//		break;
+//	case MAP_SCROLL:		m_pMap->m_Scroll_List.push_back(MAP);
+//		break;
+//	case MAP_TILE:			m_pMap->m_Tile_List.push_back(MAP); SetParent(&(m_pMap->m_LayOut6), MAP);
+//		break;
+//	case MAP_PORTAL:		m_pMap->m_Portal_List.push_back(MAP); SetParent(&(m_pMap->m_LayOut6), MAP);
+//		break;
+//	case MAP_LADDER:		m_pMap->m_Ladder_List.push_back(MAP); SetParent(&(m_pMap->m_LayOut6), MAP);
+//		break;
+//	case MAP_FRONTOBJECT:	m_pMap->m_FrontObject_List.push_back(MAP); SetParent(&(m_pMap->m_LayOut6), MAP);
+//		break;
+//	default:
+//		break;
+//	}	
+//
+//	
+//
+//}
+
+void cMapMgr::AddAnimation(D2D1_POINT_2F _pos, eMap_Type _Type, float _time, vector<wstring> _bitmapNamelist)
+{
+	cMapObj *MAP = new cMapObj;
+
+
+	for (auto &i : _bitmapNamelist)
+	{
+		ID2D1Bitmap* AddBitmap = m_pMap->m_MapImgList[i].m_Bitmap;
+		MAP->m_Renderer.AddBitmap(AddBitmap);
+	}
+
+	_pos.y -= MAP->m_Renderer.GetImgRT().bottom;
+
+	MAP->m_Transform.SetPos(_pos);
+
+	MAP->m_Renderer.AddAnimation_const(0, 0, _bitmapNamelist.size() - 1, _time);
+	MAP->m_Renderer.m_State = 0;
+
+	switch (_Type)
+	{
+	case MAP_BACKGROUND1: 	m_pMap->m_BackGround1_List.push_back(MAP);
+		break;
+	case MAP_BACKGROUND2:	m_pMap->m_BackGround2_List.push_back(MAP); SetParent(&(m_pMap->m_LayOut2), MAP);
+		break;
+	case MAP_BACKGROUND3:	m_pMap->m_BackGround3_List.push_back(MAP); SetParent(&(m_pMap->m_LayOut3), MAP);
+		break;
+	case MAP_BACKGROUND4:	m_pMap->m_BackGround4_List.push_back(MAP); SetParent(&(m_pMap->m_LayOut4), MAP);
+		break;
+	case MAP_BACKGROUND5:	m_pMap->m_BackGround5_List.push_back(MAP); SetParent(&(m_pMap->m_LayOut5), MAP);
+		break;
+	case MAP_BACKGROUND6:	m_pMap->m_BackGround6_List.push_back(MAP); SetParent(&(m_pMap->m_LayOut6), MAP);
+		break;
+	case MAP_SCROLL:		m_pMap->m_Scroll_List.push_back(MAP);
+		break;
+	case MAP_TILE:			m_pMap->m_Tile_List.push_back(MAP); SetParent(&(m_pMap->m_LayOut6), MAP);
+		break;
+	case MAP_PORTAL:		m_pMap->m_Portal_List.push_back(MAP); SetParent(&(m_pMap->m_LayOut6), MAP);
+		break;
+	case MAP_LADDER:		m_pMap->m_Ladder_List.push_back(MAP); SetParent(&(m_pMap->m_LayOut6), MAP);
+		break;
+	case MAP_FRONTOBJECT:	m_pMap->m_FrontObject_List.push_back(MAP); SetParent(&(m_pMap->m_LayOut6), MAP);
+		break;
+	default:
+		break;
 	}
 }
 
@@ -274,6 +478,7 @@ void cMapMgr::ChangeMap(int _MapName)
 	m_MapName = _MapName;
 	m_isChange = true;
 
+	srand(GetTickCount());
 
 }
 

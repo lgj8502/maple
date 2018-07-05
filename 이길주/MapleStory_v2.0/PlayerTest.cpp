@@ -250,6 +250,10 @@ void PlayerTest::Update(float _DelayTime)
 
 			m_JumpStart = true;
 		}
+		else
+		{
+			
+		}
 
 		m_Parts[0].m_Transform.m_velocityY += 9.81f * _DelayTime * 200.0f;
 
@@ -269,8 +273,8 @@ void PlayerTest::Update(float _DelayTime)
 
 
 	m_MapPos = m_Parts[0].m_Transform.GetPos();
-	m_MapPos.x -= MAP_MGR->m_pMap->m_LayOut1.m_Transform.GetPos().x;
-	m_MapPos.y -= MAP_MGR->m_pMap->m_LayOut1.m_Transform.GetPos().y;
+	m_MapPos.x -= MAP_MGR->m_pMap->m_LayOut6.m_Transform.GetPos().x;
+	m_MapPos.y -= MAP_MGR->m_pMap->m_LayOut6.m_Transform.GetPos().y;
 
 }
 
