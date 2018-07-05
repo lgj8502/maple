@@ -10,9 +10,7 @@ void IngameScene::Init(HWND hWnd)
 {
 	IMG_MGR->FileFindDir(L".\\Img\\IngameScene\\");
 
-	MAP_MGR->ChangeMap(MNAME_EREB);
-
-	
+	MAP_MGR->ChangeMap(MNAME_EREB);	
 
 	m_monster.Init();
 
@@ -37,6 +35,8 @@ void IngameScene::Update(float _DelayTime)
 	MAP_MGR->Update(_DelayTime);
 	m_player.Update(_DelayTime);
 
+	int count = 0;
+
 	for (int i = 0; i < MAP_MGR->m_pMap->m_Tile_List.size(); i++)
 	{
 		if (m_player.CrashCheckMap(MAP_MGR->m_pMap->m_Tile_List[i]) == true)
@@ -47,13 +47,16 @@ void IngameScene::Update(float _DelayTime)
 
 			if (m_player.GetMapPos().y < posY)
 			{
-				m_player.Landing();
+				m_player.Landing(MAP_MGR->m_pMap->m_Tile_List[i]);
 
+				count++;
+
+				break;
 			}
-
-			//MK_LOG("%f", m_player.GetMapPos().y);
 		}
 	}
+
+	if (count == 0) m_player.GravityOn();
 
 	
 
@@ -63,6 +66,12 @@ void IngameScene::Update(float _DelayTime)
 		{
 			UI_MGR->m_isChating = true;
 		}
+	}
+
+	if (OnceKeyDown(VK_DOWN))
+	{
+		m_player.BlowJumpTile();
+
 	}
 
 	if (StayKeyDown(VK_LEFT))

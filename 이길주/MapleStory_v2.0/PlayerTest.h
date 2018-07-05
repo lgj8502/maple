@@ -39,7 +39,7 @@ enum ePlayerParts
 class PlayerTest
 {
 
-
+	LPCWSTR m_ImgDir = L".\\Img\\Character\\";
 
 private:
 
@@ -53,9 +53,13 @@ private:
 	float	m_MoveSpeed = 200.0f;
 	float	m_JumpPower = 400.0f;
 
-	ePlayerState m_State = PLAYER_IDLE;
+	// 지형과 충돌시 캐릭터가 땅에 박히는 현상 제거용
+	float	m_CrashHeight = 0.0f;
 
-	LPCWSTR m_ImgDir = L".\\Img\\Character\\";
+	cMapObj *m_LandingTile = nullptr;
+	cMapObj *m_OldLandingTile = nullptr;
+
+
 
 	D2D1_POINT_2F m_MapPos = {};
 
@@ -105,6 +109,12 @@ public:
 	void Update(float _DelayTime = 0.0f);
 	void Render();
 
+	bool CrashCheckMap(cMapObj *_obj);
+	void Landing(cMapObj* _pLandingTile);
+	void GravityOn();
+	void BlowJumpTile();
+
+
 	void SetParent(ePlayerParts _Parent, ePlayerParts _Son);
 
 	void LeftWalk(float _DelayTime);
@@ -123,18 +133,14 @@ public:
 
 	void LoadImg(char *_path, size_t _ItemNo, map<wstring, ImgInfo> &_BotmapList);
 
-	bool CrashCheckMap(cMapObj *_obj);
 
-	void Landing();
 
 	inline D2D1_POINT_2F GetMapPos()
 	{
 		return m_MapPos;
 	}
 
-	inline Object2D GetObject2D()
-	{
-		return m_Parts[0];
-	}
+
+
 };
 
