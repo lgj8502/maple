@@ -36,7 +36,7 @@ void Transform2D::UpdateMatrix(ID2D1RenderTarget * _pRT)
 	}
 }
 
-void Transform2D::VelocityTrans(float _time)
+void Transform2D::VelocityTransX(float _time)
 {
 	Translate(m_velocityX * _time, 0);
 
@@ -49,6 +49,13 @@ void Transform2D::VelocityTrans(float _time)
 	{
 		m_Scale.x *= -1;
 	}
+
+
+}
+
+void Transform2D::VelocityTransY(float _time)
+{
+	Translate(0, m_velocityY = _time);
 }
 
 void Transform2D::VelocityTrans_Map(float _time)

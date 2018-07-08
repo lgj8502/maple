@@ -133,7 +133,8 @@ public:
 		m_Pos.y += _y;
 	}
 
-	void VelocityTrans(float _time);
+	void VelocityTransX(float _time);
+	void VelocityTransY(float _time);
 	void VelocityTrans_Map(float _time);
 
 };

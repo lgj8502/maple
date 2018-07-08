@@ -162,6 +162,9 @@
     <ClInclude Include="cErebMap.h">
       <Filter>소스 파일\Map</Filter>
     </ClInclude>
+    <ClInclude Include="cArcana.h">
+      <Filter>소스 파일\Map</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MK_KeyMgr.cpp">
@@ -255,6 +258,9 @@
       <Filter>소스 파일\Map</Filter>
     </ClCompile>
     <ClCompile Include="cErebMap.cpp">
+      <Filter>소스 파일\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="cArcana.cpp">
       <Filter>소스 파일\Map</Filter>
     </ClCompile>
   </ItemGroup>

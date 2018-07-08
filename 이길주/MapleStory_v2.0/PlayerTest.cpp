@@ -17,7 +17,7 @@ PlayerTest::PlayerTest()
 	SetParent(PART_ORIGIN, PART_CENTER);
 
 
-	m_Parts[PART_ORIGIN].m_Transform.SetPos({ 500,100});
+	m_Parts[PART_ORIGIN].m_Transform.SetPos({ 600,100});
 	m_Parts[PART_ORIGIN].m_Transform.m_gravity = true;
 
 
@@ -210,6 +210,12 @@ m_Parts[PART_HAND].m_Transform.AddTransAnimation(PLAYER_JUMP, 0, 0, 5);
 
 #pragma endregion JUMP
 
+
+// 사다리 임시 모션
+
+m_Parts[PART_ARM].m_Transform.AddAniPos({ 50, -13 });
+m_Parts[PART_ARM].m_Transform.AddTransAnimation(PLAYER_LADDER, 8, 8, 5);
+
 }
 
 
@@ -219,29 +225,93 @@ PlayerTest::~PlayerTest()
 
 void PlayerTest::Update(float _DelayTime)
 {
+	if (m_ChangeMap == true)
+	{
+		for (auto &i : MAP_MGR->m_pMap->m_Portal_List)
+		{
+			if (i->m_PortalID == m_PortalNum)
+			{
+				D2D1_POINT_2F pos =  i->GetMapPos();
+				pos.y -= 100.0f;
+
+				if (pos.x < WIN_WIDTH / 2.0f)
+				{
+					MAP_MGR->m_pMap->m_LayOut2.m_Transform.SetPos(0, 0);
+					MAP_MGR->m_pMap->m_LayOut3.m_Transform.SetPos(0, 0);
+					MAP_MGR->m_pMap->m_LayOut4.m_Transform.SetPos(0, 0);
+					MAP_MGR->m_pMap->m_LayOut5.m_Transform.SetPos(0, 0);
+					MAP_MGR->m_pMap->m_LayOut6.m_Transform.SetPos(0, 0);
+
+					MAP_MGR->m_LeftEnd = true;
+					MAP_MGR->m_RightEnd = false;
+
+					SetPos(pos);
+				}
+				else if (pos.x > MAP_MGR->m_pMap->m_LayOut6_Size.x - (WIN_WIDTH / 2.0f))
+				{
+					MAP_MGR->m_LeftEnd = false;
+					MAP_MGR->m_RightEnd = true;
+
+					MAP_MGR->m_pMap->m_LayOut2.m_Transform.SetPos(-(MAP_MGR->m_pMap->m_LayOut2_Size.x - WIN_WIDTH), 0);
+					MAP_MGR->m_pMap->m_LayOut3.m_Transform.SetPos(-(MAP_MGR->m_pMap->m_LayOut3_Size.x - WIN_WIDTH), 0);
+					MAP_MGR->m_pMap->m_LayOut4.m_Transform.SetPos(-(MAP_MGR->m_pMap->m_LayOut4_Size.x - WIN_WIDTH), 0);
+					MAP_MGR->m_pMap->m_LayOut5.m_Transform.SetPos(-(MAP_MGR->m_pMap->m_LayOut5_Size.x - WIN_WIDTH), 0);
+					MAP_MGR->m_pMap->m_LayOut6.m_Transform.SetPos(-(MAP_MGR->m_pMap->m_LayOut6_Size.x - WIN_WIDTH), 0);
+
+
+
+					pos.x = WIN_WIDTH - (MAP_MGR->m_pMap->m_LayOut6_Size.x - pos.x);
+
+					SetPos(pos);
+
+				}
+				else
+				{
+					float px = pos.x - (WIN_WIDTH / 2.0f);
+
+					float dx = (MAP_MGR->m_pMap->m_LayOut2_Size.x - WIN_WIDTH) /( MAP_MGR->m_pMap->m_LayOut6_Size.x - WIN_HEIGHT);
+					MAP_MGR->m_pMap->m_LayOut2.m_Transform.SetPos(-px * dx, 0);
+					MAP_MGR->m_pMap->m_LayOut6.m_Transform.SetPos(-px, 0);
+
+					pos.x = WIN_WIDTH / 2.0f;
+
+					SetPos(pos);
+				}
+				break;
+			}
+		}
+		m_ChangeMap = false;
+	}
+
+
 	for (int i = 0; i < PART_END; i++)
 	{
 		m_Parts[i].Update(_DelayTime);
 	}
 
-
-	if (m_Parts[PART_ORIGIN].m_Transform.m_velocityX == 0 && m_Parts[PART_ORIGIN].m_Transform.m_velocityY == 0)
+	if (m_Parts[0].m_Transform.m_gravity == true)
 	{
-		for (int i = 0; i < PART_END; i++)
-		{
-			m_Parts[i].m_Renderer.m_State = PLAYER_IDLE;
-			m_Parts[i].m_Transform.m_State = PLAYER_IDLE;
-		}
+		ChangeState(PLAYER_JUMP);
 	}
+
+
+	//if (m_Parts[PART_ORIGIN].m_Transform.m_velocityX == 0 && m_Parts[PART_ORIGIN].m_Transform.m_velocityY == 0)
+	//{
+	//	for (int i = 0; i < PART_END; i++)
+	//	{
+	//		m_Parts[i].m_Renderer.m_State = PLAYER_IDLE;
+	//		m_Parts[i].m_Transform.m_State = PLAYER_IDLE;
+	//	}
+	//}
+
+	// Jump
 
 	if (m_isJumping == true && m_Parts[0].m_Transform.m_gravity == false)
 	{
 
-		for (int i = 0; i < PART_END; i++)
-		{
-			m_Parts[i].m_Renderer.m_State = PLAYER_JUMP;
-			m_Parts[i].m_Transform.m_State = PLAYER_JUMP;
-		}
+		m_isLanding = false;
+
+		ChangeState(PLAYER_JUMP);
 
 
 		if (m_JumpStart == false)
@@ -250,20 +320,17 @@ void PlayerTest::Update(float _DelayTime)
 
 			m_JumpStart = true;
 		}
-		else
-		{
-			
-		}
+
 
 		m_Parts[0].m_Transform.m_velocityY += 9.81f * _DelayTime * 200.0f;
 
 		if (m_Parts[0].m_Transform.m_velocityY > 0.0f)
 		{
-			m_Parts[0].m_Transform.m_gravity = true;
+			//m_Parts[0].m_Transform.m_gravity = true;
+
+			LadderOff();
 
 			m_isJumping = false;
-
-
 		}
 		else
 		{
@@ -276,6 +343,78 @@ void PlayerTest::Update(float _DelayTime)
 	m_MapPos.x -= MAP_MGR->m_pMap->m_LayOut6.m_Transform.GetPos().x;
 	m_MapPos.y -= MAP_MGR->m_pMap->m_LayOut6.m_Transform.GetPos().y;
 
+
+	// 타일맵 충돌 체크
+
+	int countTile = 0;
+
+	for (size_t i = 0; i < MAP_MGR->m_pMap->m_Tile_List.size(); i++)
+	{
+		if (CrashCheckMap(MAP_MGR->m_pMap->m_Tile_List[i]) == true)
+		{
+			float posY = MAP_MGR->m_pMap->m_Tile_List[i]->GetMapPos().y;
+
+			posY += MAP_MGR->m_pMap->m_Tile_List[i]->m_Renderer.GetImgRT().top;
+
+			if (m_MapPos.y < posY)
+			{
+				Landing(MAP_MGR->m_pMap->m_Tile_List[i]);
+				countTile++;
+			}
+
+			break;
+		}
+	}
+
+	if (countTile == 0 && m_Parts[0].m_Transform.m_State != PLAYER_JUMP && m_Parts[0].m_Transform.m_State != PLAYER_LADDER) m_Parts[0].m_Transform.m_gravity = true;
+
+	// 사다리 충돌 체크
+
+	for (size_t i = 0; i < MAP_MGR->m_pMap->m_Ladder_List.size(); i++)
+	{
+		if (CrashCheckMap(MAP_MGR->m_pMap->m_Ladder_List[i]) == true)
+		{
+			float posX = MAP_MGR->m_pMap->m_Ladder_List[i]->GetMapPos().x;
+
+			float dx = abs(m_MapPos.x - posX);
+
+			if (dx < 10.0f)
+			{
+				CheckLadder(MAP_MGR->m_pMap->m_Ladder_List[i]);
+				//countLadder++;				
+			}
+
+			break;
+		}
+	}
+	
+	// 포탈 충돌 체크
+
+	int PortalCount = 0;
+
+	for (size_t i = 0; i < MAP_MGR->m_pMap->m_Portal_List.size(); i++)
+	{
+		if (CrashCheckMap(MAP_MGR->m_pMap->m_Portal_List[i]) == true)
+		{
+			float posX = MAP_MGR->m_pMap->m_Portal_List[i]->GetMapPos().x;
+
+			float dx = abs(m_MapPos.x - posX);
+
+			m_isCrashLadder = false;
+
+			if (dx < 7.0f)
+			{	
+				CheckPortal(MAP_MGR->m_pMap->m_Portal_List[i]);
+				PortalCount++;
+			}
+
+			break;
+		}
+	}
+
+	if (PortalCount == 0) PortalOff();
+
+	
 }
 
 void PlayerTest::Render()
@@ -290,8 +429,8 @@ bool PlayerTest::CrashCheckMap(cMapObj * _obj)
 {
 	if (_obj->m_CrashCheck == false) return false;
 
-	float left = m_MapPos.x - 20.0f;
-	float right = m_MapPos.x + 20.0f;
+	float left = m_MapPos.x - 7.0f;
+	float right = m_MapPos.x + 7.0f;
 	float up = m_MapPos.y - 50.0f;
 	float down = m_MapPos.y + 17.5f;
 
@@ -317,50 +456,125 @@ bool PlayerTest::CrashCheckMap(cMapObj * _obj)
 void PlayerTest::Landing(cMapObj* _pLandingTile)
 {
 	m_LandingTile = _pLandingTile;
-
-	if (m_LandingTile != m_OldLandingTile && m_OldLandingTile != nullptr)
-	{
-		m_OldLandingTile->m_CrashCheck = true;
-	}
+	m_isLanding = true;
 
 	if (m_Parts[0].m_Transform.m_gravity == true)
 	{
+		LadderOff();
+
+		if (m_OldLandingTile != nullptr)
+		{
+			m_OldLandingTile->m_CrashCheck = true;
+		}
+
+		m_JumpPowerRatio = 100.0f;
+
 		m_Parts[0].m_Transform.m_gravity = false;
 
 		m_JumpStart = false;
+		m_isJumping = false;
 
 		m_Parts[0].m_Transform.m_velocityY = 0.0f;
 
-		for (int i = 0; i < PART_END; i++)
-		{
-			m_Parts[i].m_Renderer.m_State = PLAYER_IDLE;
-			m_Parts[i].m_Transform.m_State = PLAYER_IDLE;
-		}
+		ChangeState(PLAYER_IDLE);
 
 		m_Parts[0].m_Transform.Translate(0, -m_CrashHeight);
 	}
 }
 
-void PlayerTest::GravityOn()
-{
-	if (m_Parts[0].m_Transform.m_State != PLAYER_JUMP)
-	{
-		m_Parts[0].m_Transform.m_gravity = true;
-	}
-}
+
 
 void PlayerTest::BlowJumpTile()
 {
-	if (m_LandingTile != nullptr)
+	if (m_LandingTile != nullptr && m_LandingTile->m_isBaseTile == false)
 	{
 		m_LandingTile->m_CrashCheck = false;
-
+	
 		m_OldLandingTile = m_LandingTile;
-
-		m_Parts[0].m_Transform.m_gravity = true;
-
+	
+		//m_Parts[0].m_Transform.m_gravity = true;
+	
+		m_JumpPowerRatio = 50.0f;
+	
+		m_isJumping = true;
+	
+		//LadderOff();
+	
 	}
 }
+
+void PlayerTest::CheckLadder(cMapObj * _Ladder)
+{
+	//if (m_Parts[0].m_Transform.m_State == PLAYER_LADDER) return;
+
+	m_isCrashLadder = true;
+
+	if (_Ladder->m_isLadderTop == true)
+	{
+		m_CrashedTopLadder = _Ladder;
+		m_CrashedLadder = nullptr;
+	}
+	else
+	{
+		m_CrashedLadder = _Ladder;
+		m_CrashedTopLadder = nullptr;
+	}
+
+	m_isLanding = false;
+}
+
+void PlayerTest::LadderOff()
+{
+	m_isCrashLadder = false;
+	m_CrashedLadder = nullptr;
+	m_CrashedTopLadder = nullptr;
+
+	m_Parts[PART_ORIGIN].m_Transform.m_gravity = true;
+}
+
+void PlayerTest::PortalIn()
+{
+	if (m_isCrashPortal == false) return;
+
+	m_PortalNum = m_CrashedPartal->m_ChangeMapPortalID;
+
+	MAP_MGR->ChangeMap(m_CrashedPartal->m_ChangeMap);
+
+	//m_CrashedPartal = false;
+
+	m_ChangeMap = true;
+
+	//for (auto &i : MAP_MGR->m_pMap->m_Portal_List)
+	//{
+	//	if (i->m_PortalID == PortalNum)
+	//	{
+	//		D2D1_POINT_2F pos =  i->GetMapPos();
+	//		pos.y -= 10.0f;
+
+
+	//		if (pos.x < WIN_WIDTH / 2.0f)
+	//		{
+	//			SetPos(pos);
+	//		}
+
+	//		break;
+	//	}
+	//}
+
+}
+
+void PlayerTest::CheckPortal(cMapObj * _Portal)
+{
+	m_isCrashPortal = true;
+	m_CrashedPartal = _Portal;
+}
+
+void PlayerTest::PortalOff()
+{
+	m_isCrashPortal = false;
+	m_CrashedPartal = nullptr;
+}
+
 
 void PlayerTest::SetParent(ePlayerParts _Parent, ePlayerParts _Son)
 {
@@ -369,15 +583,17 @@ void PlayerTest::SetParent(ePlayerParts _Parent, ePlayerParts _Son)
 
 void PlayerTest::LeftWalk(float _DelayTime)
 {
+	if (m_Parts[PART_ORIGIN].m_Transform.m_State == PLAYER_LADDER) return;
+
 	m_Parts[PART_ORIGIN].m_Transform.m_velocityX = -m_MoveSpeed * m_MoveSpeedRatio * 0.01f;
 
 	if (m_Parts[PART_ORIGIN].m_Transform.GetPos().x > WIN_WIDTH / 2)
 	{
-		m_Parts[PART_ORIGIN].m_Transform.VelocityTrans(_DelayTime);
+		m_Parts[PART_ORIGIN].m_Transform.VelocityTransX(_DelayTime);
 	}
 	else if (MAP_MGR->m_LeftEnd == true && m_Parts[PART_ORIGIN].m_Transform.GetPos().x > 20.0f)
 	{	
-		m_Parts[PART_ORIGIN].m_Transform.VelocityTrans(_DelayTime);
+		m_Parts[PART_ORIGIN].m_Transform.VelocityTransX(_DelayTime);
 	}
 	else
 	{
@@ -392,8 +608,8 @@ void PlayerTest::LeftWalk(float _DelayTime)
 
 		MAP_MGR->PlayerMoveLeft(m_Parts[PART_ORIGIN].m_Transform.m_velocityX, _DelayTime);
 		
-	}
-	
+	}	
+
 	for (int i = 0; i < PART_END; i++)
 	{
 		if (m_Parts[i].m_Renderer.m_State != PLAYER_JUMP)
@@ -407,15 +623,17 @@ void PlayerTest::LeftWalk(float _DelayTime)
 
 void PlayerTest::RightWalk(float _DelayTime)
 {
+	if (m_Parts[PART_ORIGIN].m_Transform.m_State == PLAYER_LADDER) return;
+
 	m_Parts[PART_ORIGIN].m_Transform.m_velocityX = +m_MoveSpeed * m_MoveSpeedRatio * 0.01f;
 
 	if (m_Parts[PART_ORIGIN].m_Transform.GetPos().x < WIN_WIDTH / 2)
 	{
-		m_Parts[PART_ORIGIN].m_Transform.VelocityTrans(_DelayTime);
+		m_Parts[PART_ORIGIN].m_Transform.VelocityTransX(_DelayTime);
 	}
 	else if (MAP_MGR->m_RightEnd == true && m_Parts[PART_ORIGIN].m_Transform.GetPos().x < WIN_WIDTH - 20.0f)
 	{
-		m_Parts[PART_ORIGIN].m_Transform.VelocityTrans(_DelayTime);
+		m_Parts[PART_ORIGIN].m_Transform.VelocityTransX(_DelayTime);
 	}
 	else
 	{
@@ -437,14 +655,121 @@ void PlayerTest::RightWalk(float _DelayTime)
 		{
 			m_Parts[i].m_Renderer.m_State = PLAYER_WALK;
 			m_Parts[i].m_Transform.m_State = PLAYER_WALK;
-
 		}
+	}
+
+}
+
+void PlayerTest::ClimbLadder(float _DelayTime)
+{
+	if (m_isCrashPortal == true) return;
+
+	if (m_CrashedTopLadder != nullptr)
+	{
+		if (m_CrashedTopLadder->GetMapPos().y > GetMapPos().y + 20.0f)
+		{
+			LadderOff();
+			return;
+		}
+	}
+
+	if (m_isCrashLadder == true)
+	{
+		m_isLanding = false;
+
+		float x = 0.0f;
+
+		if (m_CrashedLadder == nullptr)
+		{
+			x = m_CrashedTopLadder->GetMapPos().x;
+		}
+		else
+		{
+			x = m_CrashedLadder->m_LadderTop->GetMapPos().x;
+		}
+
+		x -= m_Parts[PART_ORIGIN].m_Transform.GetPos().x;
+
+		m_Parts[PART_ORIGIN].m_Transform.Translate(x, -3.0f);
+
+		m_Parts[PART_ORIGIN].m_Transform.m_gravity = false;
+
+		ChangeState(PLAYER_LADDER);	
+
+		//if (m_CrashedTopLadder != nullptr)
+		//{
+		//	if (m_CrashedTopLadder->GetMapPos().y > GetMapPos().y + 20.0f)
+		//	{
+		//		LadderOff();
+		//	}
+		//}
+	}
+}
+
+void PlayerTest::DownLadder(float _DelayTime)
+{
+	//if (m_CrashedTopLadder == nullptr) return;
+
+	if (m_isCrashLadder == true && m_isLanding == false && m_isJumping == false)
+	{
+		float x = 0.0f;
+
+		if (m_CrashedLadder == nullptr)
+		{
+			x = m_CrashedTopLadder->GetMapPos().x;
+		}
+		else
+		{
+			x = m_CrashedLadder->m_LadderTop->GetMapPos().x;
+		}
+
+		x -= m_Parts[PART_ORIGIN].m_Transform.GetPos().x;
+
+		m_Parts[PART_ORIGIN].m_Transform.Translate(x, +3.0f);
+
+		m_Parts[PART_ORIGIN].m_Transform.m_gravity = false;
+
+		ChangeState(PLAYER_LADDER);
+
+		if (m_CrashedLadder != nullptr && CrashCheckMap(m_LandingTile) == true)
+		{
+			LadderOff();
+		}
+
+		//f (m_CrashedLadder != nullptr)
+		//
+		//	if (m_isLanding == true)
+		//	{
+		//		LadderOff();
+		//	}
+		//
+	}
+
+
+
+
+
+}
+
+void PlayerTest::StopLadder()
+{
+	if (m_Parts[0].m_Transform.m_State == PLAYER_LADDER)
+	{
+		m_Parts[PART_ORIGIN].m_Transform.m_gravity = false;
 	}
 }
 
 void PlayerTest::StopWalk()
 {
+	if (m_Parts[0].m_Transform.m_State == PLAYER_LADDER || m_Parts[0].m_Transform.m_State == PLAYER_JUMP) return;
+
 	m_Parts[0].m_Transform.m_velocityX = 0.0f;
+
+	for (int i = 0; i < PART_END; i++)
+	{
+		m_Parts[i].m_Renderer.m_State = PLAYER_IDLE;
+		m_Parts[i].m_Transform.m_State = PLAYER_IDLE;
+	}
 }
 
 void PlayerTest::JumpMove()
@@ -634,5 +959,19 @@ void PlayerTest::LoadImg(char *_path, size_t _ItemNo, map<wstring, ImgInfo> &_Bo
 	{
 		MK_LOG(" 경로 : %S , Img 로드 실패", _path);
 	}
+}
+
+void PlayerTest::ChangeState(ePlayerState _state)
+{
+	if (m_Parts[0].m_Transform.m_State != _state)
+	{
+		for (int i = 0; i < PART_END; i++)
+		{
+			m_Parts[i].m_Renderer.m_State = _state;
+			m_Parts[i].m_Transform.m_State = _state;
+		}
+
+	}
+
 }
 

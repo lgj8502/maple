@@ -62,6 +62,10 @@ public:
 	void Render(Matrix3x2F _mat, ID2D1RenderTarget *_pRT);
 
 	void AddBitmap(ID2D1Bitmap* _bitmap);
+	void AddBitmap_Bottom(ID2D1Bitmap* _bitmap);
+	void AddBitmap_Top(ID2D1Bitmap* _bitmap);
+	void AddBitmap_RighitBottom(ID2D1Bitmap* _bitmap);
+	void AddBitmap_LeftBottom(ID2D1Bitmap* _bitmap);
 
 	void ChangeBitmap(size_t _index);
 

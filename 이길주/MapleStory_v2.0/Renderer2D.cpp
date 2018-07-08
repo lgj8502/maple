@@ -43,6 +43,78 @@ void Renderer2D::AddBitmap(ID2D1Bitmap* _bitmap)
 	m_HaveBitmap = true;
 }
 
+void Renderer2D::AddBitmap_Bottom(ID2D1Bitmap * _bitmap)
+{
+	m_BitmapList.push_back(_bitmap);
+
+	auto Size = m_BitmapList.back()->GetSize();
+
+	D2D1_RECT_F ImgRT;
+
+	ImgRT.left = -Size.width / 2;
+	ImgRT.right = +Size.width / 2;
+	ImgRT.top = -Size.height;
+	ImgRT.bottom = 0;
+
+	m_ImgRTList.push_back(ImgRT);
+
+	m_HaveBitmap = true;
+}
+
+void Renderer2D::AddBitmap_Top(ID2D1Bitmap * _bitmap)
+{
+	m_BitmapList.push_back(_bitmap);
+
+	auto Size = m_BitmapList.back()->GetSize();
+
+	D2D1_RECT_F ImgRT;
+
+	ImgRT.left = -Size.width / 2;
+	ImgRT.right = +Size.width / 2;
+	ImgRT.top = 0;
+	ImgRT.bottom = Size.height;
+
+	m_ImgRTList.push_back(ImgRT);
+
+	m_HaveBitmap = true;
+}
+
+void Renderer2D::AddBitmap_RighitBottom(ID2D1Bitmap * _bitmap)
+{
+	m_BitmapList.push_back(_bitmap);
+
+	auto Size = m_BitmapList.back()->GetSize();
+
+	D2D1_RECT_F ImgRT;
+
+	ImgRT.left = -Size.width;
+	ImgRT.right = 0;
+	ImgRT.top = -Size.height;
+	ImgRT.bottom = 0;
+
+	m_ImgRTList.push_back(ImgRT);
+
+	m_HaveBitmap = true;
+}
+
+void Renderer2D::AddBitmap_LeftBottom(ID2D1Bitmap * _bitmap)
+{
+	m_BitmapList.push_back(_bitmap);
+
+	auto Size = m_BitmapList.back()->GetSize();
+
+	D2D1_RECT_F ImgRT;
+
+	ImgRT.left = 0;
+	ImgRT.right = +Size.width;
+	ImgRT.top = -Size.height;
+	ImgRT.bottom = 0;
+
+	m_ImgRTList.push_back(ImgRT);
+
+	m_HaveBitmap = true;
+}
+
 
 void Renderer2D::ChangeBitmap(size_t _index)
 {

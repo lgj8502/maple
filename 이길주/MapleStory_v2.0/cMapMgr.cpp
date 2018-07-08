@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "cMapMgr.h"
 #include "cErebMap.h"
+#include "cArcana.h"
 
 cMapMgr::~cMapMgr()
 {
@@ -18,9 +19,13 @@ void cMapMgr::SetMap()
 		m_pMap = new cErebMap;
 		break;
 
+	case MNAME_ARCANA:
+		m_pMap = new cArcana;
+		break;
+
 	}
 
-	m_pMap->Init();
+	m_pMap->Init();	
 
 	m_isChange = false;
 }
@@ -40,7 +45,7 @@ void cMapMgr::AddTile(wstring _bitmapName, D2D1_POINT_2F _pos)
 	SetParent(&(m_pMap->m_LayOut6), MAP);
 }
 
-void cMapMgr::AddFlatTileH(D2D1_POINT_2F _pos, int _count)
+void cMapMgr::AddFlatTileH(D2D1_POINT_2F _pos, int _count, bool _isBaseTile)
 {
 	wstring Mapname = L"edU.0";	
 
@@ -50,7 +55,9 @@ void cMapMgr::AddFlatTileH(D2D1_POINT_2F _pos, int _count)
 
 		ID2D1Bitmap* AddBitmap = m_pMap->m_MapImgList[Mapname].m_Bitmap;
 
-		MAP->m_Renderer.AddBitmap(AddBitmap);
+		MAP->m_Renderer.AddBitmap_Bottom(AddBitmap);
+
+		MAP->m_isBaseTile = _isBaseTile;
 
 		MAP->m_CrashCheck = true;
 
@@ -82,7 +89,9 @@ void cMapMgr::AddFlatTileH(D2D1_POINT_2F _pos, int _count)
 
 		ID2D1Bitmap* AddBitmap = m_pMap->m_MapImgList[Mapname].m_Bitmap;
 
-		MAP->m_Renderer.AddBitmap(AddBitmap);
+		MAP->m_Renderer.AddBitmap_Bottom(AddBitmap);
+
+		MAP->m_isBaseTile = _isBaseTile;
 
 		MAP->m_CrashCheck = true;		
 
@@ -115,7 +124,7 @@ void cMapMgr::AddFlatTileM(D2D1_POINT_2F _pos, int _count)
 
 		MAP->m_Renderer.AddBitmap(AddBitmap);
 
-		MAP->m_CrashCheck = true;
+		MAP->m_CrashCheck = false;
 
 		if (i == 0)
 		{
@@ -168,17 +177,17 @@ void cMapMgr::AddFlatTileL(D2D1_POINT_2F _pos, int _count)
 
 		ID2D1Bitmap* AddBitmap = m_pMap->m_MapImgList[Mapname].m_Bitmap;
 
-		MAP->m_Renderer.AddBitmap(AddBitmap);
+		MAP->m_Renderer.AddBitmap_Top(AddBitmap);
 
-		MAP->m_CrashCheck = true;
+		MAP->m_CrashCheck = false;
 
 		if (i == 0)
 		{
-			MAP->m_Transform.SetPos(_pos.x - 45.0f, _pos.y - 4.5f);
+			MAP->m_Transform.SetPos(_pos.x - 45.0f, _pos.y);
 		}
 		else
 		{
-			MAP->m_Transform.SetPos(_pos.x + (_count - 1) * 90.0f + 45.0f, _pos.y - 4.5f);
+			MAP->m_Transform.SetPos(_pos.x + (_count - 1) * 90.0f + 45.0f, _pos.y);
 		}
 
 		m_pMap->m_Tile_List.push_back(MAP);
@@ -200,7 +209,7 @@ void cMapMgr::AddFlatTileL(D2D1_POINT_2F _pos, int _count)
 
 		ID2D1Bitmap* AddBitmap = m_pMap->m_MapImgList[Mapname].m_Bitmap;
 
-		MAP->m_Renderer.AddBitmap(AddBitmap);
+		MAP->m_Renderer.AddBitmap_Top(AddBitmap);
 
 		MAP->m_Transform.SetPos(_pos.x + i * 90.0f, _pos.y);
 
@@ -319,69 +328,108 @@ void cMapMgr::AddBackGround6(wstring _bitmapName, D2D1_POINT_2F _pos)
 	SetParent(&(m_pMap->m_LayOut6), MAP);
 }
 
-//void cMapMgr::AddAnimation(D2D1_POINT_2F _pos, eMap_Type _Type, float _time, int _count, wstring _bitmapName, ...)
-//{
-//	cMapObj *MAP = new cMapObj;
-//
-//	va_list arglist;
-//	va_start(arglist, _count);
-//
-//	for (int i = 0; i < _count; i++)
-//	{
-//		ID2D1Bitmap* AddBitmap = m_pMap->m_MapImgList[va_arg(arglist, wstring)].m_Bitmap;
-//		MAP->m_Renderer.AddBitmap(AddBitmap);
-//	}
-//
-//	va_end(arglist);	
-//
-//	_pos.y -= MAP->m_Renderer.GetImgRT().bottom;
-//
-//	MAP->m_Transform.SetPos(_pos);
-//
-//	MAP->m_Renderer.AddAnimation_const(0, 0, _count - 1, _time);
-//	MAP->m_Renderer.m_State = 0;
-//
-//	switch (_Type)
-//	{
-//	case MAP_BACKGROUND1: 	m_pMap->m_BackGround1_List.push_back(MAP); 
-//		break;
-//	case MAP_BACKGROUND2:	m_pMap->m_BackGround2_List.push_back(MAP); SetParent(&(m_pMap->m_LayOut2), MAP);
-//		break;
-//	case MAP_BACKGROUND3:	m_pMap->m_BackGround3_List.push_back(MAP); SetParent(&(m_pMap->m_LayOut3), MAP);
-//		break;
-//	case MAP_BACKGROUND4:	m_pMap->m_BackGround4_List.push_back(MAP); SetParent(&(m_pMap->m_LayOut4), MAP);
-//		break;
-//	case MAP_BACKGROUND5:	m_pMap->m_BackGround5_List.push_back(MAP); SetParent(&(m_pMap->m_LayOut5), MAP);
-//		break;
-//	case MAP_BACKGROUND6:	m_pMap->m_BackGround6_List.push_back(MAP); SetParent(&(m_pMap->m_LayOut6), MAP);
-//		break;
-//	case MAP_SCROLL:		m_pMap->m_Scroll_List.push_back(MAP);
-//		break;
-//	case MAP_TILE:			m_pMap->m_Tile_List.push_back(MAP); SetParent(&(m_pMap->m_LayOut6), MAP);
-//		break;
-//	case MAP_PORTAL:		m_pMap->m_Portal_List.push_back(MAP); SetParent(&(m_pMap->m_LayOut6), MAP);
-//		break;
-//	case MAP_LADDER:		m_pMap->m_Ladder_List.push_back(MAP); SetParent(&(m_pMap->m_LayOut6), MAP);
-//		break;
-//	case MAP_FRONTOBJECT:	m_pMap->m_FrontObject_List.push_back(MAP); SetParent(&(m_pMap->m_LayOut6), MAP);
-//		break;
-//	default:
-//		break;
-//	}	
-//
-//	
-//
-//}
+void cMapMgr::AddScroll(wstring _bitmapName, D2D1_POINT_2F _pos)
+{
+
+	for (int i = 0; i < 2; i++)
+	{
+		cMapObj *MAP = new cMapObj;
+
+		ID2D1Bitmap* AddBitmap = m_pMap->m_MapImgList[_bitmapName].m_Bitmap;
+
+		MAP->m_Renderer.AddBitmap(AddBitmap);
+
+		D2D1_POINT_2F pos = _pos;
+
+		pos.y -= MAP->m_Renderer.GetImgRT().bottom;
+
+		if (i == 0)
+		{
+			MAP->m_Transform.SetPos(pos);
+		}
+		else
+		{
+			MAP->m_Transform.SetPos(pos.x + WIN_WIDTH, pos.y);
+		}
+
+		m_pMap->m_Scroll_List.push_back(MAP);
+
+		SetParent(&(m_pMap->m_Scroll), MAP);
+	}
+
+}
+
+void cMapMgr::AddLadder(wstring _bitmapName, D2D1_POINT_2F _pos, bool _isLadderTop)
+{
+		cMapObj *MAP = new cMapObj;
+
+		ID2D1Bitmap* AddBitmap = m_pMap->m_MapImgList[_bitmapName].m_Bitmap;
+
+		MAP->m_Renderer.AddBitmap(AddBitmap);
+
+		MAP->m_CrashCheck = true;
+
+		MAP->m_isLadderTop = _isLadderTop;
+
+		D2D1_POINT_2F pos = _pos;
+
+		pos.y -= MAP->m_Renderer.GetImgRT().bottom;
+
+		MAP->m_Transform.SetPos(pos);
+
+		SetParent(&(m_pMap->m_LayOut6), MAP);
+
+		if (_isLadderTop == false)
+		{
+			if (m_pMap->m_Ladder_List.back()->m_isLadderTop == true)
+			{
+				MAP->m_LadderTop = m_pMap->m_Ladder_List.back();
+			}
+			else
+			{
+				MAP->m_LadderTop = m_pMap->m_Ladder_List.back()->m_LadderTop;
+			}
+
+		}
+
+		m_pMap->m_Ladder_List.push_back(MAP);
+}
+
+void cMapMgr::AddPortal(int _ID, D2D1_POINT_2F _pos, vector<wstring> _bitmapNamelist, eMapName _ChangeMap, int _ChangeMapPortalID)
+{
+	cMapObj *MAP = new cMapObj;
+
+	for (auto &i : _bitmapNamelist)
+	{
+		ID2D1Bitmap* AddBitmap = m_pMap->m_MapImgList[i].m_Bitmap;
+		MAP->m_Renderer.AddBitmap_Bottom(AddBitmap);
+	}
+
+	MAP->m_Renderer.AddAnimation_const(0, 0, _bitmapNamelist.size() - 1, 0.1f);
+	MAP->m_Renderer.m_State = 0;
+
+	MAP->m_Transform.SetPos(_pos);
+
+	MAP->m_CrashCheck = true;
+
+	MAP->m_PortalID = _ID;
+	MAP->m_ChangeMap = _ChangeMap;
+	MAP->m_ChangeMapPortalID = _ChangeMapPortalID;
+
+	m_pMap->m_Portal_List.push_back(MAP);
+
+	SetParent(&(m_pMap->m_LayOut6), MAP);
+}
+
 
 void cMapMgr::AddAnimation(D2D1_POINT_2F _pos, eMap_Type _Type, float _time, vector<wstring> _bitmapNamelist)
 {
 	cMapObj *MAP = new cMapObj;
 
-
 	for (auto &i : _bitmapNamelist)
 	{
 		ID2D1Bitmap* AddBitmap = m_pMap->m_MapImgList[i].m_Bitmap;
-		MAP->m_Renderer.AddBitmap(AddBitmap);
+		MAP->m_Renderer.AddBitmap_Bottom(AddBitmap);
 	}
 
 	_pos.y -= MAP->m_Renderer.GetImgRT().bottom;

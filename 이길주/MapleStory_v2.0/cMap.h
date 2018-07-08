@@ -27,11 +27,15 @@ public:
 	cMapObj m_LayOut5 = {};
 	cMapObj m_LayOut6 = {};
 
+	cMapObj m_Scroll = {};
+
 	D2D1_POINT_2F m_LayOut2_Size = {};
 	D2D1_POINT_2F m_LayOut3_Size = {};
 	D2D1_POINT_2F m_LayOut4_Size = {};
 	D2D1_POINT_2F m_LayOut5_Size = {};
 	D2D1_POINT_2F m_LayOut6_Size = {};
+
+
 
 public:
 	virtual ~cMap() = default;

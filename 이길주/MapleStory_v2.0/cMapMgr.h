@@ -56,7 +56,7 @@ public:
 
 
 	void AddTile(wstring _bitmapName, D2D1_POINT_2F _pos);
-	void AddFlatTileH(D2D1_POINT_2F _pos, int _count);
+	void AddFlatTileH(D2D1_POINT_2F _pos, int _count, bool _isBaseTile = false);
 	void AddFlatTileM(D2D1_POINT_2F _pos, int _count);
 	void AddFlatTileL(D2D1_POINT_2F _pos, int _count);
 
@@ -73,7 +73,12 @@ public:
 
 	void AddBackGround6(wstring _bitmapName, D2D1_POINT_2F _pos);
 
-	//void AddAnimation(D2D1_POINT_2F _pos, eMap_Type _Type, float _time, int _count, wstring _bitmapName, ...);
+	void AddScroll(wstring  _bitmapName, D2D1_POINT_2F _pos);
+
+	void AddLadder(wstring  _bitmapName, D2D1_POINT_2F _pos, bool _isLadderTop = false);
+
+	void AddPortal(int _ID, D2D1_POINT_2F _pos, vector<wstring> _bitmapNamelist, eMapName _ChangeMap, int _ChangeMapPortalID);
+
 	void AddAnimation(D2D1_POINT_2F _pos, eMap_Type _Type, float _time, vector<wstring> _bitmapNamelist);
 
 	void Update(float _DelayTime = 0);

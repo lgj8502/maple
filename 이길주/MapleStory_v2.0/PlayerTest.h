@@ -49,6 +49,8 @@ private:
 	bool   m_isJumping = false;
 	bool   m_JumpStart = false;
 
+	bool   m_isLanding = false;
+
 	// 기본 이동 속도
 	float	m_MoveSpeed = 200.0f;
 	float	m_JumpPower = 500.0f;
@@ -59,7 +61,14 @@ private:
 	cMapObj *m_LandingTile = nullptr;
 	cMapObj *m_OldLandingTile = nullptr;
 
+	bool m_isCrashLadder = false;
+	cMapObj *m_CrashedLadder = nullptr;
+	cMapObj *m_CrashedTopLadder = nullptr;
 
+	cMapObj *m_CrashedPartal = nullptr;
+	bool m_isCrashPortal = false;
+	bool m_ChangeMap = false;
+	int m_PortalNum = 0;
 
 	D2D1_POINT_2F m_MapPos = {};
 
@@ -77,8 +86,12 @@ private:
 	void SettingPants();
 	void SettingShoes();
 
+	void ChangeState(ePlayerState _state);
+
 
 public:
+
+	D2D1_POINT_2F m_startPos = {};
 
 	size_t m_Base = 100;
 	size_t m_Hair = 100;
@@ -111,14 +124,22 @@ public:
 
 	bool CrashCheckMap(cMapObj *_obj);
 	void Landing(cMapObj* _pLandingTile);
-	void GravityOn();
 	void BlowJumpTile();
 
+	void CheckLadder(cMapObj* _Ladder);
+	void LadderOff();
+
+	void PortalIn();
+	void CheckPortal(cMapObj* _Portal);
+	void PortalOff();
 
 	void SetParent(ePlayerParts _Parent, ePlayerParts _Son);
 
 	void LeftWalk(float _DelayTime);
 	void RightWalk(float _DelayTime);
+	void ClimbLadder(float _DelayTime);
+	void DownLadder(float _DelayTime);
+	void StopLadder();
 
 	void StopWalk();
 
@@ -133,13 +154,25 @@ public:
 
 	void LoadImg(char *_path, size_t _ItemNo, map<wstring, ImgInfo> &_BotmapList);
 
-
-
 	inline D2D1_POINT_2F GetMapPos()
 	{
 		return m_MapPos;
 	}
+	inline void SetMapPos(D2D1_POINT_2F _pos)
+	{
+		//_pos
+	}
 
+	inline void SetPos(D2D1_POINT_2F _pos)
+	{
+		m_Parts[0].m_Transform.SetPos(_pos);
+	}
+
+
+	inline ePlayerState PlayerState()
+	{
+		return (ePlayerState)(m_Parts[0].m_Transform.m_State);
+	}
 
 
 };

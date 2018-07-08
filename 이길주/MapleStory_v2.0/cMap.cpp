@@ -4,11 +4,19 @@
 void cMap::Update(float _DelayTime)
 {
 
+	m_Scroll.m_Transform.Translate(-0.5f, 0.0f);
+
+	if (m_Scroll.m_Transform.GetPos().x < - WIN_WIDTH)
+	{
+		m_Scroll.m_Transform.SetPos(0.0f, 0.0f);
+	}
+
 	m_LayOut2.Update(_DelayTime);
 	m_LayOut3.Update(_DelayTime);
 	m_LayOut4.Update(_DelayTime);
 	m_LayOut5.Update(_DelayTime);
 	m_LayOut6.Update(_DelayTime);
+	m_Scroll.Update(_DelayTime);
 
 	for (auto &i : m_BackGround1_List)
 	{
@@ -72,12 +80,13 @@ void cMap::BackRender()
 		i->Render();
 	}
 
-	for (auto &i : m_Scroll_List)
+
+	for (auto &i : m_BackGround2_List)
 	{
 		i->Render();
 	}
 
-	for (auto &i : m_BackGround2_List)
+	for (auto &i : m_Scroll_List)
 	{
 		i->Render();
 	}
@@ -212,6 +221,7 @@ void cMap::PlayerMoveRight(float _velocity, float _time)
 		m_LayOut6.m_Transform.m_velocityX = -_velocity;
 		m_LayOut6.m_Transform.VelocityTrans_Map(_time);
 
+
 		D2D1_POINT_2F pos = m_LayOut6.m_Transform.GetPos();
 
 		if (pos.x <= WIN_WIDTH - m_LayOut6_Size.x)
@@ -232,6 +242,7 @@ void cMap::Destroy()
 	DeleteMapList(m_BackGround3_List);
 	DeleteMapList(m_BackGround4_List);
 	DeleteMapList(m_BackGround5_List);
+	DeleteMapList(m_BackGround6_List);
 	DeleteMapList(m_FrontObject_List);
 	DeleteMapList(m_Ladder_List);
 	DeleteMapList(m_Portal_List);

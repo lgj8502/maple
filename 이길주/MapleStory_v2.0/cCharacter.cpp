@@ -42,7 +42,7 @@ void cCharacter::LeftMove(float _DelayTime)
 {
 	m_Transform.m_velocityX = -m_MoveSpeed;
 
-	m_Transform.VelocityTrans(_DelayTime);
+	m_Transform.VelocityTransX(_DelayTime);
 
 	if (m_Renderer.m_State != Charac_JUMP)
 	{
@@ -54,7 +54,7 @@ void cCharacter::RightMove(float _DelayTime)
 {
 	m_Transform.m_velocityX = +m_MoveSpeed;
 
-	m_Transform.VelocityTrans(_DelayTime);
+	m_Transform.VelocityTransX(_DelayTime);
 
 	if (m_Renderer.m_State != Charac_JUMP)
 	{

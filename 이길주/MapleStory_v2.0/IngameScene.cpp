@@ -34,30 +34,6 @@ void IngameScene::Update(float _DelayTime)
 
 	MAP_MGR->Update(_DelayTime);
 	m_player.Update(_DelayTime);
-
-	int count = 0;
-
-	for (int i = 0; i < MAP_MGR->m_pMap->m_Tile_List.size(); i++)
-	{
-		if (m_player.CrashCheckMap(MAP_MGR->m_pMap->m_Tile_List[i]) == true)
-		{
-			float posY = MAP_MGR->m_pMap->m_Tile_List[i]->m_Transform.GetPos().y;
-
-			posY += MAP_MGR->m_pMap->m_Tile_List[i]->m_Renderer.GetImgRT().top;
-
-			if (m_player.GetMapPos().y < posY)
-			{
-				m_player.Landing(MAP_MGR->m_pMap->m_Tile_List[i]);
-
-				count++;
-
-				break;
-			}
-		}
-	}
-
-	if (count == 0) m_player.GravityOn();
-
 	
 
 	if (OnceKeyDown(VK_RETURN))
@@ -68,9 +44,30 @@ void IngameScene::Update(float _DelayTime)
 		}
 	}
 
-	if (OnceKeyDown(VK_DOWN))
+	if (StayKeyDown(VK_DOWN))
 	{
-		m_player.BlowJumpTile();
+		m_player.DownLadder(_DelayTime);
+
+		if (OnceKeyDown(VK_MENU))
+		{
+			m_player.BlowJumpTile();
+		}
+	}
+
+	if (OnceKeyDown(VK_UP))
+	{
+		m_player.PortalIn();
+	}
+
+
+	if (StayKeyDown(VK_UP))
+	{
+		m_player.ClimbLadder(_DelayTime);
+
+	}
+	if (OnceKeyUp(VK_UP) || OnceKeyUp(VK_DOWN))
+	{
+		m_player.StopLadder();
 
 	}
 
@@ -127,9 +124,18 @@ void IngameScene::Render()
 
 	MAP_MGR->BackRender();
 	//m_monster.Render();
-	m_player.Render();
 
-	MAP_MGR->LadderRender();
+	if (m_player.PlayerState() == PLAYER_LADDER)
+	{
+		MAP_MGR->LadderRender();
+		m_player.Render();
+	}
+	else
+	{
+		m_player.Render();
+		MAP_MGR->LadderRender();
+	}
+
 
 	MAP_MGR->FrontRender();
 }

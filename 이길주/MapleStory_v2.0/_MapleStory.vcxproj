@@ -144,6 +144,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="BufferType.h" />
+    <ClInclude Include="cArcana.h" />
     <ClInclude Include="cCharacter.h" />
     <ClInclude Include="ChannelScene.h" />
     <ClInclude Include="cLogMgr.h" />
@@ -179,6 +180,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BufferType.cpp" />
+    <ClCompile Include="cArcana.cpp" />
     <ClCompile Include="cCharacter.cpp" />
     <ClCompile Include="ChannelScene.cpp" />
     <ClCompile Include="cLogMgr.cpp" />
