@@ -8,133 +8,17 @@ IngameScene::~IngameScene()
 
 void IngameScene::Init(HWND hWnd)
 {
-
 	IMG_MGR->FileFindDir(L".\\Img\\IngameScene\\");
 
-	//UI_MGR->AddImage("ServerMain", L"ServerMain", { 0,0,1200,800 });
+	MAP_MGR->ChangeMap(MNAME_EREB);
 
+	m_player.Init();
 
-	UI_MGR->AddImage("플레이어", L"test1", { 300,300 }, { 0.3f, 0.3f });
+	m_player.SetPos({ 200,700 });
 
-	UI_MGR->AddText("Son", "자식", { 100, 0 }, ColorF(ColorF::Black), L"고딕", 100.0f);
+	MAP_MGR->m_CameraPos = m_player.GetPos();
 
-	UI_MGR->SetParent("플레이어", "Son");
-
-	UI_MGR->FindUI("플레이어")->m_RayCast = true;
-
-	UI_MGR->BitMapAdd("플레이어", L"test2");
-
-	auto Func1 = [](void) { UI_MGR->FindUI("플레이어")->m_Transform.SetPos({ 500,500 }); };
-	auto Func2 = [](void) { UI_MGR->FindUI("플레이어")->m_Renderer.ChangeBitmap(1); };
-	auto Func3 = [](void) { UI_MGR->FindUI("플레이어")->m_Renderer.ChangeBitmap(0); };
-
-
-	//UI_MGR->AddEvent("플레이어", ADDEVENT_OnMouseDown, Func1);
-	UI_MGR->AddEvent("플레이어", ADDEVENT_OnMouseOver, Func2);
-	UI_MGR->AddEvent("플레이어", ADDEVENT_OnMouseExit, Func3);
-
-
-	//////////////////////// 탭바 예시 //////////////////////////////////////////////////
-
-	// 토글 버튼 추가
-	UI_MGR->AddToggle("토글1", L"toggle1", { -80,-200 }, { 0.8f, 0.8f });
-	UI_MGR->BitMapAdd("토글1", L"toggle2");
-
-	UI_MGR->AddToggle("토글2", L"toggle1", { 80,-200 }, { 0.8f, 0.8f });
-	UI_MGR->BitMapAdd("토글2", L"toggle2");
-
-	// 토글 on/off 시 이미지 변경 함수
-	auto tog1_1 = [](void) { UI_MGR->FindUI("토글1")->m_Renderer.ChangeBitmap(1); };
-	auto tog1_2 = [](void) { UI_MGR->FindUI("토글1")->m_Renderer.ChangeBitmap(0); };
-	auto tog2_1 = [](void) { UI_MGR->FindUI("토글2")->m_Renderer.ChangeBitmap(1); };
-	auto tog2_2 = [](void) { UI_MGR->FindUI("토글2")->m_Renderer.ChangeBitmap(0); };
-
-	UI_MGR->AddEvent("토글1", ADDEVENT_ToggleOn, tog1_1);
-	UI_MGR->AddEvent("토글1", ADDEVENT_ToggleOff, tog1_2);
-	UI_MGR->AddEvent("토글2", ADDEVENT_ToggleOn, tog2_1);
-	UI_MGR->AddEvent("토글2", ADDEVENT_ToggleOff, tog2_2);
-
-	// 토글1 버튼은 활성화
-	UI_MGR->FindUI("토글1")->m_isOn = true;
-	UI_MGR->FindUI("토글1")->m_Renderer.ChangeBitmap(1);
-
-	UI_MGR->AddToggleGroup("토글그룹", { 0, 0 }, 2, UI_MGR->FindUI("토글1"), UI_MGR->FindUI("토글2"));
-
-	// 탭바 몸체 추가
-	UI_MGR->AddImage("탭바", L"TabBar", { 600,200 }, { 0.5f, 0.5f });
-
-	// 탭바 드래그 가능
-	UI_MGR->FindUI("탭바")->m_RayCast = true;
-	UI_MGR->FindUI("탭바")->m_UseDrag = true;
-
-	// 탭바 구성
-	UI_MGR->SetParent("탭바", "토글그룹");
-	UI_MGR->AddImage("탭바글씨", L"탭바글씨", { 0, -300 }, { 0.8f, 0.8f });
-	UI_MGR->SetParent("탭바", "탭바글씨");
-
-	// 토글키 클릭시 나올 화면 표시
-	UI_MGR->AddImage("왼쪽", L"왼쪽", { 0, 100 }, { 0.6f, 0.6f });
-	UI_MGR->AddImage("오른쪽", L"오른쪽", { 0, 100 }, { 0.6f, 0.6f });
-
-	UI_MGR->SetParent("탭바", "왼쪽");
-	UI_MGR->SetParent("탭바", "오른쪽");
-
-	auto tog1_3 = [](void) { UI_MGR->FindUI("왼쪽")->m_isActive = true; };
-	auto tog1_4 = [](void) { UI_MGR->FindUI("왼쪽")->m_isActive = false; };
-	auto tog2_3 = [](void) { UI_MGR->FindUI("오른쪽")->m_isActive = true; };
-	auto tog2_4 = [](void) { UI_MGR->FindUI("오른쪽")->m_isActive = false; };
-
-	UI_MGR->AddEvent("토글1", ADDEVENT_ToggleOn, tog1_3);
-	UI_MGR->AddEvent("토글1", ADDEVENT_ToggleOff, tog1_4);
-
-	UI_MGR->AddEvent("토글2", ADDEVENT_ToggleOn, tog2_3);
-	UI_MGR->AddEvent("토글2", ADDEVENT_ToggleOff, tog2_4);
-
-	UI_MGR->FindUI("오른쪽")->m_isActive = false;
-
-	// 창닫기 버튼 추가
-
-	UI_MGR->AddButton("탭바닫기", L"창닫기", { 200,-250 }, { 0.8f, 0.8f });
-
-	UI_MGR->SetParent("탭바", "탭바닫기");
-
-	auto tabBar_off = [](void) { UI_MGR->FindUI("탭바")->m_isActive = false; };
-
-	UI_MGR->AddEvent("탭바닫기", ADDEVENT_OnMouseClick, tabBar_off);
-
-
-	////////////////// 스크롤바 추가 ////////////////////////////////////
-	UI_MGR->AddScrollBar("스크롤바", L"Scrollbar", L"ScrollHandle", { 200,100 }, 0.9f, { 0.8f, 1.2f });
-
-	UI_MGR->SetParent("탭바", "스크롤바");
-
-	UI_MGR->AddText("스크롤값", "값", { -20, 140 }, ColorF(ColorF::White));
-
-	UI_MGR->SetParent("탭바", "스크롤값");
-
-
-	auto scrollvalue = [](void) {
-		char value[5] = "";
-
-		sprintf_s(value, 5, "%.2f", UI_MGR->FindUI("스크롤바")->m_Value);
-
-		UI_MGR->FindUI("스크롤값")->m_Text = value;
-	};
-
-	UI_MGR->AddEvent("스크롤값", ADDEVENT_Update, scrollvalue);
-
-
-	////////////////// 인풋 필드 //////////////////////////////////////////////////////
-
-
-	UI_MGR->AddInputField("인풋필드", L"InputField", { 200,400 }, { 0.5f , 0.7f });
-	UI_MGR->AddInputField("인풋필드2", L"InputField", { 200,500 }, { 0.5f , 0.7f });
-
-	//UI_MGR->FindUI("인풋필드")->m_UseDrag = true;
-
-	//UI_MGR->AddPanel("판넬", { 200,200 }, 1 ,UI_MGR->FindUI("인풋필드"));
-
-	m_monster.Init();
+	//m_monster.Init();
 
 }
 
@@ -149,13 +33,45 @@ void IngameScene::Update(float _DelayTime)
 
 	}
 
+
 	UI_MGR->Update(_DelayTime);
 
-	m_monster.Update(_DelayTime);
+	//m_monster.Update(_DelayTime);
 
+
+	MAP_MGR->Update(_DelayTime);
 	m_player.Update(_DelayTime);
 
+	//MAP_MGR->m_CameraPos.x = m_player.GetPos().x - WIN_WIDTH / 2.0f;
+	//MAP_MGR->m_CameraPos.y = m_player.GetPos().y - WIN_HEIGHT / 2.0f;
 
+	D2D1_POINT_2F start = MAP_MGR->m_CameraPos;
+
+	D2D1_POINT_2F end = {};
+
+	end.x = m_player.GetPos().x - WIN_WIDTH / 2.0f;
+	end.y = m_player.GetPos().y - WIN_HEIGHT / 2.0f;
+
+	MAP_MGR->m_CameraPos = Lerp(start, end, 0.02f);
+
+	if (MAP_MGR->m_CameraPos.y > MAP_MGR->m_pMap->m_LayOut6_Size.y - WIN_HEIGHT)
+	{
+		MAP_MGR->m_CameraPos.y = MAP_MGR->m_pMap->m_LayOut6_Size.y - WIN_HEIGHT;
+	}
+	if (MAP_MGR->m_CameraPos.y < 0)
+	{
+		MAP_MGR->m_CameraPos.y = 0;
+	}
+	if (MAP_MGR->m_CameraPos.x > MAP_MGR->m_pMap->m_LayOut6_Size.x - WIN_WIDTH)
+	{
+		MAP_MGR->m_CameraPos.x = MAP_MGR->m_pMap->m_LayOut6_Size.x - WIN_WIDTH;
+	}
+	if (MAP_MGR->m_CameraPos.x < 0)
+	{
+		MAP_MGR->m_CameraPos.x = 0;
+	}
+
+	
 
 	if (OnceKeyDown(VK_RETURN))
 	{
@@ -163,6 +79,33 @@ void IngameScene::Update(float _DelayTime)
 		{
 			UI_MGR->m_isChating = true;
 		}
+	}
+
+	if (StayKeyDown(VK_DOWN))
+	{
+		m_player.DownLadder(_DelayTime);
+
+		if (OnceKeyDown(VK_MENU))
+		{
+			m_player.BlowJumpTile();
+		}
+	}
+
+	if (OnceKeyDown(VK_UP))
+	{
+		m_player.PortalIn();
+	}
+
+
+	if (StayKeyDown(VK_UP))
+	{
+		m_player.ClimbLadder(_DelayTime);
+
+	}
+	if (OnceKeyUp(VK_UP) || OnceKeyUp(VK_DOWN))
+	{
+		m_player.StopLadder();
+
 	}
 
 	if (StayKeyDown(VK_LEFT))
@@ -216,9 +159,22 @@ void IngameScene::Render()
 {
 	UI_MGR->Render();
 
-	m_monster.Render();
+	MAP_MGR->BackRender();
+	//m_monster.Render();
 
-	m_player.Render();
+	if (m_player.PlayerState() == PLAYER_LADDER)
+	{
+		MAP_MGR->LadderRender();
+		m_player.Render();
+	}
+	else
+	{
+		m_player.Render();
+		MAP_MGR->LadderRender();
+	}
+
+
+	MAP_MGR->FrontRender();
 }
 
 void IngameScene::SendText()
@@ -238,6 +194,16 @@ void IngameScene::SendText()
 	string sText = m_szBuf + m_szMixingString;
 
 	UI_MGR->m_InputField->m_SonUI[0]->m_Text = sText;
+}
+
+D2D1_POINT_2F IngameScene::Lerp(D2D1_POINT_2F _start, D2D1_POINT_2F _end, float _rate)
+{
+	D2D1_POINT_2F result = {};
+
+	result.x = _start.x * (1 - _rate) + _end.x * _rate;
+	result.y = _start.y * (1 - _rate) + _end.y * _rate;
+
+	return result;
 }
 
 LRESULT IngameScene::MyWndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)

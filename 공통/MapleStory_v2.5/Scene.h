@@ -4,7 +4,6 @@
 
 class Scene
 {
-	POINT m_MousePos = { 0,0 };
 
 public:
 	virtual ~Scene() = default;

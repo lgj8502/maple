@@ -1,6 +1,7 @@
 #pragma once
 #include "PlayerTest.h"
 #include "cCharacter.h"
+#include "cMap.h"
 
 class IngameScene: public Scene
 {
@@ -32,6 +33,8 @@ public:
 	void Render();
 
 	void SendText();
+
+	D2D1_POINT_2F Lerp(D2D1_POINT_2F _start, D2D1_POINT_2F _end, float _rate);
 
 	LRESULT MyWndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam);
 };

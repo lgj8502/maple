@@ -39,7 +39,7 @@ enum ePlayerParts
 class PlayerTest
 {
 
-
+	LPCWSTR m_ImgDir = L".\\Img\\Character\\";
 
 private:
 
@@ -49,15 +49,28 @@ private:
 	bool   m_isJumping = false;
 	bool   m_JumpStart = false;
 
+	bool   m_isLanding = false;
+
 	// 기본 이동 속도
 	float	m_MoveSpeed = 200.0f;
-	float	m_JumpPower = 400.0f;
+	float	m_JumpPower = 500.0f;
 
-	ePlayerState m_State = PLAYER_IDLE;
+	// 지형과 충돌시 캐릭터가 땅에 박히는 현상 제거용
+	float	m_CrashHeight = 0.0f;
 
-	LPCWSTR m_ImgDir = L".\\Img\\Character\\";
+	cMapObj *m_LandingTile = nullptr;
+	cMapObj *m_OldLandingTile = nullptr;
 
+	bool m_isCrashLadder = false;
+	cMapObj *m_CrashedLadder = nullptr;
+	cMapObj *m_CrashedTopLadder = nullptr;
 
+	cMapObj *m_CrashedPartal = nullptr;
+	bool m_isCrashPortal = false;
+	bool m_ChangeMap = false;
+	int m_PortalNum = 0;
+
+	//D2D1_POINT_2F m_MapPos = {};
 
 	map<wstring, ImgInfo>	m_BaseList;
 	map<wstring, ImgInfo>	m_HairList;
@@ -73,8 +86,12 @@ private:
 	void SettingPants();
 	void SettingShoes();
 
+	void ChangeState(ePlayerState _state);
+
 
 public:
+
+	D2D1_POINT_2F m_startPos = {};
 
 	size_t m_Base = 100;
 	size_t m_Hair = 100;
@@ -102,13 +119,29 @@ public:
 	PlayerTest();
 	~PlayerTest();
 
+
+	void Init();
 	void Update(float _DelayTime = 0.0f);
 	void Render();
+
+	bool CrashCheckMap(cMapObj *_obj);
+	void Landing(cMapObj* _pLandingTile);
+	void BlowJumpTile();
+
+	void CheckLadder(cMapObj* _Ladder);
+	void LadderOff();
+
+	void PortalIn();
+	void CheckPortal(cMapObj* _Portal);
+	void PortalOff();
 
 	void SetParent(ePlayerParts _Parent, ePlayerParts _Son);
 
 	void LeftWalk(float _DelayTime);
 	void RightWalk(float _DelayTime);
+	void ClimbLadder(float _DelayTime);
+	void DownLadder(float _DelayTime);
+	void StopLadder();
 
 	void StopWalk();
 
@@ -122,6 +155,23 @@ public:
 	void ChangeShoes(size_t _itemNo);
 
 	void LoadImg(char *_path, size_t _ItemNo, map<wstring, ImgInfo> &_BotmapList);
+
+
+	inline void SetPos(D2D1_POINT_2F _pos)
+	{
+		m_Parts[0].m_Transform.SetPos(_pos);
+	}
+
+	inline D2D1_POINT_2F GetPos()
+	{
+		return m_Parts[0].m_Transform.GetPos();
+	}
+
+
+	inline ePlayerState PlayerState()
+	{
+		return (ePlayerState)(m_Parts[0].m_Transform.m_State);
+	}
 
 
 };

@@ -14,11 +14,21 @@ void Transform2D::UpdateMatrix(ID2D1RenderTarget * _pRT)
 	{
 		SetPos(m_PosList[m_PosIndex]);
 	}
+	
 
 	//	행렬계산
 	m_matScale = Matrix3x2F::Scale(m_Scale.x, m_Scale.y);
 	m_matRot = Matrix3x2F::Rotation(m_Angle, m_Pivot);
-	m_matTrans = Matrix3x2F::Translation(m_Pos.x - m_Pivot.x, m_Pos.y - m_Pivot.y);
+
+	if (m_isCamera == true)
+	{
+		m_matTrans = Matrix3x2F::Translation(m_Pos.x - m_Pivot.x - (MAP_MGR->m_CameraPos.x * m_CameraRate.x), m_Pos.y - m_Pivot.y - (MAP_MGR->m_CameraPos.y * m_CameraRate.y) );
+	}
+	else
+	{
+		m_matTrans = Matrix3x2F::Translation(m_Pos.x - m_Pivot.x, m_Pos.y - m_Pivot.y);
+	}
+
 	m_matSRT = m_matScale * m_matRot * m_matTrans;
 
 	if (m_pParent != nullptr)
@@ -36,7 +46,7 @@ void Transform2D::UpdateMatrix(ID2D1RenderTarget * _pRT)
 	}
 }
 
-void Transform2D::VelocityTrans(float _time)
+void Transform2D::VelocityTransX(float _time)
 {
 	Translate(m_velocityX * _time, 0);
 
@@ -49,6 +59,18 @@ void Transform2D::VelocityTrans(float _time)
 	{
 		m_Scale.x *= -1;
 	}
+
+
+}
+
+void Transform2D::VelocityTransY(float _time)
+{
+	Translate(0, m_velocityY = _time);
+}
+
+void Transform2D::VelocityTrans_Map(float _time)
+{
+	Translate(m_velocityX * _time, 0);
 }
 
 void Transform2D::Gravity(float _DelayTime)
@@ -127,6 +149,25 @@ void Transform2D::AniTransUpdate(float _DelayTime)
 
 }
 
+void Transform2D::SetPos(float _x, float _y)
+{
+
+	m_Pos.x = _x;
+	m_Pos.y = _y;
+
+}
+
+void Transform2D::SetPos(D2D1_POINT_2F _pos)
+{
+
+	m_Pos = _pos;
+
+}
+
+D2D1_POINT_2F Transform2D::GetPos()
+{
+	return m_Pos;
+}
 
 
 Transform2D::Transform2D()

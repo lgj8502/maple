@@ -62,10 +62,15 @@ public:
 	void Render(Matrix3x2F _mat, ID2D1RenderTarget *_pRT);
 
 	void AddBitmap(ID2D1Bitmap* _bitmap);
+	void AddBitmap_Bottom(ID2D1Bitmap* _bitmap);
+	void AddBitmap_Top(ID2D1Bitmap* _bitmap);
+	void AddBitmap_RighitBottom(ID2D1Bitmap* _bitmap);
+	void AddBitmap_LeftBottom(ID2D1Bitmap* _bitmap);
 
 	void ChangeBitmap(size_t _index);
 
 	void AddAnimation(int _state, int _start, int _end, double _time, ...);
+	void AddAnimation_const(int _state, int _start, int _end, float _time);
 
 	void AniUpdate(float _DelayTime = 0.0f);
 

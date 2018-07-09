@@ -43,6 +43,78 @@ void Renderer2D::AddBitmap(ID2D1Bitmap* _bitmap)
 	m_HaveBitmap = true;
 }
 
+void Renderer2D::AddBitmap_Bottom(ID2D1Bitmap * _bitmap)
+{
+	m_BitmapList.push_back(_bitmap);
+
+	auto Size = m_BitmapList.back()->GetSize();
+
+	D2D1_RECT_F ImgRT;
+
+	ImgRT.left = -Size.width / 2;
+	ImgRT.right = +Size.width / 2;
+	ImgRT.top = -Size.height;
+	ImgRT.bottom = 0;
+
+	m_ImgRTList.push_back(ImgRT);
+
+	m_HaveBitmap = true;
+}
+
+void Renderer2D::AddBitmap_Top(ID2D1Bitmap * _bitmap)
+{
+	m_BitmapList.push_back(_bitmap);
+
+	auto Size = m_BitmapList.back()->GetSize();
+
+	D2D1_RECT_F ImgRT;
+
+	ImgRT.left = -Size.width / 2;
+	ImgRT.right = +Size.width / 2;
+	ImgRT.top = 0;
+	ImgRT.bottom = Size.height;
+
+	m_ImgRTList.push_back(ImgRT);
+
+	m_HaveBitmap = true;
+}
+
+void Renderer2D::AddBitmap_RighitBottom(ID2D1Bitmap * _bitmap)
+{
+	m_BitmapList.push_back(_bitmap);
+
+	auto Size = m_BitmapList.back()->GetSize();
+
+	D2D1_RECT_F ImgRT;
+
+	ImgRT.left = -Size.width;
+	ImgRT.right = 0;
+	ImgRT.top = -Size.height;
+	ImgRT.bottom = 0;
+
+	m_ImgRTList.push_back(ImgRT);
+
+	m_HaveBitmap = true;
+}
+
+void Renderer2D::AddBitmap_LeftBottom(ID2D1Bitmap * _bitmap)
+{
+	m_BitmapList.push_back(_bitmap);
+
+	auto Size = m_BitmapList.back()->GetSize();
+
+	D2D1_RECT_F ImgRT;
+
+	ImgRT.left = 0;
+	ImgRT.right = +Size.width;
+	ImgRT.top = -Size.height;
+	ImgRT.bottom = 0;
+
+	m_ImgRTList.push_back(ImgRT);
+
+	m_HaveBitmap = true;
+}
+
 
 void Renderer2D::ChangeBitmap(size_t _index)
 {
@@ -88,6 +160,33 @@ void Renderer2D::AddAnimation(int _state, int _start, int _end, double _time, ..
 
 	m_AniList.insert(pair<int, Ani_Info>(_state, Ani));
 
+}
+
+void Renderer2D::AddAnimation_const(int _state, int _start, int _end, float _time)
+{
+		Ani_Info Ani;
+
+	Ani.m_FrameStart = _start;
+
+	Ani.m_FrameEnd = _end ;
+
+	Ani.m_Count = _end - _start + 1;
+
+	for (int i = 0; i < Ani.m_Count; i++)
+	{
+		Ani.m_Timer.push_back(_time);
+	}
+
+	float result = 0.0f;
+
+	for (auto &i : Ani.m_Timer)
+	{
+		result += i;
+	}
+
+	Ani.m_TotalTime = result;
+
+	m_AniList.insert(pair<int, Ani_Info>(_state, Ani));
 }
 
 void Renderer2D::AniUpdate(float _DelayTime)

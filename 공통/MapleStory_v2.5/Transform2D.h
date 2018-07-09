@@ -74,6 +74,9 @@ public:
 
 	bool			m_isAniTrans = false;
 
+	bool			m_isCamera = false;
+	D2D1_POINT_2F	m_CameraRate = { 1.0f, 1.0f };
+
 protected:
 	//	방향 갱신
 	void	UpdateDir();
@@ -108,20 +111,13 @@ public:
 		return m_Scale;
 	}	
 
-	void	SetPos(float _x, float _y)
-	{
-		m_Pos.x = _x;
-		m_Pos.y = _y;
-	}
-	void	SetPos(D2D1_POINT_2F _pos)
-	{
-		m_Pos = _pos;
-	}
+	void	SetPos(float _x, float _y);
 
-	D2D1_POINT_2F	GetPos()
-	{
-		return m_Pos;
-	}
+	void	SetPos(D2D1_POINT_2F _pos);
+
+
+	D2D1_POINT_2F	GetPos();
+
 	float			GetAngle()
 	{
 		return m_Angle;
@@ -133,8 +129,9 @@ public:
 		m_Pos.y += _y;
 	}
 
-	void VelocityTrans(float _time);
-
+	void VelocityTransX(float _time);
+	void VelocityTransY(float _time);
+	void VelocityTrans_Map(float _time);
 
 };
 
