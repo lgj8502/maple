@@ -10,7 +10,12 @@ void IngameScene::Init(HWND hWnd)
 {
 	IMG_MGR->FileFindDir(L".\\Img\\IngameScene\\");
 
-	MAP_MGR->ChangeMap(MNAME_EREB);	
+	MAP_MGR->ChangeMap(MNAME_EREB);
+
+	
+	m_player.Init();
+
+	m_player.SetPos({ 200,550 });
 
 	//m_monster.Init();
 

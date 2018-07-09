@@ -6,6 +6,15 @@
 
 PlayerTest::PlayerTest()
 {
+}
+
+
+PlayerTest::~PlayerTest()
+{
+}
+
+void PlayerTest::Init()
+{
 
 	SettingBase();
 	SettingHair();
@@ -16,9 +25,7 @@ PlayerTest::PlayerTest()
 
 	SetParent(PART_ORIGIN, PART_CENTER);
 
-
-	m_Parts[PART_ORIGIN].m_Transform.SetPos({ 600,100});
-	m_Parts[PART_ORIGIN].m_Transform.m_gravity = true;
+	m_Parts[PART_ORIGIN].m_Transform.m_gravity = false;
 
 
 	for (int i = 0; i < PART_END; i++)
@@ -110,8 +117,8 @@ PlayerTest::PlayerTest()
 	m_Parts[PART_COATARM].m_Renderer.AddAnimation(PLAYER_WALK, 4, 7, 0.2, 0.2, 0.2, 0.2);
 	m_Parts[PART_PANTS].m_Renderer.AddAnimation(PLAYER_WALK, 4, 7, 0.2, 0.2, 0.2, 0.2);
 	m_Parts[PART_SHOES].m_Renderer.AddAnimation(PLAYER_WALK, 1, 4, 0.2, 0.2, 0.2, 0.2);
-	m_Parts[PART_HAND].m_Renderer.AddAnimation(PLAYER_WALK, 0, 0, 0.8);	
-	
+	m_Parts[PART_HAND].m_Renderer.AddAnimation(PLAYER_WALK, 0, 0, 0.8);
+
 	//////////////  이동 애니메이션 /////////////////////////////////////
 
 	m_Parts[PART_CENTER].m_Transform.AddAniPos({ 0, 0 });
@@ -120,53 +127,53 @@ PlayerTest::PlayerTest()
 	m_Parts[PART_CENTER].m_Transform.AddAniPos({ 0, 1 });
 
 	m_Parts[PART_CENTER].m_Transform.AddTransAnimation(PLAYER_WALK, 0, 3, 0.2, 0.2, 0.2, 0.2);
-	
+
 	m_Parts[PART_HEAD].m_Transform.AddAniPos({ 1, -30 });
 	m_Parts[PART_HEAD].m_Transform.AddAniPos({ 1, -30 });
 	m_Parts[PART_HEAD].m_Transform.AddAniPos({ 1, -30 });
 	m_Parts[PART_HEAD].m_Transform.AddAniPos({ 1, -30 });
-	
+
 	m_Parts[PART_HEAD].m_Transform.AddTransAnimation(PLAYER_WALK, 0, 3, 0.2, 0.2, 0.2, 0.2);
-	
+
 	m_Parts[PART_ARM].m_Transform.AddAniPos({ 11, -5 });
 	m_Parts[PART_ARM].m_Transform.AddAniPos({ 5, -5 });
 	m_Parts[PART_ARM].m_Transform.AddAniPos({ 11, -5 });
 	m_Parts[PART_ARM].m_Transform.AddAniPos({ 11, -5 });
-	
+
 	m_Parts[PART_ARM].m_Transform.AddTransAnimation(PLAYER_WALK, 4, 7, 0.2, 0.2, 0.2, 0.2);
-	
+
 	m_Parts[PART_BODY].m_Transform.AddAniPos({ 0, 0 });
 	m_Parts[PART_BODY].m_Transform.AddAniPos({ 2, 0 });
 	m_Parts[PART_BODY].m_Transform.AddAniPos({ 0, 0 });
 	m_Parts[PART_BODY].m_Transform.AddAniPos({ 0, 0 });
-	
+
 	m_Parts[PART_BODY].m_Transform.AddTransAnimation(PLAYER_WALK, 4, 7, 0.2, 0.2, 0.2, 0.2);
-	
+
 	m_Parts[PART_COAT].m_Transform.AddAniPos({ 1, -5 });
 	m_Parts[PART_COAT].m_Transform.AddAniPos({ 1, -5 });
 	m_Parts[PART_COAT].m_Transform.AddAniPos({ 1, -5 });
 	m_Parts[PART_COAT].m_Transform.AddAniPos({ 1, -5 });
 	m_Parts[PART_COAT].m_Transform.AddTransAnimation(PLAYER_IDLE, 4, 7, 0.5, 0.5, 0.5, 0.5);
-	
+
 	m_Parts[PART_COATARM].m_Transform.AddAniPos({ 0, -5 });
 	m_Parts[PART_COATARM].m_Transform.AddAniPos({ 2, -1 });
 	m_Parts[PART_COATARM].m_Transform.AddAniPos({ 0, -5 });
 	m_Parts[PART_COATARM].m_Transform.AddAniPos({ -1, -4 });
-	
+
 	m_Parts[PART_COATARM].m_Transform.AddTransAnimation(PLAYER_WALK, 4, 7, 0.2, 0.2, 0.2, 0.2);
-	
+
 	m_Parts[PART_PANTS].m_Transform.AddAniPos({ 3, 5 });
 	m_Parts[PART_PANTS].m_Transform.AddAniPos({ 3, 5 });
 	m_Parts[PART_PANTS].m_Transform.AddAniPos({ 5, 5 });
 	m_Parts[PART_PANTS].m_Transform.AddAniPos({ 5, 5 });
-	
+
 	m_Parts[PART_PANTS].m_Transform.AddTransAnimation(PLAYER_WALK, 4, 7, 0.2, 0.2, 0.2, 0.2);
-	
+
 	m_Parts[PART_SHOES].m_Transform.AddAniPos({ 8, 12 });
 	m_Parts[PART_SHOES].m_Transform.AddAniPos({ 2, 12 });
 	m_Parts[PART_SHOES].m_Transform.AddAniPos({ 6, 12 });
 	m_Parts[PART_SHOES].m_Transform.AddAniPos({ 2, 12 });
-	
+
 	m_Parts[PART_SHOES].m_Transform.AddTransAnimation(PLAYER_WALK, 4, 7, 0.2, 0.2, 0.2, 0.2);
 
 #pragma endregion WALK
@@ -174,57 +181,60 @@ PlayerTest::PlayerTest()
 #pragma region JUMP
 
 	///////// 비트맵 교체 애니메이션 //////////////
-m_Parts[PART_BODY].m_Renderer.AddAnimation(PLAYER_JUMP, 8, 8, 1);
-m_Parts[PART_ARM].m_Renderer.AddAnimation(PLAYER_JUMP, 8, 8, 1);
-m_Parts[PART_COAT].m_Renderer.AddAnimation(PLAYER_JUMP, 8, 8, 1);
-m_Parts[PART_COATARM].m_Renderer.AddAnimation(PLAYER_JUMP, 8, 8, 1);
-m_Parts[PART_PANTS].m_Renderer.AddAnimation(PLAYER_JUMP, 8, 8, 1);
-m_Parts[PART_SHOES].m_Renderer.AddAnimation(PLAYER_JUMP, 5, 5, 1);
-m_Parts[PART_HAND].m_Renderer.AddAnimation(PLAYER_JUMP, 1, 1, 1);
+	m_Parts[PART_BODY].m_Renderer.AddAnimation(PLAYER_JUMP, 8, 8, 1);
+	m_Parts[PART_ARM].m_Renderer.AddAnimation(PLAYER_JUMP, 8, 8, 1);
+	m_Parts[PART_COAT].m_Renderer.AddAnimation(PLAYER_JUMP, 8, 8, 1);
+	m_Parts[PART_COATARM].m_Renderer.AddAnimation(PLAYER_JUMP, 8, 8, 1);
+	m_Parts[PART_PANTS].m_Renderer.AddAnimation(PLAYER_JUMP, 8, 8, 1);
+	m_Parts[PART_SHOES].m_Renderer.AddAnimation(PLAYER_JUMP, 5, 5, 1);
+	m_Parts[PART_HAND].m_Renderer.AddAnimation(PLAYER_JUMP, 1, 1, 1);
 
 
-//////////////  이동 애니메이션 /////////////////////////////////////
+	//////////////  이동 애니메이션 /////////////////////////////////////
 
-m_Parts[PART_ARM].m_Transform.AddAniPos({ 5, -13 });
-m_Parts[PART_ARM].m_Transform.AddTransAnimation(PLAYER_JUMP, 8, 8, 5);
+	m_Parts[PART_ARM].m_Transform.AddAniPos({ 5, -13 });
+	m_Parts[PART_ARM].m_Transform.AddTransAnimation(PLAYER_JUMP, 8, 8, 5);
 
-m_Parts[PART_BODY].m_Transform.AddAniPos({ 0, 0 });
-m_Parts[PART_BODY].m_Transform.AddTransAnimation(PLAYER_JUMP, 8, 8, 5);
+	m_Parts[PART_BODY].m_Transform.AddAniPos({ 0, 0 });
+	m_Parts[PART_BODY].m_Transform.AddTransAnimation(PLAYER_JUMP, 8, 8, 5);
 
-m_Parts[PART_COAT].m_Transform.AddAniPos({ 1, -5 });
-m_Parts[PART_COAT].m_Transform.AddTransAnimation(PLAYER_IDLE, 8, 8, 5);
+	m_Parts[PART_COAT].m_Transform.AddAniPos({ 1, -5 });
+	m_Parts[PART_COAT].m_Transform.AddTransAnimation(PLAYER_IDLE, 8, 8, 5);
 
-m_Parts[PART_COATARM].m_Transform.AddAniPos({ 3, 0 });
-m_Parts[PART_COATARM].m_Transform.AddTransAnimation(PLAYER_JUMP, 8, 8, 5);
+	m_Parts[PART_COATARM].m_Transform.AddAniPos({ 3, 0 });
+	m_Parts[PART_COATARM].m_Transform.AddTransAnimation(PLAYER_JUMP, 8, 8, 5);
 
-m_Parts[PART_PANTS].m_Transform.AddAniPos({ 3, 3 });
-m_Parts[PART_PANTS].m_Transform.AddTransAnimation(PLAYER_JUMP, 8, 8, 5);
+	m_Parts[PART_PANTS].m_Transform.AddAniPos({ 3, 3 });
+	m_Parts[PART_PANTS].m_Transform.AddTransAnimation(PLAYER_JUMP, 8, 8, 5);
 
-m_Parts[PART_SHOES].m_Transform.AddAniPos({ 0, 10 });
-m_Parts[PART_SHOES].m_Transform.AddTransAnimation(PLAYER_JUMP, 8, 8, 5);
+	m_Parts[PART_SHOES].m_Transform.AddAniPos({ 0, 10 });
+	m_Parts[PART_SHOES].m_Transform.AddTransAnimation(PLAYER_JUMP, 8, 8, 5);
 
-m_Parts[PART_HAND].m_Transform.AddAniPos({ -10, -7});
-m_Parts[PART_HAND].m_Transform.AddTransAnimation(PLAYER_JUMP, 0, 0, 5);
+	m_Parts[PART_HAND].m_Transform.AddAniPos({ -10, -7 });
+	m_Parts[PART_HAND].m_Transform.AddTransAnimation(PLAYER_JUMP, 0, 0, 5);
 
 
 
 #pragma endregion JUMP
 
 
-// 사다리 임시 모션
+	// 사다리 임시 모션
 
-m_Parts[PART_ARM].m_Transform.AddAniPos({ 50, -13 });
-m_Parts[PART_ARM].m_Transform.AddTransAnimation(PLAYER_LADDER, 8, 8, 5);
-
-}
-
-
-PlayerTest::~PlayerTest()
-{
+	m_Parts[PART_ARM].m_Transform.AddAniPos({ 50, -13 });
+	m_Parts[PART_ARM].m_Transform.AddTransAnimation(PLAYER_LADDER, 8, 8, 5);
 }
 
 void PlayerTest::Update(float _DelayTime)
 {
+	if (GetPos().y > WIN_HEIGHT)
+	{
+		D2D1_POINT_2F pos = GetPos();
+
+		pos.y = 550.0f;
+
+		SetPos(pos);
+	}
+
 	if (m_ChangeMap == true)
 	{
 		for (auto &i : MAP_MGR->m_pMap->m_Portal_List)

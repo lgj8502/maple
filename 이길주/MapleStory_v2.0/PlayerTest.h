@@ -119,6 +119,8 @@ public:
 	PlayerTest();
 	~PlayerTest();
 
+
+	void Init();
 	void Update(float _DelayTime = 0.0f);
 	void Render();
 
@@ -166,6 +168,11 @@ public:
 	inline void SetPos(D2D1_POINT_2F _pos)
 	{
 		m_Parts[0].m_Transform.SetPos(_pos);
+	}
+
+	inline D2D1_POINT_2F GetPos()
+	{
+		return m_Parts[0].m_Transform.GetPos();
 	}
 
 
