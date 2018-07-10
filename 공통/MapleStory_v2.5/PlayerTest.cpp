@@ -234,9 +234,6 @@ void PlayerTest::Update(float _DelayTime)
 		SetPos(pos);
 	}
 
-	MK_LOG("%f, %f", MAP_MGR->m_CameraPos.x, MAP_MGR->m_CameraPos.y);
-
-
 	// Æ÷Å»°ü·Ã
 	if (m_ChangeMap == true)
 	{
@@ -248,6 +245,9 @@ void PlayerTest::Update(float _DelayTime)
 				pos.y -= 100.0f;
 
 				SetPos(pos);
+
+				pos.x -= WIN_WIDTH / 2.0f;
+				pos.y -= WIN_HEIGHT / 2.0f;
 
 				MAP_MGR->m_CameraPos = pos;
 		

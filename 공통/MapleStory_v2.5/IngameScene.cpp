@@ -16,7 +16,7 @@ void IngameScene::Init(HWND hWnd)
 
 	m_player.SetPos({ 200,700 });
 
-	MAP_MGR->m_CameraPos = m_player.GetPos();
+	MAP_MGR->m_CameraPos = {0, 300};
 
 	//m_monster.Init();
 
