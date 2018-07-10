@@ -15,7 +15,6 @@ PlayerTest::~PlayerTest()
 
 void PlayerTest::Init()
 {
-
 	SettingBase();
 	SettingHair();
 	SettingFace();
@@ -26,7 +25,7 @@ void PlayerTest::Init()
 	SetParent(PART_ORIGIN, PART_CENTER);
 
 	m_Parts[PART_ORIGIN].m_Transform.m_gravity = false;
-
+	m_Parts[PART_ORIGIN].m_Transform.m_isCamera = true;
 
 	for (int i = 0; i < PART_END; i++)
 	{
@@ -226,15 +225,17 @@ void PlayerTest::Init()
 
 void PlayerTest::Update(float _DelayTime)
 {
-	if (GetPos().y > WIN_HEIGHT)
+
+	if (GetPos().y > MAP_MGR->m_pMap->m_LayOut6_Size.y)
 	{
 		D2D1_POINT_2F pos = GetPos();
-
-		pos.y = 550.0f;
-
+	
+		pos.y = MAP_MGR->m_pMap->m_LayOut6_Size.y - 250.0f;
+	
 		SetPos(pos);
 	}
 
+	// 포탈관련
 	if (m_ChangeMap == true)
 	{
 		for (auto &i : MAP_MGR->m_pMap->m_Portal_List)
@@ -244,49 +245,13 @@ void PlayerTest::Update(float _DelayTime)
 				D2D1_POINT_2F pos =  i->GetMapPos();
 				pos.y -= 100.0f;
 
-				if (pos.x < WIN_WIDTH / 2.0f)
-				{
-					MAP_MGR->m_pMap->m_LayOut2.m_Transform.SetPos(0, 0);
-					MAP_MGR->m_pMap->m_LayOut3.m_Transform.SetPos(0, 0);
-					MAP_MGR->m_pMap->m_LayOut4.m_Transform.SetPos(0, 0);
-					MAP_MGR->m_pMap->m_LayOut5.m_Transform.SetPos(0, 0);
-					MAP_MGR->m_pMap->m_LayOut6.m_Transform.SetPos(0, 0);
+				SetPos(pos);
 
-					MAP_MGR->m_LeftEnd = true;
-					MAP_MGR->m_RightEnd = false;
+				pos.x -= WIN_WIDTH / 2.0f;
+				pos.y -= WIN_HEIGHT / 2.0f;
 
-					SetPos(pos);
-				}
-				else if (pos.x > MAP_MGR->m_pMap->m_LayOut6_Size.x - (WIN_WIDTH / 2.0f))
-				{
-					MAP_MGR->m_LeftEnd = false;
-					MAP_MGR->m_RightEnd = true;
-
-					MAP_MGR->m_pMap->m_LayOut2.m_Transform.SetPos(-(MAP_MGR->m_pMap->m_LayOut2_Size.x - WIN_WIDTH), 0);
-					MAP_MGR->m_pMap->m_LayOut3.m_Transform.SetPos(-(MAP_MGR->m_pMap->m_LayOut3_Size.x - WIN_WIDTH), 0);
-					MAP_MGR->m_pMap->m_LayOut4.m_Transform.SetPos(-(MAP_MGR->m_pMap->m_LayOut4_Size.x - WIN_WIDTH), 0);
-					MAP_MGR->m_pMap->m_LayOut5.m_Transform.SetPos(-(MAP_MGR->m_pMap->m_LayOut5_Size.x - WIN_WIDTH), 0);
-					MAP_MGR->m_pMap->m_LayOut6.m_Transform.SetPos(-(MAP_MGR->m_pMap->m_LayOut6_Size.x - WIN_WIDTH), 0);
-
-
-
-					pos.x = WIN_WIDTH - (MAP_MGR->m_pMap->m_LayOut6_Size.x - pos.x);
-
-					SetPos(pos);
-
-				}
-				else
-				{
-					float px = pos.x - (WIN_WIDTH / 2.0f);
-
-					float dx = (MAP_MGR->m_pMap->m_LayOut2_Size.x - WIN_WIDTH) /( MAP_MGR->m_pMap->m_LayOut6_Size.x - WIN_HEIGHT);
-					MAP_MGR->m_pMap->m_LayOut2.m_Transform.SetPos(-px * dx, 0);
-					MAP_MGR->m_pMap->m_LayOut6.m_Transform.SetPos(-px, 0);
-
-					pos.x = WIN_WIDTH / 2.0f;
-
-					SetPos(pos);
-				}
+				MAP_MGR->m_CameraPos = pos;
+		
 				break;
 			}
 		}
@@ -303,16 +268,6 @@ void PlayerTest::Update(float _DelayTime)
 	{
 		ChangeState(PLAYER_JUMP);
 	}
-
-
-	//if (m_Parts[PART_ORIGIN].m_Transform.m_velocityX == 0 && m_Parts[PART_ORIGIN].m_Transform.m_velocityY == 0)
-	//{
-	//	for (int i = 0; i < PART_END; i++)
-	//	{
-	//		m_Parts[i].m_Renderer.m_State = PLAYER_IDLE;
-	//		m_Parts[i].m_Transform.m_State = PLAYER_IDLE;
-	//	}
-	//}
 
 	// Jump
 
@@ -348,35 +303,34 @@ void PlayerTest::Update(float _DelayTime)
 		}
 	}
 
-
-	m_MapPos = m_Parts[0].m_Transform.GetPos();
-	m_MapPos.x -= MAP_MGR->m_pMap->m_LayOut6.m_Transform.GetPos().x;
-	m_MapPos.y -= MAP_MGR->m_pMap->m_LayOut6.m_Transform.GetPos().y;
-
-
 	// 타일맵 충돌 체크
 
-	int countTile = 0;
-
-	for (size_t i = 0; i < MAP_MGR->m_pMap->m_Tile_List.size(); i++)
+	if (MAP_MGR->m_isPlaying == true)
 	{
-		if (CrashCheckMap(MAP_MGR->m_pMap->m_Tile_List[i]) == true)
+		int countTile = 0;
+
+		for (size_t i = 0; i < MAP_MGR->m_pMap->m_Tile_List.size(); i++)
 		{
-			float posY = MAP_MGR->m_pMap->m_Tile_List[i]->GetMapPos().y;
-
-			posY += MAP_MGR->m_pMap->m_Tile_List[i]->m_Renderer.GetImgRT().top;
-
-			if (m_MapPos.y < posY)
+			if (CrashCheckMap(MAP_MGR->m_pMap->m_Tile_List[i]) == true)
 			{
-				Landing(MAP_MGR->m_pMap->m_Tile_List[i]);
-				countTile++;
-			}
+				float posY = MAP_MGR->m_pMap->m_Tile_List[i]->GetMapPos().y;
 
-			break;
+				posY += MAP_MGR->m_pMap->m_Tile_List[i]->m_Renderer.GetImgRT().top;
+
+				if (GetPos().y < posY)
+				{
+					Landing(MAP_MGR->m_pMap->m_Tile_List[i]);
+					countTile++;
+				}
+
+				break;
+			}
 		}
+
+		if (countTile == 0 && m_Parts[0].m_Transform.m_State != PLAYER_JUMP && m_Parts[0].m_Transform.m_State != PLAYER_LADDER) m_Parts[0].m_Transform.m_gravity = true;
 	}
 
-	if (countTile == 0 && m_Parts[0].m_Transform.m_State != PLAYER_JUMP && m_Parts[0].m_Transform.m_State != PLAYER_LADDER) m_Parts[0].m_Transform.m_gravity = true;
+
 
 	// 사다리 충돌 체크
 
@@ -386,7 +340,7 @@ void PlayerTest::Update(float _DelayTime)
 		{
 			float posX = MAP_MGR->m_pMap->m_Ladder_List[i]->GetMapPos().x;
 
-			float dx = abs(m_MapPos.x - posX);
+			float dx = abs(GetPos().x - posX);
 
 			if (dx < 10.0f)
 			{
@@ -408,7 +362,7 @@ void PlayerTest::Update(float _DelayTime)
 		{
 			float posX = MAP_MGR->m_pMap->m_Portal_List[i]->GetMapPos().x;
 
-			float dx = abs(m_MapPos.x - posX);
+			float dx = abs(GetPos().x - posX);
 
 			m_isCrashLadder = false;
 
@@ -439,10 +393,10 @@ bool PlayerTest::CrashCheckMap(cMapObj * _obj)
 {
 	if (_obj->m_CrashCheck == false) return false;
 
-	float left = m_MapPos.x - 7.0f;
-	float right = m_MapPos.x + 7.0f;
-	float up = m_MapPos.y - 50.0f;
-	float down = m_MapPos.y + 17.5f;
+	float left = GetPos().x - 7.0f;
+	float right = GetPos().x + 7.0f;
+	float up = GetPos().y - 50.0f;
+	float down = GetPos().y + 17.5f;
 
 	D2D1_POINT_2F pos = _obj->m_Transform.GetPos();
 
@@ -496,6 +450,8 @@ void PlayerTest::Landing(cMapObj* _pLandingTile)
 
 void PlayerTest::BlowJumpTile()
 {
+	if (m_CrashedLadder != nullptr || m_CrashedTopLadder != nullptr) return;
+
 	if (m_LandingTile != nullptr && m_LandingTile->m_isBaseTile == false)
 	{
 		m_LandingTile->m_CrashCheck = false;
@@ -554,22 +510,7 @@ void PlayerTest::PortalIn()
 
 	m_ChangeMap = true;
 
-	//for (auto &i : MAP_MGR->m_pMap->m_Portal_List)
-	//{
-	//	if (i->m_PortalID == PortalNum)
-	//	{
-	//		D2D1_POINT_2F pos =  i->GetMapPos();
-	//		pos.y -= 10.0f;
-
-
-	//		if (pos.x < WIN_WIDTH / 2.0f)
-	//		{
-	//			SetPos(pos);
-	//		}
-
-	//		break;
-	//	}
-	//}
+	MAP_MGR->m_isPlaying = false;
 
 }
 
@@ -595,30 +536,13 @@ void PlayerTest::LeftWalk(float _DelayTime)
 {
 	if (m_Parts[PART_ORIGIN].m_Transform.m_State == PLAYER_LADDER) return;
 
+	if (GetPos().x < 50.0f) return;
+
+	m_isCrashLadder = false;
+
 	m_Parts[PART_ORIGIN].m_Transform.m_velocityX = -m_MoveSpeed * m_MoveSpeedRatio * 0.01f;
 
-	if (m_Parts[PART_ORIGIN].m_Transform.GetPos().x > WIN_WIDTH / 2)
-	{
-		m_Parts[PART_ORIGIN].m_Transform.VelocityTransX(_DelayTime);
-	}
-	else if (MAP_MGR->m_LeftEnd == true && m_Parts[PART_ORIGIN].m_Transform.GetPos().x > 20.0f)
-	{	
-		m_Parts[PART_ORIGIN].m_Transform.VelocityTransX(_DelayTime);
-	}
-	else
-	{
-		if (m_Parts->m_Transform.GetScale().x < 0)
-		{
-			D2D1_POINT_2F scale = m_Parts->m_Transform.GetScale();
-
-			scale.x *= -1;
-
-			m_Parts->m_Transform.SetScale(scale);
-		}
-
-		MAP_MGR->PlayerMoveLeft(m_Parts[PART_ORIGIN].m_Transform.m_velocityX, _DelayTime);
-		
-	}	
+	m_Parts[PART_ORIGIN].m_Transform.VelocityTransX(_DelayTime);
 
 	for (int i = 0; i < PART_END; i++)
 	{
@@ -635,29 +559,13 @@ void PlayerTest::RightWalk(float _DelayTime)
 {
 	if (m_Parts[PART_ORIGIN].m_Transform.m_State == PLAYER_LADDER) return;
 
+	if (GetPos().x > MAP_MGR->m_pMap->m_LayOut6_Size.x - 50.0f) return;
+
+	m_isCrashLadder = false;
+
 	m_Parts[PART_ORIGIN].m_Transform.m_velocityX = +m_MoveSpeed * m_MoveSpeedRatio * 0.01f;
 
-	if (m_Parts[PART_ORIGIN].m_Transform.GetPos().x < WIN_WIDTH / 2)
-	{
-		m_Parts[PART_ORIGIN].m_Transform.VelocityTransX(_DelayTime);
-	}
-	else if (MAP_MGR->m_RightEnd == true && m_Parts[PART_ORIGIN].m_Transform.GetPos().x < WIN_WIDTH - 20.0f)
-	{
-		m_Parts[PART_ORIGIN].m_Transform.VelocityTransX(_DelayTime);
-	}
-	else
-	{
-		if (m_Parts->m_Transform.GetScale().x > 0)
-		{
-			D2D1_POINT_2F scale = m_Parts->m_Transform.GetScale();
-
-			scale.x *= -1;
-
-			m_Parts->m_Transform.SetScale(scale);
-		}
-
-		MAP_MGR->PlayerMoveRight(m_Parts[PART_ORIGIN].m_Transform.m_velocityX, _DelayTime);
-	}
+	m_Parts[PART_ORIGIN].m_Transform.VelocityTransX(_DelayTime);
 
 	for (int i = 0; i < PART_END; i++)
 	{
@@ -676,7 +584,7 @@ void PlayerTest::ClimbLadder(float _DelayTime)
 
 	if (m_CrashedTopLadder != nullptr)
 	{
-		if (m_CrashedTopLadder->GetMapPos().y > GetMapPos().y + 20.0f)
+		if (m_CrashedTopLadder->GetMapPos().y > GetPos().y + 45.0f)
 		{
 			LadderOff();
 			return;
@@ -708,7 +616,7 @@ void PlayerTest::ClimbLadder(float _DelayTime)
 
 		//if (m_CrashedTopLadder != nullptr)
 		//{
-		//	if (m_CrashedTopLadder->GetMapPos().y > GetMapPos().y + 20.0f)
+		//	if (m_CrashedTopLadder->GetMapPos().y > GetPos().y + 200.0f)
 		//	{
 		//		LadderOff();
 		//	}
@@ -745,14 +653,6 @@ void PlayerTest::DownLadder(float _DelayTime)
 		{
 			LadderOff();
 		}
-
-		//f (m_CrashedLadder != nullptr)
-		//
-		//	if (m_isLanding == true)
-		//	{
-		//		LadderOff();
-		//	}
-		//
 	}
 
 
@@ -783,7 +683,7 @@ void PlayerTest::StopWalk()
 }
 
 void PlayerTest::JumpMove()
-{
+{	
 	m_isJumping = true;
 }
 

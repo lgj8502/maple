@@ -70,7 +70,7 @@ private:
 	bool m_ChangeMap = false;
 	int m_PortalNum = 0;
 
-	D2D1_POINT_2F m_MapPos = {};
+	//D2D1_POINT_2F m_MapPos = {};
 
 	map<wstring, ImgInfo>	m_BaseList;
 	map<wstring, ImgInfo>	m_HairList;
@@ -156,14 +156,6 @@ public:
 
 	void LoadImg(char *_path, size_t _ItemNo, map<wstring, ImgInfo> &_BotmapList);
 
-	inline D2D1_POINT_2F GetMapPos()
-	{
-		return m_MapPos;
-	}
-	inline void SetMapPos(D2D1_POINT_2F _pos)
-	{
-		//_pos
-	}
 
 	inline void SetPos(D2D1_POINT_2F _pos)
 	{

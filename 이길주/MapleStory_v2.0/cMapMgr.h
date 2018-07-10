@@ -40,13 +40,20 @@ class cMapMgr : public TemplateSingleton<cMapMgr>
 public:
 	~cMapMgr();
 
+	D2D1_POINT_2F m_CameraPos = {};
+
 	cMap *m_pMap = nullptr;
+
+	Object2D m_Fade;
 
 	int m_MapName = MNAME_NONE;
 	bool m_isChange = false;
 
 	bool m_LeftEnd = false;
 	bool m_RightEnd = false;
+
+	bool m_isPlaying = false;
+
 
 private:
 
@@ -85,9 +92,6 @@ public:
 	void BackRender();
 	void FrontRender();
 	void LadderRender();
-
-	void PlayerMoveLeft(float _velocity, float _time);
-	void PlayerMoveRight(float _velocity, float _time);
 
 	void ChangeMap(int _MapName);
 

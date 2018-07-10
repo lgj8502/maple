@@ -18,7 +18,7 @@ void cArcana::Init()
 
 	// 배경 6
 
-	m_LayOut6_Size = { 2000, 800 };
+	m_LayOut6_Size = { 2000, 801 };
 	// 타일 _ 베이스
 
 	MAP_MGR->AddFlatTileH({ 0, 618 }, 30, true);
@@ -37,8 +37,8 @@ void cArcana::Init()
 	portalImgList.push_back(L"pv.default.6");
 	portalImgList.push_back(L"pv.default.7");
 
-	MAP_MGR->AddPortal(1, { 100, 585 }, portalImgList, MNAME_EREB, 1);
-	MAP_MGR->AddPortal(2, { 1800, 585 }, portalImgList, MNAME_EREB, 2);
+	MAP_MGR->AddPortal(1, { 100, 585 }, portalImgList, MNAME_EREB, 2);
+	MAP_MGR->AddPortal(2, { 1800, 585 }, portalImgList, MNAME_EREB, 1);
 	MAP_MGR->AddPortal(3, { 1000, 585 }, portalImgList, MNAME_EREB, 3);
 
 
@@ -57,4 +57,22 @@ void cArcana::Init()
 
 
 	MAP_MGR->AddAnimation({ 400, 585 }, MAP_BACKGROUND6, 0.1f, lighitForestList);
+
+	m_LayOut2.m_Transform.m_isCamera = true;
+	m_LayOut3.m_Transform.m_isCamera = true;
+	m_LayOut4.m_Transform.m_isCamera = true;
+	m_LayOut5.m_Transform.m_isCamera = true;
+	m_LayOut6.m_Transform.m_isCamera = true;
+
+	m_LayOut2.m_Transform.m_CameraRate.x = (m_LayOut2_Size.x - WIN_WIDTH) / (m_LayOut6_Size.x - WIN_WIDTH);
+	m_LayOut3.m_Transform.m_CameraRate.x = (m_LayOut3_Size.x - WIN_WIDTH) / (m_LayOut6_Size.x - WIN_WIDTH);
+	m_LayOut4.m_Transform.m_CameraRate.x = (m_LayOut4_Size.x - WIN_WIDTH) / (m_LayOut6_Size.x - WIN_WIDTH);
+	m_LayOut5.m_Transform.m_CameraRate.x = (m_LayOut5_Size.x - WIN_WIDTH) / (m_LayOut6_Size.x - WIN_WIDTH);
+	m_LayOut6.m_Transform.m_CameraRate.x = (m_LayOut6_Size.x - WIN_WIDTH) / (m_LayOut6_Size.x - WIN_WIDTH);
+
+	m_LayOut2.m_Transform.m_CameraRate.y = (m_LayOut2_Size.y - WIN_HEIGHT) / (m_LayOut6_Size.y - WIN_HEIGHT);
+	m_LayOut3.m_Transform.m_CameraRate.y = (m_LayOut3_Size.y - WIN_HEIGHT) / (m_LayOut6_Size.y - WIN_HEIGHT);
+	m_LayOut4.m_Transform.m_CameraRate.y = (m_LayOut4_Size.y - WIN_HEIGHT) / (m_LayOut6_Size.y - WIN_HEIGHT);
+	m_LayOut5.m_Transform.m_CameraRate.y = (m_LayOut5_Size.y - WIN_HEIGHT) / (m_LayOut6_Size.y - WIN_HEIGHT);
+	m_LayOut6.m_Transform.m_CameraRate.y = (m_LayOut6_Size.y - WIN_HEIGHT) / (m_LayOut6_Size.y - WIN_HEIGHT);
 }

@@ -29,8 +29,7 @@ public:
 
 	D2D1_POINT_2F GetMapPos()
 	{
-		m_MapPos.x = m_Transform.GetPos().x;
-		m_MapPos.y = m_Transform.GetPos().y;
+		m_MapPos = m_Transform.GetPos();		
 
 		return m_MapPos;
 	}
