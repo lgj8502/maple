@@ -31,8 +31,8 @@ void cErebMap::Init()
 
 	m_LayOut2_Size = { 1400, 850 };
 
-	MAP_MGR->AddBackGround2(L"back.9",	{ 200.0f,  368.0f });
-	MAP_MGR->AddBackGround2(L"back.9", { 600.0f,   368.0f });
+	MAP_MGR->AddBackGround2(L"back.9",	{ 201.0f,  368.0f });
+	MAP_MGR->AddBackGround2(L"back.9", { 600.5f,   368.0f });
 	MAP_MGR->AddBackGround2(L"back.9",	{ 1000.0f, 368.0f });
 	MAP_MGR->AddBackGround2(L"back.9", { 1400.0f,  368.0f });
 
@@ -40,24 +40,24 @@ void cErebMap::Init()
 
 	m_LayOut3_Size = { 1600, 900 };
 
-	MAP_MGR->AddBackGround3(L"back.11", { 400.0f,  726.0f });
-	MAP_MGR->AddBackGround3(L"back.12", { 1200.0f, 726.0f });
+	MAP_MGR->AddBackGround3(L"back.11", { 401.0f,  726.0f });
+	MAP_MGR->AddBackGround3(L"back.12", { 1200.5f, 726.0f });
 	MAP_MGR->AddBackGround3(L"back.13", { 2000.0f, 726.0f });
 
 	// 배경 4
 
 	m_LayOut4_Size = { 1600, 1000 };
 
-	MAP_MGR->AddBackGround4(L"back.14", { 400.0f,  798.0f });
-	MAP_MGR->AddBackGround4(L"back.15", { 1200.0f, 798.0f });
+	MAP_MGR->AddBackGround4(L"back.14", { 401.0f,  798.0f });
+	MAP_MGR->AddBackGround4(L"back.15", { 1200.5f, 798.0f });
 	MAP_MGR->AddBackGround4(L"back.16", { 2000.0f, 798.0f });
 
 	// 배경 5
 
 	m_LayOut5_Size = { 1800, 1100 };
 
-	MAP_MGR->AddBackGround5(L"back.18", { 400.0f,  988.0f });
-	MAP_MGR->AddBackGround5(L"back.19", { 1200.0f, 988.0f });
+	MAP_MGR->AddBackGround5(L"back.18", { 401.0f,  988.0f });
+	MAP_MGR->AddBackGround5(L"back.19", { 1200.5f, 988.0f });
 	MAP_MGR->AddBackGround5(L"back.20", { 2000.0f, 988.0f });
 
 	// 배경 6
@@ -69,8 +69,8 @@ void cErebMap::Init()
 	MAP_MGR->AddBackGround6(L"nature.10.0", { 50.0f,  995.0f });
 
 	// Holybird
-	MAP_MGR->AddBackGround6(L"holybird.0.0", { 1300.0f, 995.0f });
-	MAP_MGR->AddBackGround6(L"holybird.1.0", { 1393.0f, 1000.0f });
+	MAP_MGR->AddBackGround6(L"holybird.0.0", { 1301.0f, 995.0f });
+	MAP_MGR->AddBackGround6(L"holybird.1.0", { 1393.5f, 1000.0f });
 	MAP_MGR->AddBackGround6(L"holybird.4.0", { 1513.0f, 996.0f });
 
 	// 타일 _ 베이스
@@ -127,6 +127,8 @@ void cErebMap::Init()
 
 	MAP_MGR->AddPortal(3, { 500, 493 }, portalImgList, MNAME_ARCANA, 3);
 
+	
+	///// 레이아웃 카메라 비율 설정
 
 	m_LayOut2.m_Transform.m_isCamera = true;
 	m_LayOut3.m_Transform.m_isCamera = true;

@@ -61,6 +61,9 @@
     <Filter Include="소스 파일\Map">
       <UniqueIdentifier>{b091c4f4-c552-46a5-834e-b599857da0de}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Effect">
+      <UniqueIdentifier>{d2bb1360-e3c9-456a-b08b-88335a8a90e3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -165,6 +168,12 @@
     <ClInclude Include="cArcana.h">
       <Filter>소스 파일\Map</Filter>
     </ClInclude>
+    <ClInclude Include="cEffectMgr.h">
+      <Filter>소스 파일\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="cEffect.h">
+      <Filter>소스 파일\Effect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MK_KeyMgr.cpp">
@@ -262,6 +271,12 @@
     </ClCompile>
     <ClCompile Include="cArcana.cpp">
       <Filter>소스 파일\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="cEffectMgr.cpp">
+      <Filter>소스 파일\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="cEffect.cpp">
+      <Filter>소스 파일\Effect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

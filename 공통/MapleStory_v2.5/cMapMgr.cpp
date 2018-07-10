@@ -63,11 +63,11 @@ void cMapMgr::AddFlatTileH(D2D1_POINT_2F _pos, int _count, bool _isBaseTile)
 
 		if (i == 0)
 		{
-			MAP->m_Transform.SetPos(_pos.x - 45.0f, _pos.y);
+			MAP->m_Transform.SetPos(_pos.x - 44.5f, _pos.y);
 		}
 		else
 		{
-			MAP->m_Transform.SetPos(_pos.x + (_count - 1) * 90.0f + 45.0f, _pos.y);
+			MAP->m_Transform.SetPos(_pos.x + (_count - 1) * 89.5f + 44.5f, _pos.y);
 		}
 
 		m_pMap->m_Tile_List.push_back(MAP);
@@ -96,7 +96,7 @@ void cMapMgr::AddFlatTileH(D2D1_POINT_2F _pos, int _count, bool _isBaseTile)
 
 		MAP->m_CrashCheck = true;
 
-		MAP->m_Transform.SetPos(_pos.x + i * 90.0f, _pos.y);
+		MAP->m_Transform.SetPos(_pos.x + i * 89.5f, _pos.y);
 
 		m_pMap->m_Tile_List.push_back(MAP);	
 
@@ -130,11 +130,11 @@ void cMapMgr::AddFlatTileM(D2D1_POINT_2F _pos, int _count)
 
 		if (i == 0)
 		{
-			MAP->m_Transform.SetPos(_pos.x - 45.0f - 13.0f, _pos.y);
+			MAP->m_Transform.SetPos(_pos.x - 44.5f - 13.0f, _pos.y);
 		}
 		else
 		{
-			MAP->m_Transform.SetPos(_pos.x + (_count - 1) * 90.0f + 45.0f +13.0f, _pos.y);
+			MAP->m_Transform.SetPos(_pos.x + (_count - 1) * 89.5f + 44.5f +13.0f, _pos.y);
 		}
 
 		m_pMap->m_Tile_List.push_back(MAP);
@@ -164,7 +164,7 @@ void cMapMgr::AddFlatTileM(D2D1_POINT_2F _pos, int _count)
 		MAP->m_Renderer.AddBitmap(AddBitmap);
 
 
-		MAP->m_Transform.SetPos(_pos.x + i * 90.0f, _pos.y);
+		MAP->m_Transform.SetPos(_pos.x + i * 89.5f, _pos.y);
 
 		m_pMap->m_Tile_List.push_back(MAP);
 
@@ -189,11 +189,11 @@ void cMapMgr::AddFlatTileL(D2D1_POINT_2F _pos, int _count)
 
 		if (i == 0)
 		{
-			MAP->m_Transform.SetPos(_pos.x - 45.0f, _pos.y);
+			MAP->m_Transform.SetPos(_pos.x - 44.5f, _pos.y);
 		}
 		else
 		{
-			MAP->m_Transform.SetPos(_pos.x + (_count - 1) * 90.0f + 45.0f, _pos.y);
+			MAP->m_Transform.SetPos(_pos.x + (_count - 1) * 89.5f + 44.5f, _pos.y);
 		}
 
 		m_pMap->m_Tile_List.push_back(MAP);
@@ -219,7 +219,7 @@ void cMapMgr::AddFlatTileL(D2D1_POINT_2F _pos, int _count)
 
 		MAP->m_Renderer.AddBitmap_Top(AddBitmap);
 
-		MAP->m_Transform.SetPos(_pos.x + i * 90.0f, _pos.y);
+		MAP->m_Transform.SetPos(_pos.x + i * 89.5f, _pos.y);
 
 		m_pMap->m_Tile_List.push_back(MAP);
 

@@ -146,6 +146,8 @@
     <ClInclude Include="BufferType.h" />
     <ClInclude Include="cArcana.h" />
     <ClInclude Include="cCharacter.h" />
+    <ClInclude Include="cEffect.h" />
+    <ClInclude Include="cEffectMgr.h" />
     <ClInclude Include="ChannelScene.h" />
     <ClInclude Include="cLogMgr.h" />
     <ClInclude Include="cMap.h" />
@@ -182,6 +184,8 @@
     <ClCompile Include="BufferType.cpp" />
     <ClCompile Include="cArcana.cpp" />
     <ClCompile Include="cCharacter.cpp" />
+    <ClCompile Include="cEffect.cpp" />
+    <ClCompile Include="cEffectMgr.cpp" />
     <ClCompile Include="ChannelScene.cpp" />
     <ClCompile Include="cLogMgr.cpp" />
     <ClCompile Include="cMap.cpp" />
