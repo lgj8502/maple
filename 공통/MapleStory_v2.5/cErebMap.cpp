@@ -121,9 +121,9 @@ void cErebMap::Init()
 	portalImgList.push_back(L"pv.default.7");
 
 
-	MAP_MGR->AddPortal(1, { 320, 493 }, portalImgList, MNAME_ARCANA, 1);
+	MAP_MGR->AddPortal(1, { 320, 493 }, portalImgList, MNAME_ARCANA, 2);
 
-	MAP_MGR->AddPortal(2, { 320, 991 }, portalImgList, MNAME_ARCANA, 2);
+	MAP_MGR->AddPortal(2, { 320, 991 }, portalImgList, MNAME_ARCANA, 1);
 
 	MAP_MGR->AddPortal(3, { 500, 493 }, portalImgList, MNAME_ARCANA, 3);
 

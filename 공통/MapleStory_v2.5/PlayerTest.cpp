@@ -225,12 +225,13 @@ void PlayerTest::Init()
 
 void PlayerTest::Update(float _DelayTime)
 {
+
 	if (GetPos().y > MAP_MGR->m_pMap->m_LayOut6_Size.y)
 	{
 		D2D1_POINT_2F pos = GetPos();
-
+	
 		pos.y = MAP_MGR->m_pMap->m_LayOut6_Size.y - 250.0f;
-
+	
 		SetPos(pos);
 	}
 
@@ -304,27 +305,32 @@ void PlayerTest::Update(float _DelayTime)
 
 	// 타일맵 충돌 체크
 
-	int countTile = 0;
-
-	for (size_t i = 0; i < MAP_MGR->m_pMap->m_Tile_List.size(); i++)
+	if (MAP_MGR->m_isPlaying == true)
 	{
-		if (CrashCheckMap(MAP_MGR->m_pMap->m_Tile_List[i]) == true)
+		int countTile = 0;
+
+		for (size_t i = 0; i < MAP_MGR->m_pMap->m_Tile_List.size(); i++)
 		{
-			float posY = MAP_MGR->m_pMap->m_Tile_List[i]->GetMapPos().y;
-
-			posY += MAP_MGR->m_pMap->m_Tile_List[i]->m_Renderer.GetImgRT().top;
-
-			if (GetPos().y < posY)
+			if (CrashCheckMap(MAP_MGR->m_pMap->m_Tile_List[i]) == true)
 			{
-				Landing(MAP_MGR->m_pMap->m_Tile_List[i]);
-				countTile++;
-			}
+				float posY = MAP_MGR->m_pMap->m_Tile_List[i]->GetMapPos().y;
 
-			break;
+				posY += MAP_MGR->m_pMap->m_Tile_List[i]->m_Renderer.GetImgRT().top;
+
+				if (GetPos().y < posY)
+				{
+					Landing(MAP_MGR->m_pMap->m_Tile_List[i]);
+					countTile++;
+				}
+
+				break;
+			}
 		}
+
+		if (countTile == 0 && m_Parts[0].m_Transform.m_State != PLAYER_JUMP && m_Parts[0].m_Transform.m_State != PLAYER_LADDER) m_Parts[0].m_Transform.m_gravity = true;
 	}
 
-	if (countTile == 0 && m_Parts[0].m_Transform.m_State != PLAYER_JUMP && m_Parts[0].m_Transform.m_State != PLAYER_LADDER) m_Parts[0].m_Transform.m_gravity = true;
+
 
 	// 사다리 충돌 체크
 
@@ -444,6 +450,8 @@ void PlayerTest::Landing(cMapObj* _pLandingTile)
 
 void PlayerTest::BlowJumpTile()
 {
+	if (m_CrashedLadder != nullptr || m_CrashedTopLadder != nullptr) return;
+
 	if (m_LandingTile != nullptr && m_LandingTile->m_isBaseTile == false)
 	{
 		m_LandingTile->m_CrashCheck = false;
@@ -502,22 +510,7 @@ void PlayerTest::PortalIn()
 
 	m_ChangeMap = true;
 
-	//for (auto &i : MAP_MGR->m_pMap->m_Portal_List)
-	//{
-	//	if (i->m_PortalID == PortalNum)
-	//	{
-	//		D2D1_POINT_2F pos =  i->GetMapPos();
-	//		pos.y -= 10.0f;
-
-
-	//		if (pos.x < WIN_WIDTH / 2.0f)
-	//		{
-	//			SetPos(pos);
-	//		}
-
-	//		break;
-	//	}
-	//}
+	MAP_MGR->m_isPlaying = false;
 
 }
 
@@ -660,14 +653,6 @@ void PlayerTest::DownLadder(float _DelayTime)
 		{
 			LadderOff();
 		}
-
-		//f (m_CrashedLadder != nullptr)
-		//
-		//	if (m_isLanding == true)
-		//	{
-		//		LadderOff();
-		//	}
-		//
 	}
 
 
@@ -698,7 +683,7 @@ void PlayerTest::StopWalk()
 }
 
 void PlayerTest::JumpMove()
-{
+{	
 	m_isJumping = true;
 }
 

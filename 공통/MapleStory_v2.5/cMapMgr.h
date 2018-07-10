@@ -52,6 +52,7 @@ public:
 	bool m_LeftEnd = false;
 	bool m_RightEnd = false;
 
+	bool m_isPlaying = false;
 
 
 private:

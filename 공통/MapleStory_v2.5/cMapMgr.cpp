@@ -249,7 +249,7 @@ void cMapMgr::AddBackGround1_Back1()
 
 	MAP->m_Renderer.AddBitmap(AddBitmap);
 
-	MAP->m_Renderer.SetImgRT({ 0,0, WIN_WIDTH, WIN_HEIGHT });
+	MAP->m_Renderer.SetImgRT({ 0,0, (float)WIN_WIDTH, (float)WIN_HEIGHT });
 
 	m_pMap->m_BackGround1_List.push_back(MAP);
 	

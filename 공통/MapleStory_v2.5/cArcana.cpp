@@ -37,8 +37,8 @@ void cArcana::Init()
 	portalImgList.push_back(L"pv.default.6");
 	portalImgList.push_back(L"pv.default.7");
 
-	MAP_MGR->AddPortal(1, { 100, 585 }, portalImgList, MNAME_EREB, 1);
-	MAP_MGR->AddPortal(2, { 1800, 585 }, portalImgList, MNAME_EREB, 2);
+	MAP_MGR->AddPortal(1, { 100, 585 }, portalImgList, MNAME_EREB, 2);
+	MAP_MGR->AddPortal(2, { 1800, 585 }, portalImgList, MNAME_EREB, 1);
 	MAP_MGR->AddPortal(3, { 1000, 585 }, portalImgList, MNAME_EREB, 3);
 
 
