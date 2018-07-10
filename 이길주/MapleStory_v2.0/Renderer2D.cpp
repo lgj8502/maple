@@ -162,6 +162,30 @@ void Renderer2D::AddAnimation(int _state, int _start, int _end, double _time, ..
 
 }
 
+void Renderer2D::AddAnimation(int _state, int _start, int _end, vector<float> _timeList)
+{
+	Ani_Info Ani;
+
+	Ani.m_FrameStart = _start;
+
+	Ani.m_FrameEnd = _end;
+
+	Ani.m_Count = _end - _start + 1;
+
+	Ani.m_Timer = _timeList;
+
+	float result = 0.0f;
+
+	for (auto &i : Ani.m_Timer)
+	{
+		result += i;
+	}
+
+	Ani.m_TotalTime = result;
+
+	m_AniList.insert(pair<int, Ani_Info>(_state, Ani));
+}
+
 void Renderer2D::AddAnimation_const(int _state, int _start, int _end, float _time)
 {
 		Ani_Info Ani;

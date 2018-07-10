@@ -141,6 +141,8 @@ void cMap::LadderRender()
 
 
 
+
+
 void cMap::Destroy()
 {
 	DeleteMapList(m_BackGround1_List);

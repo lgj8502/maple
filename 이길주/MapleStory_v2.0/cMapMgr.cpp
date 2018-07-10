@@ -510,6 +510,7 @@ void cMapMgr::LadderRender()
 
 
 
+
 void cMapMgr::ChangeMap(int _MapName)
 {
 	m_MapName = _MapName;

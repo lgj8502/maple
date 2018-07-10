@@ -93,6 +93,7 @@ public:
 	void FrontRender();
 	void LadderRender();
 
+
 	void ChangeMap(int _MapName);
 
 	void SetParent(cMapObj *_parent, cMapObj *_son);
