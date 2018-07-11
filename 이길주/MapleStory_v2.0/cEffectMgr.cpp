@@ -7,7 +7,7 @@ cEffectMgr::~cEffectMgr()
 	Destoy();
 }
 
-void cEffectMgr::EffectSingle(wstring _bitmapName, D2D1_POINT_2F _pos, float _DestroyTime)
+void cEffectMgr::EffectSingle(wstring _bitmapName, D2D1_POINT_2F _pos, float _DestroyTime, bool _camera)
 {
 	cEffect *Effect = new cEffect;
 
@@ -17,12 +17,12 @@ void cEffectMgr::EffectSingle(wstring _bitmapName, D2D1_POINT_2F _pos, float _De
 
 	Effect->m_Transform.SetPos(_pos);
 
-	Effect->m_Transform.m_isCamera = true;
+	Effect->m_Transform.m_isCamera = _camera;
 
 	m_EffectList.push_back(Effect);
 }
 
-void cEffectMgr::EffectMultiBtimap(vector<wstring> _bitmapList, D2D1_POINT_2F _pos, double _holdingTIme, ...)
+void cEffectMgr::EffectMultiBtimap(vector<wstring> _bitmapList, D2D1_POINT_2F _pos, bool _camera, double _holdingTIme, ...)
 {
 	cEffect *Effect = new cEffect;
 
@@ -35,7 +35,7 @@ void cEffectMgr::EffectMultiBtimap(vector<wstring> _bitmapList, D2D1_POINT_2F _p
 	vector<float> timelist;
 
 	va_list arglist;
-	va_start(arglist, _pos);
+	va_start(arglist, _camera);
 
 	for (size_t i = 0; i < _bitmapList.size(); i++)
 	{
@@ -56,12 +56,12 @@ void cEffectMgr::EffectMultiBtimap(vector<wstring> _bitmapList, D2D1_POINT_2F _p
 	Effect->m_Renderer.AddAnimation(0, 0, _bitmapList.size() - 1, timelist);
 	Effect->m_Renderer.m_State = 0;
 
-	Effect->m_Transform.m_isCamera = true;
+	Effect->m_Transform.m_isCamera = _camera;
 
 	m_EffectList.push_back(Effect);
 }
 
-void cEffectMgr::EffectMultiBtimap_const(vector<wstring> _bitmapList, D2D1_POINT_2F _pos, float _holdingTIme)
+void cEffectMgr::EffectMultiBtimap_const(vector<wstring> _bitmapList, D2D1_POINT_2F _pos, float _holdingTIme, bool _camera)
 {
 	cEffect *Effect = new cEffect;
 
@@ -77,7 +77,7 @@ void cEffectMgr::EffectMultiBtimap_const(vector<wstring> _bitmapList, D2D1_POINT
 	Effect->m_Renderer.AddAnimation_const(0, 0, _bitmapList.size() - 1, _holdingTIme);
 	Effect->m_Renderer.m_State = 0;
 
-	Effect->m_Transform.m_isCamera = true;
+	Effect->m_Transform.m_isCamera = _camera;
 
 	m_EffectList.push_back(Effect);
 }

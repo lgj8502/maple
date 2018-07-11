@@ -770,6 +770,40 @@ void IngameScene::Update(float _DelayTime)
 		EFF_MGR->EffectMultiBtimap_const(strList, pos, 0.1f);
 	}
 
+	if (OnceKeyDown(VK_F8))
+	{
+		vector<wstring> strList;
+
+		strList.push_back(L"LevelUp.1");
+		strList.push_back(L"LevelUp.2");
+		strList.push_back(L"LevelUp.3");
+		strList.push_back(L"LevelUp.4");
+		strList.push_back(L"LevelUp.5");
+		strList.push_back(L"LevelUp.6");
+		strList.push_back(L"LevelUp.7");
+		strList.push_back(L"LevelUp.8");
+		strList.push_back(L"LevelUp.9");
+		strList.push_back(L"LevelUp.10");
+		strList.push_back(L"LevelUp.11");
+		strList.push_back(L"LevelUp.12");
+		strList.push_back(L"LevelUp.13");
+		strList.push_back(L"LevelUp.14");
+		strList.push_back(L"LevelUp.15");
+		strList.push_back(L"LevelUp.16");
+		strList.push_back(L"LevelUp.17");
+		strList.push_back(L"LevelUp.18");
+		strList.push_back(L"LevelUp.19");
+		strList.push_back(L"LevelUp.20");
+
+
+		D2D1_POINT_2F pos = m_player.GetPos();
+
+		pos.y -= -20.0f;
+
+
+		EFF_MGR->EffectMultiBtimap_const(strList, pos, 0.1f);
+	}
+
 	if (OnceKeyDown(VK_MENU))
 	{
 		m_player.JumpMove();
