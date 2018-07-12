@@ -3,7 +3,13 @@
 class cMushroom : public cMob
 {
 public:
-	cMushroom();
 	~cMushroom();
+
+	void Init();
+
+	void StateUpdate(float _DelayTime);
+	void StateChagne() ;
+	void StateSetting();
+
 };
 

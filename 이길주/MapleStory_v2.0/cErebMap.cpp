@@ -126,6 +126,11 @@ void cErebMap::Init()
 
 	MAP_MGR->AddPortal(3, { 500, 493 }, portalImgList, MNAME_ARCANA, 3);
 
+
+
+	MOB_MGR->MobSetting(MOB_MUSHROOM, 5, { 300, 600 }, 200);
+
+
 	
 	///// 레이아웃 카메라 비율 설정
 

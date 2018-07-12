@@ -610,8 +610,12 @@ void IngameScene::Update(float _DelayTime)
 	//m_monster.Update(_DelayTime);
 
 
+
 	MAP_MGR->Update(_DelayTime);
 	m_player.Update(_DelayTime);
+
+	MOB_MGR->Update(_DelayTime);
+	
 
 	EFF_MGR->Update(_DelayTime);
 
@@ -832,6 +836,8 @@ void IngameScene::Render()
 
 	MAP_MGR->BackRender();
 	//m_monster.Render();
+
+	MOB_MGR->Render();
 
 	if (m_player.PlayerState() == PLAYER_LADDER || m_player.PlayerState() == PLAYER_LADDERMOVE)
 	{
