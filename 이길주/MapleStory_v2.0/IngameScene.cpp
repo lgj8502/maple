@@ -660,14 +660,29 @@ void IngameScene::Update(float _DelayTime)
 		}
 	}
 
+	//ATTACK
+	if (OnceKeyDown(VK_CONTROL))
+	{
+		m_player.Attack();
+
+	}
+
 	if (StayKeyDown(VK_DOWN))
 	{
 		m_player.DownLadder(_DelayTime);
+
+		m_player.Prone();
 
 		if (OnceKeyDown(VK_MENU))
 		{
 			m_player.BlowJumpTile();
 		}
+	}
+
+	//PRONESTEB
+	if (StayKeyDown(VK_DOWN) && OnceKeyUp(VK_CONTROL))
+	{
+		m_player.ProneSteb();
 	}
 
 	if (OnceKeyDown(VK_UP))
@@ -684,6 +699,8 @@ void IngameScene::Update(float _DelayTime)
 	if (OnceKeyUp(VK_UP) || OnceKeyUp(VK_DOWN))
 	{
 		m_player.StopLadder();
+
+		m_player.NotProne();
 
 	}
 
@@ -714,7 +731,7 @@ void IngameScene::Update(float _DelayTime)
 		m_player.ChangeCoat(100);
 	}
 
-	if (OnceKeyDown(VK_F5))
+	/*if (OnceKeyDown(VK_F5))
 	{
 		EFF_MGR->EffectSingle(L"0.swingT1.2.0", m_player.GetPos(), 0.5f);
 	}
@@ -727,7 +744,7 @@ void IngameScene::Update(float _DelayTime)
 		strList.push_back(L"0.swingT3.2.0");
 		strList.push_back(L"0.swingTF.3.0");
 
-		EFF_MGR->EffectMultiBtimap(strList, m_player.GetPos(), 0.5f, 1.0f, 1.5f);
+		EFF_MGR->EffectMultiBtimap(strList, m_player.GetPos(), true, 0.5f, 1.0f, 1.5f);
 	}
 
 	if (OnceKeyDown(VK_F7))
@@ -802,7 +819,7 @@ void IngameScene::Update(float _DelayTime)
 
 
 		EFF_MGR->EffectMultiBtimap_const(strList, pos, 0.1f);
-	}
+	}*/
 
 	if (OnceKeyDown(VK_MENU))
 	{
@@ -816,7 +833,7 @@ void IngameScene::Render()
 	MAP_MGR->BackRender();
 	//m_monster.Render();
 
-	if (m_player.PlayerState() == PLAYER_LADDER)
+	if (m_player.PlayerState() == PLAYER_LADDER || m_player.PlayerState() == PLAYER_LADDERMOVE)
 	{
 		MAP_MGR->LadderRender();
 		m_player.Render();

@@ -103,6 +103,63 @@ void cMapMgr::AddFlatTileH(D2D1_POINT_2F _pos, int _count, bool _isBaseTile)
 		SetParent(&(m_pMap->m_LayOut6), MAP);
 
 	}
+
+	//////////////////////////////////////////////////////////
+
+
+	for (int i = 0; i < 2; i++)
+	{
+		cMapObj *MAP = new cMapObj;
+
+		ID2D1Bitmap* AddBitmap = m_pMap->m_MapImgList[Mapname].m_Bitmap;
+
+		MAP->m_Renderer.AddBitmap_Bottom(AddBitmap);
+
+		MAP->m_CrashCheck = false;
+
+		if (i == 0)
+		{
+			MAP->m_Transform.SetPos(_pos.x - 44.5f, _pos.y);
+		}
+		else
+		{
+			MAP->m_Transform.SetPos(_pos.x + (_count - 1) * 89.5f + 44.5f, _pos.y);
+		}
+
+		m_pMap->m_Minimap_List.push_back(MAP);
+
+		SetParent(&(m_pMap->m_MiniMap), MAP);
+	}
+
+	for (int i = 0; i < _count; i++)
+	{
+		int randum = rand() % 3;
+
+		switch (randum)
+		{
+		case 0: Mapname = L"enH0.0"; break;
+		case 1: Mapname = L"enH0.1"; break;
+		case 2: Mapname = L"enH0.2"; break;
+		}
+
+		cMapObj *MAP = new cMapObj;
+
+		ID2D1Bitmap* AddBitmap = m_pMap->m_MapImgList[Mapname].m_Bitmap;
+
+		MAP->m_Renderer.AddBitmap_Bottom(AddBitmap);
+
+		MAP->m_CrashCheck = false;
+
+		MAP->m_Transform.SetPos(_pos.x + i * 89.5f, _pos.y);
+
+		m_pMap->m_Minimap_List.push_back(MAP);
+
+		SetParent(&(m_pMap->m_MiniMap), MAP);
+
+	}
+
+
+
 }
 
 void cMapMgr::AddFlatTileM(D2D1_POINT_2F _pos, int _count)
@@ -171,6 +228,71 @@ void cMapMgr::AddFlatTileM(D2D1_POINT_2F _pos, int _count)
 		SetParent(&(m_pMap->m_LayOut6), MAP);
 
 	}
+
+	//////////////////////////////////////////////////////////
+
+	for (int i = 0; i < 2; i++)
+	{
+		cMapObj *MAP = new cMapObj;
+
+		if (i == 0)
+		{
+			Mapname = L"enV0.0";
+		}
+		else
+		{
+			Mapname = L"enV1.0";
+		}
+
+		ID2D1Bitmap* AddBitmap = m_pMap->m_MapImgList[Mapname].m_Bitmap;
+
+		MAP->m_Renderer.AddBitmap(AddBitmap);
+
+		MAP->m_CrashCheck = false;
+
+		if (i == 0)
+		{
+			MAP->m_Transform.SetPos(_pos.x - 44.5f - 13.0f, _pos.y);
+		}
+		else
+		{
+			MAP->m_Transform.SetPos(_pos.x + (_count - 1) * 89.5f + 44.5f + 13.0f, _pos.y);
+		}
+
+		m_pMap->m_Minimap_List.push_back(MAP);
+
+		SetParent(&(m_pMap->m_MiniMap), MAP);
+
+	}
+
+	for (int i = 0; i < _count; i++)
+	{
+		int randum = rand() % 6;
+
+		switch (randum)
+		{
+		case 0: Mapname = L"bsc.0"; break;
+		case 1: Mapname = L"bsc.1"; break;
+		case 2: Mapname = L"bsc.2"; break;
+		case 3: Mapname = L"bsc.3"; break;
+		case 4: Mapname = L"bsc.4"; break;
+		case 5: Mapname = L"bsc.5"; break;
+		}
+
+		cMapObj *MAP = new cMapObj;
+
+		ID2D1Bitmap* AddBitmap = m_pMap->m_MapImgList[Mapname].m_Bitmap;
+
+		MAP->m_Renderer.AddBitmap(AddBitmap);
+
+
+		MAP->m_Transform.SetPos(_pos.x + i * 89.5f, _pos.y);
+
+		m_pMap->m_Minimap_List.push_back(MAP);
+
+		SetParent(&(m_pMap->m_MiniMap), MAP);
+
+	}
 }
 
 void cMapMgr::AddFlatTileL(D2D1_POINT_2F _pos, int _count)
@@ -224,6 +346,57 @@ void cMapMgr::AddFlatTileL(D2D1_POINT_2F _pos, int _count)
 		m_pMap->m_Tile_List.push_back(MAP);
 
 		SetParent(&(m_pMap->m_LayOut6), MAP);
+	}
+
+	//////////////////////////////////////////////////////////
+
+	for (int i = 0; i < 2; i++)
+	{
+		cMapObj *MAP = new cMapObj;
+
+		ID2D1Bitmap* AddBitmap = m_pMap->m_MapImgList[Mapname].m_Bitmap;
+
+		MAP->m_Renderer.AddBitmap_Top(AddBitmap);
+
+		MAP->m_CrashCheck = false;
+
+		if (i == 0)
+		{
+			MAP->m_Transform.SetPos(_pos.x - 44.5f, _pos.y);
+		}
+		else
+		{
+			MAP->m_Transform.SetPos(_pos.x + (_count - 1) * 89.5f + 44.5f, _pos.y);
+		}
+
+		m_pMap->m_Minimap_List.push_back(MAP);
+
+		SetParent(&(m_pMap->m_MiniMap), MAP);
+
+	}
+
+	for (int i = 0; i < _count; i++)
+	{
+		int randum = rand() % 3;
+
+		switch (randum)
+		{
+		case 0: Mapname = L"enH1.0"; break;
+		case 1: Mapname = L"enH1.1"; break;
+		case 2: Mapname = L"enH1.2"; break;
+		}
+
+		cMapObj *MAP = new cMapObj;
+
+		ID2D1Bitmap* AddBitmap = m_pMap->m_MapImgList[Mapname].m_Bitmap;
+
+		MAP->m_Renderer.AddBitmap_Top(AddBitmap);
+
+		MAP->m_Transform.SetPos(_pos.x + i * 89.5f, _pos.y);
+
+		m_pMap->m_Minimap_List.push_back(MAP);
+
+		SetParent(&(m_pMap->m_MiniMap), MAP);
 	}
 }
 
@@ -328,6 +501,18 @@ void cMapMgr::AddBackGround6(wstring _bitmapName, D2D1_POINT_2F _pos)
 	m_pMap->m_BackGround6_List.push_back(MAP);
 
 	SetParent(&(m_pMap->m_LayOut6), MAP);
+
+	///////////////////////////////////////////////
+
+	cMapObj *MAP2 = new cMapObj;	
+
+	MAP2->m_Renderer.AddBitmap_Bottom(AddBitmap);
+
+	MAP2->m_Transform.SetPos(_pos);
+
+	m_pMap->m_Minimap_List.push_back(MAP2);
+
+	SetParent(&(m_pMap->m_MiniMap), MAP2);
 
 }
 

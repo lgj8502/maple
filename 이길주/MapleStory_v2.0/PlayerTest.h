@@ -8,8 +8,13 @@ enum ePlayerState
 	PLAYER_WALK,
 	PLAYER_JUMP,
 	PLAYER_ATTACK,
+	PLAYER_ATTACK2,
+	PLAYER_ATTACK3,
 	PLAYER_LADDER,
+	PLAYER_LADDERMOVE,
 	PLAYER_FIGHT,
+	PLAYER_PRONE,
+	PLAYER_PRONESTEB
 
 };
 
@@ -28,6 +33,7 @@ enum ePlayerParts
 	PART_FRONTSHIELD,
 	PART_WEAPON,
 	PART_ARM,
+
 	PART_CAP,
 	PART_COATARM,
 	PART_SHOES,
@@ -54,6 +60,8 @@ private:
 	// 기본 이동 속도
 	float	m_MoveSpeed = 200.0f;
 	float	m_JumpPower = 500.0f;
+	float   m_AttackSpeed = 0.9f;
+
 
 	// 지형과 충돌시 캐릭터가 땅에 박히는 현상 제거용
 	float	m_CrashHeight = 0.0f;
@@ -70,6 +78,13 @@ private:
 	bool m_ChangeMap = false;
 	int m_PortalNum = 0;
 
+
+	bool		m_isProne = false;
+	bool		m_isProneSteb = false;
+
+	bool		m_isAttack = false;
+	bool	    m_AttackStart = false;
+
 	//D2D1_POINT_2F m_MapPos = {};
 
 	map<wstring, ImgInfo>	m_BaseList;
@@ -78,6 +93,7 @@ private:
 	map<wstring, ImgInfo>	m_CoatList;
 	map<wstring, ImgInfo>	m_PantsList;
 	map<wstring, ImgInfo>	m_ShoesList;
+	map<wstring, ImgInfo>	m_WeaponList;
 
 	void SettingBase();
 	void SettingHair();
@@ -85,6 +101,8 @@ private:
 	void SettingCoat();
 	void SettingPants();
 	void SettingShoes();
+
+	void SettingWeapon();
 
 	void ChangeState(ePlayerState _state);
 
@@ -97,8 +115,9 @@ public:
 	size_t m_Hair = 100;
 	size_t m_Face = 100;
 	size_t m_Coat = 100;
-	size_t m_Pants = 100;
-	size_t m_Shoes = 100;
+	size_t m_Pants = 101;
+	size_t m_Shoes = 101;
+	size_t m_Weapon = 101;
 
 	///////////////////// 스탯 //////////////////////////////////////////////////////
 
@@ -142,6 +161,13 @@ public:
 	void ClimbLadder(float _DelayTime);
 	void DownLadder(float _DelayTime);
 	void StopLadder();
+
+	void Prone();
+	void NotProne();
+	void ProneSteb();
+
+	void Attack();
+	void NotAttack();
 
 	void StopWalk();
 

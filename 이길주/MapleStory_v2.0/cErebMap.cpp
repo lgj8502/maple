@@ -35,7 +35,6 @@ void cErebMap::Init()
 	MAP_MGR->AddBackGround2(L"back.9", { 600.5f,   368.0f });
 	MAP_MGR->AddBackGround2(L"back.9",	{ 1000.0f, 368.0f });
 	MAP_MGR->AddBackGround2(L"back.9", { 1400.0f,  368.0f });
-
 	// 배경 3
 
 	m_LayOut3_Size = { 1600, 900 };
@@ -75,10 +74,10 @@ void cErebMap::Init()
 
 	// 타일 _ 베이스
 
-	MAP_MGR->AddFlatTileH({ 0, 1018 }, 30, true);
-	MAP_MGR->AddFlatTileM({ 0, 1048 }, 30);
-	MAP_MGR->AddFlatTileM({ 0, 1108 }, 30);
-	MAP_MGR->AddFlatTileM({ 0, 1168 }, 30);
+	MAP_MGR->AddFlatTileH({ 0, 1018 }, 23, true);
+	MAP_MGR->AddFlatTileM({ 0, 1048 }, 23);
+	MAP_MGR->AddFlatTileM({ 0, 1108 }, 23);
+	MAP_MGR->AddFlatTileM({ 0, 1168 }, 23);
 
 
 	// 로프용 타일
@@ -147,6 +146,11 @@ void cErebMap::Init()
 	m_LayOut4.m_Transform.m_CameraRate.y = (m_LayOut4_Size.y - WIN_HEIGHT) / (m_LayOut6_Size.y - WIN_HEIGHT);
 	m_LayOut5.m_Transform.m_CameraRate.y = (m_LayOut5_Size.y - WIN_HEIGHT) / (m_LayOut6_Size.y - WIN_HEIGHT);
 	m_LayOut6.m_Transform.m_CameraRate.y = (m_LayOut6_Size.y - WIN_HEIGHT) / (m_LayOut6_Size.y - WIN_HEIGHT);
+
+
+	m_MiniMap.m_Transform.SetPos({ 50,0 });
+	m_MiniMap.m_Transform.SetScale(0.1f, 0.1f);
+
 }
 
 

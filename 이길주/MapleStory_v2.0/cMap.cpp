@@ -19,6 +19,8 @@ void cMap::Update(float _DelayTime)
 	m_LayOut6.Update(_DelayTime);
 	m_Scroll.Update(_DelayTime);
 
+	m_MiniMap.Update(_DelayTime);
+
 	for (auto &i : m_BackGround1_List)
 	{
 		i->Update(_DelayTime);
@@ -68,6 +70,11 @@ void cMap::Update(float _DelayTime)
 
 
 	for (auto &i : m_FrontObject_List)
+	{
+		i->Update(_DelayTime);
+	}
+
+	for (auto &i : m_Minimap_List)
 	{
 		i->Update(_DelayTime);
 	}
@@ -129,6 +136,11 @@ void cMap::FrontRender()
 	{
 		i->Render();
 	}
+
+	for (auto &i : m_Minimap_List)
+	{
+		i->Render();
+	}
 }
 
 void cMap::LadderRender()
@@ -138,9 +150,6 @@ void cMap::LadderRender()
 		i->Render();
 	}
 }
-
-
-
 
 
 void cMap::Destroy()

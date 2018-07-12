@@ -20,11 +20,15 @@ public:
 	vector<cMapObj*> m_FrontObject_List;
 	vector<cMapObj*> m_Ladder_List;
 
+	vector<cMapObj*> m_Minimap_List;
+
 	cMapObj m_LayOut2 = {};
 	cMapObj m_LayOut3 = {};
 	cMapObj m_LayOut4 = {};
 	cMapObj m_LayOut5 = {};
 	cMapObj m_LayOut6 = {};
+
+	cMapObj m_MiniMap = {};
 
 
 	cMapObj m_Scroll = {};
