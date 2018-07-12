@@ -605,7 +605,6 @@ void IngameScene::Update(float _DelayTime)
 		m_szMixingString[0] = NULL;
 
 		UI_MGR->m_ExitField = false;
-
 	}
 
 	//m_monster.Update(_DelayTime);
@@ -613,6 +612,8 @@ void IngameScene::Update(float _DelayTime)
 
 	MAP_MGR->Update(_DelayTime);
 	m_player.Update(_DelayTime);
+
+	EFF_MGR->Update(_DelayTime);
 
 	UI_MGR->Update(_DelayTime);
 
@@ -659,14 +660,29 @@ void IngameScene::Update(float _DelayTime)
 		}
 	}
 
+	//ATTACK
+	if (OnceKeyDown(VK_CONTROL))
+	{
+		m_player.Attack();
+
+	}
+
 	if (StayKeyDown(VK_DOWN))
 	{
 		m_player.DownLadder(_DelayTime);
+
+		m_player.Prone();
 
 		if (OnceKeyDown(VK_MENU))
 		{
 			m_player.BlowJumpTile();
 		}
+	}
+
+	//PRONESTEB
+	if (StayKeyDown(VK_DOWN) && OnceKeyUp(VK_CONTROL))
+	{
+		m_player.ProneSteb();
 	}
 
 	if (OnceKeyDown(VK_UP))
@@ -683,6 +699,8 @@ void IngameScene::Update(float _DelayTime)
 	if (OnceKeyUp(VK_UP) || OnceKeyUp(VK_DOWN))
 	{
 		m_player.StopLadder();
+
+		m_player.NotProne();
 
 	}
 
@@ -713,6 +731,95 @@ void IngameScene::Update(float _DelayTime)
 		m_player.ChangeCoat(100);
 	}
 
+	/*if (OnceKeyDown(VK_F5))
+	{
+		EFF_MGR->EffectSingle(L"0.swingT1.2.0", m_player.GetPos(), 0.5f);
+	}
+
+	if (OnceKeyDown(VK_F6))
+	{
+		vector<wstring> strList;
+
+		strList.push_back(L"0.swingT2.2.0");
+		strList.push_back(L"0.swingT3.2.0");
+		strList.push_back(L"0.swingTF.3.0");
+
+		EFF_MGR->EffectMultiBtimap(strList, m_player.GetPos(), true, 0.5f, 1.0f, 1.5f);
+	}
+
+	if (OnceKeyDown(VK_F7))
+	{
+		vector<wstring> strList;
+
+		strList.push_back(L"LevelUpHyper.0");
+		strList.push_back(L"LevelUpHyper.1");
+		strList.push_back(L"LevelUpHyper.2");
+		strList.push_back(L"LevelUpHyper.3");
+		strList.push_back(L"LevelUpHyper.4");
+		strList.push_back(L"LevelUpHyper.5");
+		strList.push_back(L"LevelUpHyper.6");
+		strList.push_back(L"LevelUpHyper.7");
+		strList.push_back(L"LevelUpHyper.8");
+		strList.push_back(L"LevelUpHyper.9");
+		strList.push_back(L"LevelUpHyper.10");
+		strList.push_back(L"LevelUpHyper.11");
+		strList.push_back(L"LevelUpHyper.12");
+		strList.push_back(L"LevelUpHyper.13");
+		strList.push_back(L"LevelUpHyper.14");
+		strList.push_back(L"LevelUpHyper.15");
+		strList.push_back(L"LevelUpHyper.16");
+		strList.push_back(L"LevelUpHyper.17");
+		strList.push_back(L"LevelUpHyper.18");
+		strList.push_back(L"LevelUpHyper.19");
+		strList.push_back(L"LevelUpHyper.20");
+		strList.push_back(L"LevelUpHyper.21");
+		strList.push_back(L"LevelUpHyper.22");
+		strList.push_back(L"LevelUpHyper.23");
+		strList.push_back(L"LevelUpHyper.24");
+		strList.push_back(L"LevelUpHyper.25");
+		strList.push_back(L"LevelUpHyper.26");
+
+
+		D2D1_POINT_2F pos = m_player.GetPos();
+
+		pos.y -= -20.0f;
+
+		EFF_MGR->EffectMultiBtimap_const(strList, pos, 0.1f);
+	}
+
+	if (OnceKeyDown(VK_F8))
+	{
+		vector<wstring> strList;
+
+		strList.push_back(L"LevelUp.1");
+		strList.push_back(L"LevelUp.2");
+		strList.push_back(L"LevelUp.3");
+		strList.push_back(L"LevelUp.4");
+		strList.push_back(L"LevelUp.5");
+		strList.push_back(L"LevelUp.6");
+		strList.push_back(L"LevelUp.7");
+		strList.push_back(L"LevelUp.8");
+		strList.push_back(L"LevelUp.9");
+		strList.push_back(L"LevelUp.10");
+		strList.push_back(L"LevelUp.11");
+		strList.push_back(L"LevelUp.12");
+		strList.push_back(L"LevelUp.13");
+		strList.push_back(L"LevelUp.14");
+		strList.push_back(L"LevelUp.15");
+		strList.push_back(L"LevelUp.16");
+		strList.push_back(L"LevelUp.17");
+		strList.push_back(L"LevelUp.18");
+		strList.push_back(L"LevelUp.19");
+		strList.push_back(L"LevelUp.20");
+
+
+		D2D1_POINT_2F pos = m_player.GetPos();
+
+		pos.y -= -20.0f;
+
+
+		EFF_MGR->EffectMultiBtimap_const(strList, pos, 0.1f);
+	}*/
 
 	if (OnceKeyDown(VK_MENU))
 	{
@@ -726,7 +833,7 @@ void IngameScene::Render()
 	MAP_MGR->BackRender();
 	//m_monster.Render();
 
-	if (m_player.PlayerState() == PLAYER_LADDER)
+	if (m_player.PlayerState() == PLAYER_LADDER || m_player.PlayerState() == PLAYER_LADDERMOVE)
 	{
 		MAP_MGR->LadderRender();
 		m_player.Render();
@@ -737,6 +844,7 @@ void IngameScene::Render()
 		MAP_MGR->LadderRender();
 	}
 
+	EFF_MGR->Render();
 
 	MAP_MGR->FrontRender();
 

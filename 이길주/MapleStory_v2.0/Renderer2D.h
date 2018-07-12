@@ -93,6 +93,12 @@ public:
 		m_ImgRTList[m_BitmapIndex] = _rt;
 
 	}
+
+	inline void SetImgRT(D2D1_RECT_F _rt, int _Index)
+	{
+		m_ImgRTList[_Index] = _rt;
+
+	}
 	inline D2D1_RECT_F GetImgRT()
 	{
 		return m_ImgRTList[m_BitmapIndex];

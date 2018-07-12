@@ -145,7 +145,7 @@
   <ItemGroup>
     <ClInclude Include="BufferType.h" />
     <ClInclude Include="cArcana.h" />
-    <ClInclude Include="cCharacter.h" />
+    <ClInclude Include="cMob.h" />
     <ClInclude Include="cEffect.h" />
     <ClInclude Include="cEffectMgr.h" />
     <ClInclude Include="ChannelScene.h" />
@@ -153,6 +153,8 @@
     <ClInclude Include="cMap.h" />
     <ClInclude Include="cMapObj.h" />
     <ClInclude Include="cMapMgr.h" />
+    <ClInclude Include="cMonsterMgr.h" />
+    <ClInclude Include="cMushroom.h" />
     <ClInclude Include="CreateScene0.h" />
     <ClInclude Include="cErebMap.h" />
     <ClInclude Include="cTimer.h" />
@@ -183,7 +185,7 @@
   <ItemGroup>
     <ClCompile Include="BufferType.cpp" />
     <ClCompile Include="cArcana.cpp" />
-    <ClCompile Include="cCharacter.cpp" />
+    <ClCompile Include="cMob.cpp" />
     <ClCompile Include="cEffect.cpp" />
     <ClCompile Include="cEffectMgr.cpp" />
     <ClCompile Include="ChannelScene.cpp" />
@@ -191,6 +193,8 @@
     <ClCompile Include="cMap.cpp" />
     <ClCompile Include="cMapObj.cpp" />
     <ClCompile Include="cMapMgr.cpp" />
+    <ClCompile Include="cMonsterMgr.cpp" />
+    <ClCompile Include="cMushroom.cpp" />
     <ClCompile Include="CreateScene0.cpp" />
     <ClCompile Include="cErebMap.cpp" />
     <ClCompile Include="cTimer.cpp" />

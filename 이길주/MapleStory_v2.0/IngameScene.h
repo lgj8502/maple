@@ -1,15 +1,10 @@
 #pragma once
 #include "PlayerTest.h"
-#include "cCharacter.h"
 #include "cMap.h"
 
 class IngameScene: public Scene
 {
-
-
 	POINT m_MousePos = { 0,0 };
-
-	cCharacter m_monster;
 
 	PlayerTest m_player;
 

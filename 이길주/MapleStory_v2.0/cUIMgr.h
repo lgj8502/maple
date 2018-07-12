@@ -118,6 +118,9 @@ public:
 
 	void AddPanel(string _name, D2D1_POINT_2F _pos, int _count ,cUI* _UI, ...);
 
+	void AddAnimation(string _name, D2D1_POINT_2F _pos, float _time, vector<wstring> _bitmapList);
+	void AddAnimation(string _name, D2D1_RECT_F _rect, float _time, vector<wstring> _bitmapList);
+
 	void Update(float _DelayTime = 0);
 	void Render();
 

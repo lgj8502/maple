@@ -21,11 +21,11 @@ void cArcana::Init()
 	m_LayOut6_Size = { 2000, 801 };
 	// 타일 _ 베이스
 
-	MAP_MGR->AddFlatTileH({ 0, 618 }, 30, true);
-	MAP_MGR->AddFlatTileM({ 0, 648 }, 30);
-	MAP_MGR->AddFlatTileM({ 0, 708 }, 30);
-	MAP_MGR->AddFlatTileM({ 0, 768 }, 30);
-	MAP_MGR->AddFlatTileL({ 0, 800 }, 30);
+	MAP_MGR->AddFlatTileH({ 0, 618 }, 23, true);
+	MAP_MGR->AddFlatTileM({ 0, 648 }, 23);
+	MAP_MGR->AddFlatTileM({ 0, 708 }, 23);
+	MAP_MGR->AddFlatTileM({ 0, 768 }, 23);
+	MAP_MGR->AddFlatTileL({ 0, 800 }, 23);
 
 
 	vector<wstring> portalImgList;
@@ -75,4 +75,7 @@ void cArcana::Init()
 	m_LayOut4.m_Transform.m_CameraRate.y = (m_LayOut4_Size.y - WIN_HEIGHT) / (m_LayOut6_Size.y - WIN_HEIGHT);
 	m_LayOut5.m_Transform.m_CameraRate.y = (m_LayOut5_Size.y - WIN_HEIGHT) / (m_LayOut6_Size.y - WIN_HEIGHT);
 	m_LayOut6.m_Transform.m_CameraRate.y = (m_LayOut6_Size.y - WIN_HEIGHT) / (m_LayOut6_Size.y - WIN_HEIGHT);
+
+	m_MiniMap.m_Transform.SetPos({ 50,0 });
+	m_MiniMap.m_Transform.SetScale(0.1f, 0.1f);
 }

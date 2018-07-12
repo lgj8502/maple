@@ -88,6 +88,8 @@ public:
 
 	void AddAnimation(D2D1_POINT_2F _pos, eMap_Type _Type, float _time, vector<wstring> _bitmapNamelist);
 
+
+
 	void Update(float _DelayTime = 0);
 	void BackRender();
 	void FrontRender();

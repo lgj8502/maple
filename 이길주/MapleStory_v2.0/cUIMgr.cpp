@@ -857,6 +857,68 @@ void cUIMgr::AddPanel(string _name, D2D1_POINT_2F _pos,  int _count, cUI* _UI, .
 
 }
 
+void cUIMgr::AddAnimation(string _name, D2D1_POINT_2F _pos, float _time, vector<wstring> _bitmapList)
+{
+	if (FindUI(_name) != nullptr)
+	{
+		MK_LOG("UI 이름 중복 : UI 생성 실패");
+
+		return;
+	}
+
+	cUI *UI = new cUI;
+
+	UI->m_Type = UI_IMAGE;
+	UI->m_Name = _name;
+
+	UI->m_Transform.SetPos(_pos);
+
+	for (size_t i = 0; i < _bitmapList.size(); i++)
+	{
+		ID2D1Bitmap* AddBitmap = IMG_MGR->GetImage(_bitmapList[i]);
+
+		UI->m_Renderer.AddBitmap(AddBitmap);
+	}
+
+
+	UI->m_Renderer.m_State = 0;
+
+	UI->m_Renderer.AddAnimation_const(0, 0, _bitmapList.size() - 1, _time);
+
+	m_UIList.push_back(UI);
+
+
+}
+
+void cUIMgr::AddAnimation(string _name, D2D1_RECT_F _rect, float _time, vector<wstring> _bitmapList)
+{
+	if (FindUI(_name) != nullptr)
+	{
+		MK_LOG("UI 이름 중복 : UI 생성 실패");
+
+		return;
+	}
+
+	cUI *UI = new cUI;
+
+	UI->m_Type = UI_IMAGE;
+	UI->m_Name = _name;
+
+	for (size_t i = 0; i < _bitmapList.size(); i++)
+	{
+		ID2D1Bitmap* AddBitmap = IMG_MGR->GetImage(_bitmapList[i]);
+
+		UI->m_Renderer.AddBitmap(AddBitmap);
+		UI->m_Renderer.SetImgRT(_rect, i);
+	}
+
+	UI->m_Renderer.m_State = 0;
+
+	UI->m_Renderer.AddAnimation_const(0, 0, _bitmapList.size() - 1, _time);
+
+	m_UIList.push_back(UI);
+}
+
 void cUIMgr::Update(float _DelayTime)
 {
 	for (auto &i : m_UIList)

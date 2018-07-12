@@ -28,21 +28,32 @@ void ChannelScene::Init(HWND hWnd)
 	obj.m_Renderer.m_State = -1;
 
 
-	background.m_Renderer.m_State = 0;
-	background.m_Renderer.AddBitmap(IMG_MGR->GetImage(L"ChannelScene_channel_1first"));			//0
-	background.m_Renderer.AddBitmap(IMG_MGR->GetImage(L"ChannelScene_channel_2second"));		// 1
-	background.m_Renderer.AddBitmap(IMG_MGR->GetImage(L"ChannelScene_channel_3third"));			// 2
-	background.m_Renderer.AddBitmap(IMG_MGR->GetImage(L"ChannelScene_channel_4four"));			// 3
+	vector<wstring> bgList;
 	
-	background.m_Renderer.ChangeBitmap(0);
-	background.m_Renderer.SetImgRT({ 0,0,1200,800 });
-	background.m_Renderer.ChangeBitmap(1);
-	background.m_Renderer.SetImgRT({ 0,0,1200,800 });
-	background.m_Renderer.ChangeBitmap(2);
-	background.m_Renderer.SetImgRT({ 0,0,1200,800 });
-	background.m_Renderer.ChangeBitmap(3);
-	background.m_Renderer.SetImgRT({ 0,0,1200,800 });
-	background.m_Renderer.AddAnimation(0, 0, 3, 0.18, 0.18, 0.18, 0.18);
+	bgList.push_back(L"ChannelScene_channel_1first");
+	bgList.push_back(L"ChannelScene_channel_2second");
+	bgList.push_back(L"ChannelScene_channel_3third");
+	bgList.push_back(L"ChannelScene_channel_4four");
+
+	UI_MGR->AddAnimation("BG", { 0,0,1200,800 }, 0.18f, bgList);
+
+	
+
+	//background.m_Renderer.m_State = 0;
+	//background.m_Renderer.AddBitmap(IMG_MGR->GetImage(L"ChannelScene_channel_1first"));			//0
+	//background.m_Renderer.AddBitmap(IMG_MGR->GetImage(L"ChannelScene_channel_2second"));		// 1
+	//background.m_Renderer.AddBitmap(IMG_MGR->GetImage(L"ChannelScene_channel_3third"));			// 2
+	//background.m_Renderer.AddBitmap(IMG_MGR->GetImage(L"ChannelScene_channel_4four"));			// 3
+	//
+	//background.m_Renderer.ChangeBitmap(0);
+	//background.m_Renderer.SetImgRT({ 0,0,1200,800 });
+	//background.m_Renderer.ChangeBitmap(1);
+	//background.m_Renderer.SetImgRT({ 0,0,1200,800 });
+	//background.m_Renderer.ChangeBitmap(2);
+	//background.m_Renderer.SetImgRT({ 0,0,1200,800 });
+	//background.m_Renderer.ChangeBitmap(3);
+	//background.m_Renderer.SetImgRT({ 0,0,1200,800 });
+	//background.m_Renderer.AddAnimation(0, 0, 3, 0.18, 0.18, 0.18, 0.18);
 
 	
 	//background.m_Renderer.SetImgRT
