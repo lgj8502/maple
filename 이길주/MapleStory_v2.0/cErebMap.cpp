@@ -85,6 +85,10 @@ void cErebMap::Init()
 	MAP_MGR->AddFlatTileH({ 300, 518 }, 3);
 	MAP_MGR->AddFlatTileL({ 300, 518 }, 3);
 
+	// 몬스터용 타일
+	MAP_MGR->AddFlatTileH({ 500, 700 }, 5);
+	MAP_MGR->AddFlatTileL({ 500, 700 }, 5);
+
 
 	// 지형 애니메이션 만들기
 
@@ -127,8 +131,8 @@ void cErebMap::Init()
 	MAP_MGR->AddPortal(3, { 500, 493 }, portalImgList, MNAME_ARCANA, 3);
 
 
-
-	MOB_MGR->MobSetting(MOB_MUSHROOM, 5, { 300, 600 }, 200);
+	MOB_MGR->Init();
+	MOB_MGR->MobSetting(MOB_MUSHROOM, 1, { 450, 670 }, 470);
 
 
 	

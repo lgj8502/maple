@@ -15,9 +15,11 @@ void IngameScene::Init(HWND hWnd)
 
 	MAP_MGR->ChangeMap(MNAME_EREB);
 
-	m_player.Init();
+	PLAYER_MGR->CreatePlayer();
 
-	m_player.SetPos({ 200,900 });
+	PLAYER_MGR->m_player->Init();
+
+	PLAYER_MGR->m_player->SetPos({ 200,900 });
 
 	MAP_MGR->m_CameraPos = {0, 300};
 
@@ -612,7 +614,7 @@ void IngameScene::Update(float _DelayTime)
 
 
 	MAP_MGR->Update(_DelayTime);
-	m_player.Update(_DelayTime);
+	PLAYER_MGR->m_player->Update(_DelayTime);
 
 	MOB_MGR->Update(_DelayTime);
 	
@@ -628,8 +630,8 @@ void IngameScene::Update(float _DelayTime)
 
 	D2D1_POINT_2F end = {};
 
-	end.x = m_player.GetPos().x - WIN_WIDTH / 2.0f;
-	end.y = m_player.GetPos().y - WIN_HEIGHT / 2.0f;
+	end.x = PLAYER_MGR->m_player->GetPos().x - WIN_WIDTH / 2.0f;
+	end.y = PLAYER_MGR->m_player->GetPos().y - WIN_HEIGHT / 2.0f;
 
 	MAP_MGR->m_CameraPos = Lerp(start, end, 0.02f);
 
@@ -667,72 +669,72 @@ void IngameScene::Update(float _DelayTime)
 	//ATTACK
 	if (OnceKeyDown(VK_CONTROL))
 	{
-		m_player.Attack();
+		PLAYER_MGR->m_player->Attack();
 
 	}
 
 	if (StayKeyDown(VK_DOWN))
 	{
-		m_player.DownLadder(_DelayTime);
+		PLAYER_MGR->m_player->DownLadder(_DelayTime);
 
-		m_player.Prone();
+		PLAYER_MGR->m_player->Prone();
 
 		if (OnceKeyDown(VK_MENU))
 		{
-			m_player.BlowJumpTile();
+			PLAYER_MGR->m_player->BlowJumpTile();
 		}
 	}
 
 	//PRONESTEB
 	if (StayKeyDown(VK_DOWN) && OnceKeyUp(VK_CONTROL))
 	{
-		m_player.ProneSteb();
+		PLAYER_MGR->m_player->ProneSteb();
 	}
 
 	if (OnceKeyDown(VK_UP))
 	{
-		m_player.PortalIn();
+		PLAYER_MGR->m_player->PortalIn();
 	}
 
 
 	if (StayKeyDown(VK_UP))
 	{
-		m_player.ClimbLadder(_DelayTime);
+		PLAYER_MGR->m_player->ClimbLadder(_DelayTime);
 
 	}
 	if (OnceKeyUp(VK_UP) || OnceKeyUp(VK_DOWN))
 	{
-		m_player.StopLadder();
+		PLAYER_MGR->m_player->StopLadder();
 
-		m_player.NotProne();
+		PLAYER_MGR->m_player->NotProne();
 
 	}
 
 	if (StayKeyDown(VK_LEFT))
 	{
-		m_player.LeftWalk(_DelayTime);
+		PLAYER_MGR->m_player->LeftWalk(_DelayTime);
 
 	}
 	if (OnceKeyUp(VK_LEFT) || OnceKeyUp(VK_RIGHT))
 	{
-		m_player.StopWalk();
+		PLAYER_MGR->m_player->StopWalk();
 
 	}
 
 	if (StayKeyDown(VK_RIGHT))
 	{
-		m_player.RightWalk(_DelayTime);
+		PLAYER_MGR->m_player->RightWalk(_DelayTime);
 
 	}
 
 	if (OnceKeyDown(VK_F1))
 	{
-		m_player.ChangeCoat(101);
+		PLAYER_MGR->m_player->ChangeCoat(101);
 	}
 
 	if (OnceKeyDown(VK_F2))
 	{
-		m_player.ChangeCoat(100);
+		PLAYER_MGR->m_player->ChangeCoat(100);
 	}
 
 	/*if (OnceKeyDown(VK_F5))
@@ -827,7 +829,12 @@ void IngameScene::Update(float _DelayTime)
 
 	if (OnceKeyDown(VK_MENU))
 	{
-		m_player.JumpMove();
+		PLAYER_MGR->m_player->JumpMove();
+	}
+
+	if (OnceKeyDown(VK_F9))
+	{
+		MOB_MGR->m_MobList.front()->Hit();
 	}
 }
 
@@ -839,14 +846,14 @@ void IngameScene::Render()
 
 	MOB_MGR->Render();
 
-	if (m_player.PlayerState() == PLAYER_LADDER || m_player.PlayerState() == PLAYER_LADDERMOVE)
+	if (PLAYER_MGR->m_player->PlayerState() == PLAYER_LADDER || PLAYER_MGR->m_player->PlayerState() == PLAYER_LADDERMOVE)
 	{
 		MAP_MGR->LadderRender();
-		m_player.Render();
+		PLAYER_MGR->m_player->Render();
 	}
 	else
 	{
-		m_player.Render();
+		PLAYER_MGR->m_player->Render();
 		MAP_MGR->LadderRender();
 	}
 

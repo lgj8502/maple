@@ -32,12 +32,12 @@ void cMonsterMgr::CreateMob(eMobName _MobName, D2D1_POINT_2F _pos, int _range, m
 
 	MOB->RecvList(_ImgList);
 
+	MOB->m_minX = _pos.x;
+	MOB->m_maxX = _pos.x + (float)_range;
+
 	int Random = rand() % _range;
 
 	_pos.x += (float)Random;
-
-	MOB->m_minX = _pos.x;
-	MOB->m_maxX = _pos.x + (float)_range;
 
 	MOB->m_Transform.SetPos(_pos);
 
@@ -65,6 +65,14 @@ void cMonsterMgr::MobSetting(eMobName _MobName, int _MaxCount, D2D1_POINT_2F _po
 
 }
 
+void cMonsterMgr::Init()
+{
+	for (auto &i : m_MobList)
+	{
+		i->Init();
+	}
+}
+
 void cMonsterMgr::Update(float _DelayTime)
 {
 	for (auto &i : m_MobList)
@@ -80,6 +88,14 @@ void cMonsterMgr::Render()
 	{
 		i->Render();
 	}
+}
+
+void cMonsterMgr::DelMob(cMob * _obj)
+{
+	m_MobList.remove(_obj);
+
+	delete _obj;
+	_obj = nullptr;
 }
 
 void cMonsterMgr::Destoy()

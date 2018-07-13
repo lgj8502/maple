@@ -717,6 +717,27 @@ void PlayerTest::Update(float _DelayTime)
 	{
 		ChangeState(PLAYER_ATTACK);
 		m_AttackSpeed -= _DelayTime;
+
+		if (m_AttackSpeed < 0.3f && m_AttackEffectPos.y != 0)
+		{
+			list<cMob*>::iterator Iter;
+
+			Iter = MOB_MGR->m_MobList.begin();
+
+			for (size_t i = 0; i < MOB_MGR->m_MobList.size(); i++)
+			{
+				if (CrashCheckMob((*Iter), m_AttackEffectPos) == true)
+				{
+					(*Iter)->Hit();
+
+					m_AttackEffectPos = { 0,0 };
+
+					break;
+				}
+			}
+		}
+
+
 		if (m_AttackSpeed <= 0)
 		{
 			m_AttackStart = false;
@@ -770,6 +791,19 @@ void PlayerTest::Update(float _DelayTime)
 			m_Parts[0].m_Transform.Translate(0, m_Parts[0].m_Transform.m_velocityY * _DelayTime);
 		}
 	}
+
+	//list<cMob*>::iterator Iter;
+
+	//Iter = MOB_MGR->m_MobList.begin();
+
+	//for (size_t i = 0; i < MOB_MGR->m_MobList.size(); i++)
+	//{
+	//	if ( CrashCheckMob((*Iter)) ==  true)
+	//	{
+
+	//	}
+	//}
+
 
 	// 타일맵 충돌 체크
 
@@ -904,6 +938,31 @@ bool PlayerTest::CrashCheckMap(cMapObj * _obj)
 		up < rect.bottom && down > rect.top)
 	{
 		m_CrashHeight = down - rect.top - 5.0f;		
+
+		return true;
+	}
+	return false;
+}
+
+bool PlayerTest::CrashCheckMob(cMob * _obj, D2D1_POINT_2F _pos)
+{
+	float left = _pos.x - 7.0f;
+	float right = _pos.x + 7.0f;
+	float up = _pos.y - 50.0f;
+	float down = _pos.y + 17.5f;
+
+	D2D1_POINT_2F pos = _obj->m_Transform.GetPos();
+	D2D1_RECT_F rect = _obj->m_Renderer.GetImgRT();
+
+	rect.left += pos.x;
+	rect.right += pos.x;
+	rect.top += pos.y;
+	rect.bottom += pos.y;
+
+	if (right > rect.left && left < rect.right &&
+		up < rect.bottom && down > rect.top)
+	{
+		m_CrashHeight = down - rect.top - 5.0f;
 
 		return true;
 	}
@@ -1199,22 +1258,21 @@ void PlayerTest::Attack()
 
 	if (m_isAttack == false)
 	{
-		D2D1_POINT_2F pos = GetPos();
+		m_AttackEffectPos = GetPos();
 
 		if (m_Parts[0].m_Transform.GetScale().x > 0)
 		{
-			pos.x -= 40.0f;
+			m_AttackEffectPos.x -= 40.0f;
 
-			EFF_MGR->EffectSingle(L"0.swingO1.2.0", pos, true, 0.6f, 0.3f);
+			EFF_MGR->EffectSingle(L"0.swingO1.2.0", m_AttackEffectPos, true, 0.6f, 0.3f);
 		}
 		else
 		{
-			pos.x += 40.0f;
+			m_AttackEffectPos.x += 40.0f;
 
-			EFF_MGR->EffectSingle(L"0.swingO1.2.0", pos, false, 0.6f, 0.3f);
+			EFF_MGR->EffectSingle(L"0.swingO1.2.0", m_AttackEffectPos, false, 0.6f, 0.3f);
 
 		}
-
 
 		m_isAttack = true;
 	}	

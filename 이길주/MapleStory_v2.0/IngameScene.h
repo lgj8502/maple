@@ -1,12 +1,14 @@
 #pragma once
-#include "PlayerTest.h"
+
 #include "cMap.h"
+
+
 
 class IngameScene: public Scene
 {
 	POINT m_MousePos = { 0,0 };
 
-	PlayerTest m_player;
+
 
 	bool m_isClicked = false;
 
@@ -16,8 +18,6 @@ class IngameScene: public Scene
 	char m_szMixingString[3] = "";
 	size_t m_maxText = 70;
 	string m_oldText = "";
-
-
 
 public:
 

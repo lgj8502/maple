@@ -11,5 +11,7 @@ public:
 	void StateChagne() ;
 	void StateSetting();
 
+	void Hit();
+
 };
 

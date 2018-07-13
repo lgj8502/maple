@@ -10,22 +10,27 @@ enum eMobState
 	MOBSTATE_DIE,
 	MOBSTATE_JUMP,
 	MOBSTATE_ATTACK,
-	MOBSTATE_ROMING,
+	MOBSTATE_AGGRO,
 };
 
 class cMob : public Object2D
 {
-	float  m_MoveSpeed = 50.0f;
+	float  m_MoveSpeed = 100.0f;
 
 public:
 
 	int m_HP = 0;
+	int m_AttackPower = 0;
 
 	float m_minX = 0.0f;
 	float m_maxX = 0.0f;
 
+	int   m_dir = 0;
+
+	bool  m_HitLeft = true;
+
 	eMobState	 m_state		= MOBSTATE_IDLE;
-	float		 m_stateTime	= 0;
+	float		 m_stateTime	= 0.0f;
 
 	virtual ~cMob() = default;
 
@@ -34,11 +39,13 @@ public:
 	virtual void StateUpdate(float _DelayTime) = 0;
 	virtual void StateChagne() = 0;
 	virtual void StateSetting() = 0;
-
+	virtual void Hit() = 0;
 	void LeftWalk(float _DelayTime);
 	void RightWalk(float _DelayTime);
 
-	void Hit(int _Damage, float _PlayerPosX);
+	void Die();
+
+
 	
 	void RecvList(map<wstring, ImgInfo> _ImgList);
 

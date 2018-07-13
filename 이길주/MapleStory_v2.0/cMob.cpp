@@ -3,30 +3,35 @@
 
 void cMob::LeftWalk(float _DelayTime)
 {
-	if (m_Transform.GetPos().x < m_minX) return;
+	if (m_Transform.GetPos().x < m_minX)
+	{
+		m_dir = 1;
+		return;
+	}
 
-	m_Transform.m_velocityX -= m_MoveSpeed;
+	m_Transform.m_velocityX = -m_MoveSpeed;
 	m_Transform.VelocityTransX(_DelayTime);
+	
 
 }
 
 void cMob::RightWalk(float _DelayTime)
 {
-	if (m_Transform.GetPos().x > m_maxX) return;
+	if (m_Transform.GetPos().x > m_maxX)
+	{
+		m_dir = 0;
+		return;
+	}
 
-	m_Transform.m_velocityX += m_MoveSpeed;
+	m_Transform.m_velocityX = m_MoveSpeed;
 	m_Transform.VelocityTransX(_DelayTime);
 }
 
-void cMob::Hit(int _Damage, float _PlayerPosX)
+void cMob::Die()
 {
-	m_HP -= _Damage;
-
-	if (m_Transform.GetPos().x < _PlayerPosX)
-	{
-		m_Transform.SetScale(-1.0f, 1.0f);
-	}
+	MOB_MGR->DelMob(this);
 }
+
 
 void cMob::RecvList(map<wstring, ImgInfo> _ImgList)
 {
@@ -38,7 +43,7 @@ void cMob::RecvList(map<wstring, ImgInfo> _ImgList)
 	{
 		wstr.push_back(Iter->first);
 
-		m_Renderer.AddBitmap_RighitBottom(Iter->second.m_Bitmap);
+		m_Renderer.AddBitmap_Bottom(Iter->second.m_Bitmap);
 	}
 
 	int Idle = 0;
@@ -101,9 +106,9 @@ void cMob::RecvList(map<wstring, ImgInfo> _ImgList)
 	if (Move != 0)
 	{
 		m_Renderer.AddAnimation_const(MOBSTATE_MOVE, current, current + Move - 1, 0.2f);
-		m_Renderer.AddAnimation_const(MOBSTATE_ROMING, current, current + Move - 1, 0.2f);
+		m_Renderer.AddAnimation_const(MOBSTATE_AGGRO, current, current + Move - 1, 0.2f);
 
-		current = +Move;
+		current += Move;
 	}
 
 	if (Idle != 0)

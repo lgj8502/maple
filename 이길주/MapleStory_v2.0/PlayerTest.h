@@ -84,6 +84,7 @@ private:
 
 	bool		m_isAttack = false;
 	bool	    m_AttackStart = false;
+	D2D1_POINT_2F m_AttackEffectPos = {};
 
 	//D2D1_POINT_2F m_MapPos = {};
 
@@ -132,6 +133,8 @@ public:
 	int		m_INT = 0;
 	int		m_LUK = 0;
 
+	int		m_AttackPower = 50;
+
 	////////////////////////////////////////////////////////////////////////////////
 
 public:
@@ -144,6 +147,7 @@ public:
 	void Render();
 
 	bool CrashCheckMap(cMapObj *_obj);
+	bool CrashCheckMob(cMob *_obj, D2D1_POINT_2F _pos);
 	void Landing(cMapObj* _pLandingTile);
 	void BlowJumpTile();
 

@@ -48,7 +48,7 @@ void Transform2D::UpdateMatrix(ID2D1RenderTarget * _pRT)
 
 void Transform2D::VelocityTransX(float _time)
 {
-	Translate(m_velocityX * _time, 0);
+	Translate(m_velocityX * _time, 0);	
 
 	if (m_velocityX < 0 && m_Scale.x < 0)
 	{

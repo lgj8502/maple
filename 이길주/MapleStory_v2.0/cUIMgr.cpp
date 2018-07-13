@@ -688,7 +688,7 @@ void cUIMgr::AddToggle(string _name, wstring _bitmapName, D2D1_RECT_F _rect, flo
 
 
 
-void cUIMgr::AddToggleGroup(string _name, D2D1_POINT_2F _pos, int _count, cUI* _UI, ...)
+void cUIMgr::AddToggleGroup(string _name, D2D1_POINT_2F _pos, int _count, cUI* _pUI, ...)
 {
 	if (FindUI(_name) != nullptr)
 	{
@@ -824,7 +824,7 @@ void cUIMgr::AddInputField(string _name, wstring _bitmapName, D2D1_POINT_2F _pos
 	SetParent(UI, UI_Text);
 }
 
-void cUIMgr::AddPanel(string _name, D2D1_POINT_2F _pos,  int _count, cUI* _UI, ...)
+void cUIMgr::AddPanel(string _name, D2D1_POINT_2F _pos,  int _count, cUI* _pUI, ...)
 {
 	if (FindUI(_name) != nullptr)
 	{

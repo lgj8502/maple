@@ -19,7 +19,7 @@ class cMonsterMgr : public TemplateSingleton<cMonsterMgr>
 
 private:
 
-	list<cMob*> m_MobList;
+
 
 	void CreateMob(eMobName _MobName, D2D1_POINT_2F _pos, int _range, map<wstring, ImgInfo> _ImgList);
 
@@ -27,12 +27,17 @@ private:
 
 public:
 
+	list<cMob*> m_MobList;
+
 	~cMonsterMgr();
 
 	void MobSetting(eMobName _MobName, int _MaxCount, D2D1_POINT_2F _pos, int _range);
 
+	void Init();
 	void Update(float _DelayTime = 0.0f);
 	void Render();
+
+	void DelMob(cMob* _obj);
 
 	void Destoy();
 

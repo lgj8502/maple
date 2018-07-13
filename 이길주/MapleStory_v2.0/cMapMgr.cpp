@@ -701,6 +701,8 @@ void cMapMgr::ChangeMap(int _MapName)
 	m_MapName = _MapName;
 	m_isChange = true;
 
+	MOB_MGR->Destoy();
+
 	srand(GetTickCount());
 
 }
