@@ -17,6 +17,7 @@ enum eUI_Type
 	UI_PANEL,
 	UI_SCROLLVIEW,
 	UI_SLIDER,
+	UI_GAGE,
 };
 
 enum eEvent_Type
@@ -47,6 +48,12 @@ class cUIMgr : public TemplateSingleton<cUIMgr>
 	cUI* m_ClickedUI = nullptr;
 
 	float m_time = 0.0f;
+
+	vector<Object2D*> m_HP;
+	vector<Object2D*> m_HPmax;
+	vector<Object2D*> m_MP;
+	vector<Object2D*> m_MPmax;
+
 
 private:
 
@@ -108,7 +115,7 @@ public:
 	void AddToggle(string _name, wstring _bitmapName, D2D1_RECT_F _rect,
 		float _alpha = 1.0f, bool _isActive = true, bool _isRayCast = true);
 
-	void AddToggleGroup(string _name, D2D1_POINT_2F _pos, int _count, cUI* _UI, ...);
+	void AddToggleGroup(string _name, D2D1_POINT_2F _pos, int _count, cUI* _pUI, ...);
 
 	void AddScrollBar(string _name, wstring _barBitmap, wstring _handleBitmap, D2D1_POINT_2F _pos, float _value = 0.0f, D2D1_POINT_2F _scale = { 1.0f, 1.0f },
 		         float _alpha = 1.0f, bool _isActive = true, bool _isRayCast = true);
@@ -116,10 +123,18 @@ public:
 	void AddInputField(string _name, wstring _bitmapName, D2D1_POINT_2F _pos, D2D1_POINT_2F _scale = { 1.0f, 1.0f }, D2D1_COLOR_F _FontColor = ColorF(ColorF::White),
 		wstring _FontName = L"°íµñ",  float _alpha = 1.0f, float _FontSize = 30.0f, bool _isActive = true, bool _isRayCast = true);
 
-	void AddPanel(string _name, D2D1_POINT_2F _pos, int _count ,cUI* _UI, ...);
+	void AddPanel(string _name, D2D1_POINT_2F _pos, int _count ,cUI* _pUI, ...);
 
 	void AddAnimation(string _name, D2D1_POINT_2F _pos, float _time, vector<wstring> _bitmapList);
 	void AddAnimation(string _name, D2D1_RECT_F _rect, float _time, vector<wstring> _bitmapList);
+
+	void AddHPgauge(D2D1_POINT_2F _pos);
+	void AddMPgauge(D2D1_POINT_2F _pos);
+
+	void HPSetting(int _Number);
+	void HPMaxSetting(int _Number);
+	void MPSetting(int _Number);
+	void MPMaxSetting(int _Number);
 
 	void Update(float _DelayTime = 0);
 	void Render();

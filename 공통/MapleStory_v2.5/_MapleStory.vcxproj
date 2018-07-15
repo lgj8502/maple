@@ -155,6 +155,7 @@
     <ClInclude Include="cMapMgr.h" />
     <ClInclude Include="cMonsterMgr.h" />
     <ClInclude Include="cMushroom.h" />
+    <ClInclude Include="cPlayerMgr.h" />
     <ClInclude Include="CreateScene0.h" />
     <ClInclude Include="cErebMap.h" />
     <ClInclude Include="cTimer.h" />
@@ -195,6 +196,7 @@
     <ClCompile Include="cMapMgr.cpp" />
     <ClCompile Include="cMonsterMgr.cpp" />
     <ClCompile Include="cMushroom.cpp" />
+    <ClCompile Include="cPlayerMgr.cpp" />
     <ClCompile Include="CreateScene0.cpp" />
     <ClCompile Include="cErebMap.cpp" />
     <ClCompile Include="cTimer.cpp" />

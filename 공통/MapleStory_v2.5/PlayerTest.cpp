@@ -15,6 +15,11 @@ PlayerTest::~PlayerTest()
 
 void PlayerTest::Init()
 {
+	m_HP = 200;
+	m_HPmax = 200;
+	m_MP = 200;
+	m_MPmax = 200;
+
 	SettingBase();
 	SettingHair();
 	SettingFace();
@@ -662,13 +667,29 @@ void PlayerTest::Init()
 
 #pragma endregion LADDERMOVE
 
-#pragma endregion LADDERMOVE
+#pragma region HIT
+
+	m_Parts[PART_FACE].m_Renderer.AddAnimation(PLAYER_HIT, 4, 4, 1);
+
+#pragma endregion HIT
+
+#pragma region DIE
+
+	m_Parts[PART_HEAD].m_Renderer.AddAnimation(PLAYER_DIE, 0, 0, 1);
+	m_Parts[PART_BODY].m_Renderer.AddAnimation(PLAYER_DIE, 21, 21, 1);
+	m_Parts[PART_ARM].m_Renderer.AddAnimation(PLAYER_DIE, 14, 14, 1);
+
+	m_Parts[PART_FACE].m_Renderer.AddAnimation(PLAYER_DIE, 0, 0, 1);
+	m_Parts[PART_HAIR].m_Renderer.AddAnimation(PLAYER_DIE, 0, 0, 1);
+	m_Parts[PART_HAND].m_Renderer.AddAnimation(PLAYER_DIE, 0, 0, 1);
+
+	m_Parts[PART_COAT].m_Renderer.AddAnimation(PLAYER_DIE, 22, 22, 1);
+	m_Parts[PART_COATARM].m_Renderer.AddAnimation(PLAYER_DIE, 22, 22, 1);
+	m_Parts[PART_PANTS].m_Renderer.AddAnimation(PLAYER_DIE, 23, 23, 1);
+	m_Parts[PART_SHOES].m_Renderer.AddAnimation(PLAYER_DIE, 20, 20, 1);
+	m_Parts[PART_WEAPON].m_Renderer.AddAnimation(PLAYER_DIE, 12, 12, 1);
 
 
-	//// 사다리 임시 모션
-	//
-	//m_Parts[PART_ARM].m_Transform.AddAniPos({ 50, -13 });
-	//m_Parts[PART_ARM].m_Transform.AddTransAnimation(PLAYER_LADDER, 8, 8, 5);
 }
 
 void PlayerTest::Update(float _DelayTime)
@@ -712,11 +733,160 @@ void PlayerTest::Update(float _DelayTime)
 		m_Parts[i].Update(_DelayTime);
 	}
 
+	if (m_isDead == true && m_isLanding == true)
+	{		
+		m_DeadTime -= _DelayTime;
+
+		m_Parts[0].m_Transform.m_gravity = false;
+
+		if (m_DeadTime > 1.0f)
+		{
+			m_Parts[0].m_Transform.m_velocityY = -50.0f;
+		}
+		else if(m_DeadTime > 0.0f)
+		{
+			m_Parts[0].m_Transform.m_velocityY = 50.0f;
+		}
+		else
+		{
+			m_DeadTime = 2.0f;
+		}
+
+		m_Parts[0].m_Transform.VelocityTransY(_DelayTime);
+
+		return;
+	}
+		
+
+	// HITTED
+	if (m_isProtected == false && PlayerState() != PLAYER_ATTACK)
+	{
+		list<cMob*>::iterator Iter;
+		for (Iter = MOB_MGR->m_MobList.begin(); Iter != MOB_MGR->m_MobList.end(); Iter++)
+		{
+			if ((*Iter)->m_state == MOBSTATE_DIE) continue;
+
+			if (CrashCheckMob((*Iter), GetPos()) == true)
+			{
+				m_isHitted = true;
+				m_isProtected = true;
+
+				m_HP -= (*Iter)->m_AttackPower;
+				UI_MGR->HPSetting(PLAYER_MGR->m_player->m_HP);
+
+				EFF_MGR->NumberEffect(NUMC_RED, (*Iter)->m_AttackPower, GetPos());
+
+				if (m_HP <= 0)
+				{	
+					m_isDead = true;
+
+					//return;					
+				}
+
+				if ((*Iter)->m_Transform.GetPos().x < GetPos().x)
+				{
+					m_Parts[0].m_Transform.m_velocityX = 200.0f;
+				}
+				else
+				{
+					m_Parts[0].m_Transform.m_velocityX = -200.0f;
+				}
+
+				m_Parts[0].m_Transform.m_velocityY = 0;
+				m_JumpPowerRatio = 50.0f;
+				m_Parts[0].m_Transform.m_gravity = false;
+				m_JumpStart = false;
+
+
+				m_isJumping = true;
+				m_isAlpha = true;
+
+				//ChangeState(PLAYER_JUMP);
+				m_Parts[PART_FACE].m_Renderer.m_State = PLAYER_HIT;
+
+				break;
+			}
+		}
+	}
+
+
+	if (m_isHitted == true)
+	{		
+		m_HitTime -= _DelayTime;
+	
+		m_Parts[0].m_Transform.VelocityTransX(_DelayTime);
+	
+		if (m_HitTime < 0)
+		{
+			ChangeState(PLAYER_IDLE);
+			m_Parts[0].m_Transform.m_velocityX = 0;
+			m_isHitted = false;
+	
+			m_HitTime = 0.5f;
+		}
+	
+		//return;
+	
+	}
+
+	if (m_isAlpha == true)
+	{
+		m_AlphaTime -= _DelayTime;
+
+		m_IntervalTime -= _DelayTime;
+
+		if (m_IntervalTime < 0)
+		{
+			float Alpha = 0.5f;
+
+			if (m_Parts[0].m_Renderer.GetAlpha() == 0.5f)
+			{
+				Alpha = 1.0f;
+			}
+
+			for (int i = 0; i < PART_END; i++)
+			{
+				m_Parts[i].m_Renderer.SetAlpha(Alpha);
+			}
+
+			m_IntervalTime = 0.02f;
+		}
+
+		if (m_AlphaTime < 0)
+		{
+			m_AlphaTime = 1.5f;
+			m_isAlpha = false;
+			m_isProtected = false;
+
+			for (int i = 0; i < PART_END; i++)
+			{
+				m_Parts[i].m_Renderer.SetAlpha(1.0f);
+			}
+		}
+	}
+
 	//Attack
 	if (m_isAttack == true && m_isProne == false)
 	{
 		ChangeState(PLAYER_ATTACK);
 		m_AttackSpeed -= _DelayTime;
+
+		if (m_AttackSpeed < 0.3f && m_AttackEffectPos.y != 0)
+		{
+			list<cMob*>::iterator Iter;			
+
+			for (Iter = MOB_MGR->m_MobList.begin(); Iter != MOB_MGR->m_MobList.end(); Iter++)
+			{
+				if (CrashCheckMob((*Iter), m_AttackEffectPos) == true)
+				{
+					(*Iter)->Hit();
+				}
+			}
+
+			m_AttackEffectPos = { 0,0 };
+		}
+
+
 		if (m_AttackSpeed <= 0)
 		{
 			m_AttackStart = false;
@@ -770,6 +940,19 @@ void PlayerTest::Update(float _DelayTime)
 			m_Parts[0].m_Transform.Translate(0, m_Parts[0].m_Transform.m_velocityY * _DelayTime);
 		}
 	}
+
+	//list<cMob*>::iterator Iter;
+
+	//Iter = MOB_MGR->m_MobList.begin();
+
+	//for (size_t i = 0; i < MOB_MGR->m_MobList.size(); i++)
+	//{
+	//	if ( CrashCheckMob((*Iter)) ==  true)
+	//	{
+
+	//	}
+	//}
+
 
 	// 타일맵 충돌 체크
 
@@ -866,6 +1049,24 @@ void PlayerTest::Update(float _DelayTime)
 		}
 	}
 
+	if (m_isAlpha == true)
+	{
+		m_Parts[PART_FACE].m_Renderer.m_State = PLAYER_HIT;
+	}
+	else
+	{
+		m_Parts[PART_FACE].m_Renderer.m_State = PLAYER_IDLE;
+	}
+
+
+	if (m_isDead == true)
+	{
+		for (int i = 0; i < PART_END; i++)
+		{
+			m_Parts[i].m_Renderer.m_State = PLAYER_DIE;
+		}
+	}
+
 }
 
 void PlayerTest::Render()
@@ -910,10 +1111,40 @@ bool PlayerTest::CrashCheckMap(cMapObj * _obj)
 	return false;
 }
 
+bool PlayerTest::CrashCheckMob(cMob * _obj, D2D1_POINT_2F _pos)
+{
+	float left = _pos.x - 7.0f;
+	float right = _pos.x + 7.0f;
+	float up = _pos.y - 50.0f;
+	float down = _pos.y + 17.5f;
+
+	D2D1_POINT_2F pos = _obj->m_Transform.GetPos();
+	D2D1_RECT_F rect = _obj->m_Renderer.GetImgRT();
+
+	rect.left += pos.x;
+	rect.right += pos.x;
+	rect.top += pos.y;
+	rect.bottom += pos.y;
+
+	if (right > rect.left && left < rect.right &&
+		up < rect.bottom && down > rect.top)
+	{
+		m_CrashHeight = down - rect.top - 5.0f;
+
+		return true;
+	}
+	return false;
+}
+
 void PlayerTest::Landing(cMapObj* _pLandingTile)
 {
 	m_LandingTile = _pLandingTile;
 	m_isLanding = true;
+
+	if (m_isDead == true)
+	{
+		EFF_MGR->DieEffect(GetPos());
+	}
 
 	if (m_Parts[0].m_Transform.m_gravity == true)
 	{
@@ -1027,7 +1258,7 @@ void PlayerTest::SetParent(ePlayerParts _Parent, ePlayerParts _Son)
 
 void PlayerTest::LeftWalk(float _DelayTime)
 {
-	if (PlayerState() == PLAYER_LADDER || PlayerState() == PLAYER_LADDERMOVE || m_isAttack == true) return;
+	if (PlayerState() == PLAYER_LADDER || PlayerState() == PLAYER_LADDERMOVE || m_isAttack == true || m_isHitted == true || m_isDead == true) return;
 	
 
 	if (GetPos().x < 50.0f) return;
@@ -1053,7 +1284,7 @@ void PlayerTest::LeftWalk(float _DelayTime)
 
 void PlayerTest::RightWalk(float _DelayTime)
 {
-	if (PlayerState() == PLAYER_LADDER || PlayerState() == PLAYER_LADDERMOVE || m_isAttack == true) return;
+	if (PlayerState() == PLAYER_LADDER || PlayerState() == PLAYER_LADDERMOVE || m_isAttack == true || m_isHitted == true || m_isDead == true) return;
 
 	if (GetPos().x > MAP_MGR->m_pMap->m_LayOut6_Size.x - 50.0f) return;
 
@@ -1078,11 +1309,11 @@ void PlayerTest::RightWalk(float _DelayTime)
 
 void PlayerTest::ClimbLadder(float _DelayTime)
 {
-	if (m_isCrashPortal == true || m_isAttack == true) return;
+	if (m_isCrashPortal == true || m_isAttack == true || m_isHitted == true || m_isDead == true) return;
 
 	if (m_CrashedTopLadder != nullptr)
 	{
-		if (m_CrashedTopLadder->GetMapPos().y > GetPos().y + 45.0f)
+		if (m_CrashedTopLadder->GetMapPos().y > GetPos().y + 50.0f)
 		{
 			LadderOff();
 			return;
@@ -1124,7 +1355,7 @@ void PlayerTest::ClimbLadder(float _DelayTime)
 
 void PlayerTest::DownLadder(float _DelayTime)
 {
-	if (m_isAttack == true) return;
+	if (m_isAttack == true || m_isHitted == true || m_isDead == true) return;
 
 	if (m_isCrashLadder == true && m_isLanding == false && m_isJumping == false)
 	{
@@ -1167,7 +1398,7 @@ void PlayerTest::StopLadder()
 
 void PlayerTest::Prone()
 {
-	if (m_isAttack == true) return;
+	if (m_isAttack == true || m_isHitted == true || m_isDead == true) return;
 
 	if (PlayerState() == PLAYER_IDLE)
 	{
@@ -1195,26 +1426,25 @@ void PlayerTest::ProneSteb()
 
 void PlayerTest::Attack()
 {
-	if (PlayerState() == PLAYER_JUMP || PlayerState() == PLAYER_PRONE || PlayerState() == PLAYER_PRONESTEB) return;
+	if (PlayerState() == PLAYER_JUMP || PlayerState() == PLAYER_PRONE || PlayerState() == PLAYER_PRONESTEB || m_isHitted == true || m_isDead == true) return;
 
 	if (m_isAttack == false)
 	{
-		D2D1_POINT_2F pos = GetPos();
+		m_AttackEffectPos = GetPos();
 
 		if (m_Parts[0].m_Transform.GetScale().x > 0)
 		{
-			pos.x -= 40.0f;
+			m_AttackEffectPos.x -= 60.0f;
 
-			EFF_MGR->EffectSingle(L"0.swingO1.2.0", pos, true, 0.6f, 0.3f);
+			EFF_MGR->EffectSingle(L"0.swingO1.2.0", m_AttackEffectPos, true, 0.6f, 0.3f);
 		}
 		else
 		{
-			pos.x += 40.0f;
+			m_AttackEffectPos.x += 60.0f;
 
-			EFF_MGR->EffectSingle(L"0.swingO1.2.0", pos, false, 0.6f, 0.3f);
+			EFF_MGR->EffectSingle(L"0.swingO1.2.0", m_AttackEffectPos, false, 0.6f, 0.3f);
 
 		}
-
 
 		m_isAttack = true;
 	}	
@@ -1227,7 +1457,7 @@ void PlayerTest::NotAttack()
 
 void PlayerTest::StopWalk()
 {
-	if (m_Parts[0].m_Transform.m_State == PLAYER_LADDER || m_Parts[PART_ORIGIN].m_Transform.m_State == PLAYER_LADDERMOVE || m_Parts[0].m_Transform.m_State == PLAYER_JUMP) return;
+	if (m_Parts[0].m_Transform.m_State == PLAYER_LADDER || m_Parts[PART_ORIGIN].m_Transform.m_State == PLAYER_LADDERMOVE || m_Parts[0].m_Transform.m_State == PLAYER_JUMP || m_isDead == true) return;
 
 	m_Parts[0].m_Transform.m_velocityX = 0.0f;
 
@@ -1240,10 +1470,12 @@ void PlayerTest::StopWalk()
 
 void PlayerTest::JumpMove()
 {	
-	if (m_isAttack == true) return;
+	if (m_isAttack == true || m_isDead == true) return;
 
 	m_isJumping = true;
 }
+
+
 
 void PlayerTest::ChangeBase(size_t _itemNo)
 {
@@ -1328,6 +1560,8 @@ void PlayerTest::SettingBase()
 	m_Parts[PART_BODY].m_Renderer.AddBitmap(m_BaseList[L"swingO3.1.body"].m_Bitmap); // 19
 	m_Parts[PART_BODY].m_Renderer.AddBitmap(m_BaseList[L"swingO3.2.body"].m_Bitmap); // 20
 
+	m_Parts[PART_BODY].m_Renderer.AddBitmap(m_BaseList[L"DIE"].m_Bitmap); // 21
+
 	m_Parts[PART_ARM].m_Renderer.AddBitmap(m_BaseList[L"Arm1_IDLE"].m_Bitmap);
 	m_Parts[PART_ARM].m_Renderer.AddBitmap(m_BaseList[L"Arm2_IDLE"].m_Bitmap);
 	m_Parts[PART_ARM].m_Renderer.AddBitmap(m_BaseList[L"Arm3_IDLE"].m_Bitmap);
@@ -1380,6 +1614,8 @@ void PlayerTest::SettingFace()
 	m_Parts[PART_FACE].m_Renderer.AddBitmap(m_FaceList[L"blink.1.face"].m_Bitmap);
 	m_Parts[PART_FACE].m_Renderer.AddBitmap(m_FaceList[L"blink.2.face"].m_Bitmap);
 	m_Parts[PART_FACE].m_Renderer.AddBitmap(m_FaceList[L"hide.face"].m_Bitmap); //3
+
+	m_Parts[PART_FACE].m_Renderer.AddBitmap(m_FaceList[L"hit.0.face"].m_Bitmap);
 }
 
 void PlayerTest::SettingCoat()
@@ -1419,6 +1655,7 @@ void PlayerTest::SettingCoat()
 	m_Parts[PART_COAT].m_Renderer.AddBitmap(m_CoatList[L"swingO3.0.mail"].m_Bitmap);//20
 	m_Parts[PART_COAT].m_Renderer.AddBitmap(m_CoatList[L"swingO3.1.mail"].m_Bitmap);
 	m_Parts[PART_COAT].m_Renderer.AddBitmap(m_CoatList[L"swingO3.2.mail"].m_Bitmap);//22
+	m_Parts[PART_COAT].m_Renderer.AddBitmap(m_CoatList[L"hide.coatArm"].m_Bitmap);//22
 
 	m_Parts[PART_COATARM].m_Renderer.AddBitmap(m_CoatList[L"stand1.0.mailArm"].m_Bitmap);
 	m_Parts[PART_COATARM].m_Renderer.AddBitmap(m_CoatList[L"stand1.1.mailArm"].m_Bitmap);
@@ -1447,6 +1684,7 @@ void PlayerTest::SettingCoat()
 	m_Parts[PART_COATARM].m_Renderer.AddBitmap(m_CoatList[L"swingO3.0.mailArm"].m_Bitmap);//19
 	m_Parts[PART_COATARM].m_Renderer.AddBitmap(m_CoatList[L"swingO3.1.mailArm"].m_Bitmap);
 	m_Parts[PART_COATARM].m_Renderer.AddBitmap(m_CoatList[L"swingO3.2.mailArm"].m_Bitmap);//21
+	m_Parts[PART_COATARM].m_Renderer.AddBitmap(m_CoatList[L"hide.coatArm"].m_Bitmap);//22
 }
 
 void PlayerTest::SettingPants()
@@ -1464,6 +1702,7 @@ void PlayerTest::SettingPants()
 	m_Parts[PART_PANTS].m_Renderer.AddBitmap(m_PantsList[L"walk1.2.pants"].m_Bitmap);
 	m_Parts[PART_PANTS].m_Renderer.AddBitmap(m_PantsList[L"walk1.3.pants"].m_Bitmap);
 	m_Parts[PART_PANTS].m_Renderer.AddBitmap(m_PantsList[L"jump.0.pants"].m_Bitmap);
+
 
 	m_Parts[PART_PANTS].m_Renderer.AddBitmap(m_PantsList[L"swingO1.0.pants"].m_Bitmap); //9
 	m_Parts[PART_PANTS].m_Renderer.AddBitmap(m_PantsList[L"swingO1.1.pants"].m_Bitmap);
@@ -1483,6 +1722,8 @@ void PlayerTest::SettingPants()
 	m_Parts[PART_PANTS].m_Renderer.AddBitmap(m_PantsList[L"swingO3.0.pants"].m_Bitmap); //20
 	m_Parts[PART_PANTS].m_Renderer.AddBitmap(m_PantsList[L"swingO3.1.pants"].m_Bitmap);
 	m_Parts[PART_PANTS].m_Renderer.AddBitmap(m_PantsList[L"swingO3.2.pants"].m_Bitmap);//22
+
+	m_Parts[PART_PANTS].m_Renderer.AddBitmap(m_PantsList[L"swingP1.0.pants"].m_Bitmap);
 }
 
 void PlayerTest::SettingShoes()
@@ -1517,6 +1758,9 @@ void PlayerTest::SettingShoes()
 	m_Parts[PART_SHOES].m_Renderer.AddBitmap(m_ShoesList[L"swingO3.0.shoes"].m_Bitmap);//17
 	m_Parts[PART_SHOES].m_Renderer.AddBitmap(m_ShoesList[L"swingO3.1.shoes"].m_Bitmap);
 	m_Parts[PART_SHOES].m_Renderer.AddBitmap(m_ShoesList[L"swingO3.2.shoes"].m_Bitmap);//19
+	m_Parts[PART_SHOES].m_Renderer.AddBitmap(m_ShoesList[L"stand1.2.shoes"].m_Bitmap);//20
+
+
 }
 
 void PlayerTest::SettingWeapon()
@@ -1554,6 +1798,7 @@ void PlayerTest::SettingWeapon()
 	m_Parts[PART_WEAPON].m_Renderer.AddBitmap(m_WeaponList[L"swingO3.0.weapon"].m_Bitmap);//16
 	m_Parts[PART_WEAPON].m_Renderer.AddBitmap(m_WeaponList[L"swingO3.1.weapon"].m_Bitmap);
 	m_Parts[PART_WEAPON].m_Renderer.AddBitmap(m_WeaponList[L"swingO3.2.weapon"].m_Bitmap);//18
+
 
 
 

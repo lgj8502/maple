@@ -1,12 +1,12 @@
 #pragma once
-#include "PlayerTest.h"
+
 #include "cMap.h"
+
+
 
 class IngameScene: public Scene
 {
 	POINT m_MousePos = { 0,0 };
-
-	PlayerTest m_player;
 
 	bool m_isClicked = false;
 
@@ -17,15 +17,13 @@ class IngameScene: public Scene
 	size_t m_maxText = 70;
 	string m_oldText = "";
 
-
-
 public:
 
 	~IngameScene();
 
 	void Init(HWND hWnd);
 	void Update(float _DelayTime = 0.0f);
-	void Render();
+	void Render();	
 
 	void SendText();
 

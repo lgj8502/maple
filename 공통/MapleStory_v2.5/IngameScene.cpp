@@ -15,11 +15,20 @@ void IngameScene::Init(HWND hWnd)
 
 	MAP_MGR->ChangeMap(MNAME_EREB);
 
-	m_player.Init();
+	PLAYER_MGR->CreatePlayer();
 
-	m_player.SetPos({ 200,900 });
+	PLAYER_MGR->m_player->Init();
+
+	PLAYER_MGR->m_player->SetPos({ 200,900 });
 
 	MAP_MGR->m_CameraPos = {0, 300};
+
+	///// HP, MP, LV 등등...
+
+	UI_MGR->HPSetting(PLAYER_MGR->m_player->m_HP);
+	UI_MGR->HPMaxSetting(PLAYER_MGR->m_player->m_HPmax);
+	UI_MGR->MPSetting(PLAYER_MGR->m_player->m_MP);
+	UI_MGR->MPMaxSetting(PLAYER_MGR->m_player->m_MPmax);
 
 	///////////////////////////////////
 
@@ -42,31 +51,35 @@ void IngameScene::Init(HWND hWnd)
 
 	UI_MGR->AddImage("backgrnd", L"backgrnd", { 743 + ingameScenePosX, 750 }, { 1.5f, 1.3333f });
 	// 조정해야함 hp :: 간격 8
-	UI_MGR->AddImage("gauge.hp.layer0", L"gauge.hp.layer0", { 756 + ingameScenePosX, 739 }, { 1.5f, 1.3333f });
-	UI_MGR->AddImage("status.1.0", L"status.1", { 726 + ingameScenePosX, 740 }, { 1.5f, 1.0f });
-	UI_MGR->AddImage("status.0.0", L"status.0", { 734 + ingameScenePosX, 740 }, { 1.0f, 1.0f });
-	UI_MGR->AddImage("status.0.1", L"status.0", { 742 + ingameScenePosX, 740 }, { 1.0f, 1.0f });
+
+	UI_MGR->AddHPgauge({ 54, 747 });
+	UI_MGR->AddMPgauge({ 54, 767 });
+
+	//UI_MGR->AddImage("gauge.hp.layer0", L"gauge.hp.layer0", { 756 + ingameScenePosX, 739 }, { 1.5f, 1.3333f });
+	//UI_MGR->AddImage("status.1.0", L"status.1", { 726 + ingameScenePosX, 740 }, { 1.5f, 1.0f });
+	//UI_MGR->AddImage("status.0.0", L"status.0", { 734 + ingameScenePosX, 740 }, { 1.0f, 1.0f });
+	//UI_MGR->AddImage("status.0.1", L"status.0", { 742 + ingameScenePosX, 740 }, { 1.0f, 1.0f });
 	UI_MGR->AddImage("status.slash.0", L"status.slash", { 750 + ingameScenePosX, 740 }, { 1.0f, 1.0f });
-	UI_MGR->AddImage("status.1.1", L"status.1", { 758 + ingameScenePosX, 740 }, { 1.5f, 1.0f });
-	UI_MGR->AddImage("status.0.2", L"status.0", { 766 + ingameScenePosX, 740 }, { 1.0f, 1.0f });
-	UI_MGR->AddImage("status.0.3", L"status.0", { 774 + ingameScenePosX, 740 }, { 1.0f, 1.0f });
+	//UI_MGR->AddImage("status.1.1", L"status.1", { 758 + ingameScenePosX, 740 }, { 1.5f, 1.0f });
+	//UI_MGR->AddImage("status.0.2", L"status.0", { 766 + ingameScenePosX, 740 }, { 1.0f, 1.0f });
+	//UI_MGR->AddImage("status.0.3", L"status.0", { 774 + ingameScenePosX, 740 }, { 1.0f, 1.0f });
 
 	// 조정해야함 mp ::
-	UI_MGR->AddImage("gauge.mp.layer0", L"gauge.mp.layer0", { 756 + ingameScenePosX, 760 }, { 1.5f, 1.3333f });
-	UI_MGR->AddImage("status.1.2", L"status.1", { 726 + ingameScenePosX, 761 }, { 1.5f, 1.0f });
-	UI_MGR->AddImage("status.0.4", L"status.0", { 734 + ingameScenePosX, 761 }, { 1.0f, 1.0f });
-	UI_MGR->AddImage("status.0.5", L"status.0", { 742 + ingameScenePosX, 761 }, { 1.0f, 1.0f });
+	//UI_MGR->AddImage("gauge.mp.layer0", L"gauge.mp.layer0", { 756 + ingameScenePosX, 760 }, { 1.5f, 1.3333f });
+	//UI_MGR->AddImage("status.1.2", L"status.1", { 726 + ingameScenePosX, 761 }, { 1.5f, 1.0f });
+	//UI_MGR->AddImage("status.0.4", L"status.0", { 734 + ingameScenePosX, 761 }, { 1.0f, 1.0f });
+	//UI_MGR->AddImage("status.0.5", L"status.0", { 742 + ingameScenePosX, 761 }, { 1.0f, 1.0f });
 	UI_MGR->AddImage("status.slash.1", L"status.slash", { 750 + ingameScenePosX, 761 }, { 1.0f, 1.0f });
-	UI_MGR->AddImage("status.1.3", L"status.1", { 758 + ingameScenePosX, 761 }, { 1.5f, 1.0f });
-	UI_MGR->AddImage("status.0.6", L"status.0", { 766 + ingameScenePosX, 761 }, { 1.0f, 1.0f });
-	UI_MGR->AddImage("status.0.7", L"status.0", { 774 + ingameScenePosX, 761 }, { 1.0f, 1.0f });
+	//UI_MGR->AddImage("status.1.3", L"status.1", { 758 + ingameScenePosX, 761 }, { 1.5f, 1.0f });
+	//UI_MGR->AddImage("status.0.6", L"status.0", { 766 + ingameScenePosX, 761 }, { 1.0f, 1.0f });
+	//UI_MGR->AddImage("status.0.7", L"status.0", { 774 + ingameScenePosX, 761 }, { 1.0f, 1.0f });
 
 	UI_MGR->AddImage("status.layer.cover", L"status.layer.cover", { 743 + ingameScenePosX, 740 }, { 1.5f, 1.3333f }); // 600
 
 	UI_MGR->AddImage("status.layer.lv", L"status.layer.lv", { 648 + ingameScenePosX, 710 }, { 1.5f, 1.3333f }); // 
 																												// 케릭터 레벨에 따라 변화해야할 ui  // 525 부터 시작하여 15 간격
-	UI_MGR->AddImage("lvNumber.1", L"lvNumber.1", { 668 + ingameScenePosX, 710 }, { 1.5f, 1.3333f }); // 525
-	UI_MGR->AddImage("lvNumber.0", L"lvNumber.0", { 683 + ingameScenePosX, 710 }, { 1.5f, 1.3333f }); // 540
+	//UI_MGR->AddImage("lvNumber.1", L"lvNumber.1", { 668 + ingameScenePosX, 710 }, { 1.5f, 1.3333f }); // 525
+	//UI_MGR->AddImage("lvNumber.0", L"lvNumber.0", { 683 + ingameScenePosX, 710 }, { 1.5f, 1.3333f }); // 540
 																									  ///////////////////////////////////////////////////////////////////////////////////
 																									  //quickSlot
 
@@ -569,6 +582,8 @@ void IngameScene::Init(HWND hWnd)
 	auto menuFunc20 = [](void) { UI_MGR->FindUI("claim.normal")->m_Renderer.ChangeBitmap(0);  checkEvent = false; };
 	UI_MGR->AddEvent("claim.normal", ADDEVENT_OnMouseOver, menuFunc19);
 	UI_MGR->AddEvent("claim.normal", ADDEVENT_OnMouseExit, menuFunc20);
+
+
 	//부모 설정
 
 
@@ -590,11 +605,6 @@ void IngameScene::Init(HWND hWnd)
 	UI_MGR->SetParent("submenu.backgrnd.0.menu", "submenu.backgrnd.1.menu");
 	UI_MGR->SetParent("submenu.backgrnd.0.menu", "submenu.backgrnd.2.menu");
 
-
-
-
-
-
 }
 
 void IngameScene::Update(float _DelayTime)
@@ -610,8 +620,12 @@ void IngameScene::Update(float _DelayTime)
 	//m_monster.Update(_DelayTime);
 
 
+
 	MAP_MGR->Update(_DelayTime);
-	m_player.Update(_DelayTime);
+	PLAYER_MGR->m_player->Update(_DelayTime);
+
+	MOB_MGR->Update(_DelayTime);
+	
 
 	EFF_MGR->Update(_DelayTime);
 
@@ -624,8 +638,8 @@ void IngameScene::Update(float _DelayTime)
 
 	D2D1_POINT_2F end = {};
 
-	end.x = m_player.GetPos().x - WIN_WIDTH / 2.0f;
-	end.y = m_player.GetPos().y - WIN_HEIGHT / 2.0f;
+	end.x = PLAYER_MGR->m_player->GetPos().x - WIN_WIDTH / 2.0f;
+	end.y = PLAYER_MGR->m_player->GetPos().y - WIN_HEIGHT / 2.0f;
 
 	MAP_MGR->m_CameraPos = Lerp(start, end, 0.02f);
 
@@ -663,72 +677,72 @@ void IngameScene::Update(float _DelayTime)
 	//ATTACK
 	if (OnceKeyDown(VK_CONTROL))
 	{
-		m_player.Attack();
+		PLAYER_MGR->m_player->Attack();
 
 	}
 
 	if (StayKeyDown(VK_DOWN))
 	{
-		m_player.DownLadder(_DelayTime);
+		PLAYER_MGR->m_player->DownLadder(_DelayTime);
 
-		m_player.Prone();
+		PLAYER_MGR->m_player->Prone();
 
 		if (OnceKeyDown(VK_MENU))
 		{
-			m_player.BlowJumpTile();
+			PLAYER_MGR->m_player->BlowJumpTile();
 		}
 	}
 
 	//PRONESTEB
 	if (StayKeyDown(VK_DOWN) && OnceKeyUp(VK_CONTROL))
 	{
-		m_player.ProneSteb();
+		PLAYER_MGR->m_player->ProneSteb();
 	}
 
 	if (OnceKeyDown(VK_UP))
 	{
-		m_player.PortalIn();
+		PLAYER_MGR->m_player->PortalIn();
 	}
 
 
 	if (StayKeyDown(VK_UP))
 	{
-		m_player.ClimbLadder(_DelayTime);
+		PLAYER_MGR->m_player->ClimbLadder(_DelayTime);
 
 	}
 	if (OnceKeyUp(VK_UP) || OnceKeyUp(VK_DOWN))
 	{
-		m_player.StopLadder();
+		PLAYER_MGR->m_player->StopLadder();
 
-		m_player.NotProne();
+		PLAYER_MGR->m_player->NotProne();
 
 	}
 
 	if (StayKeyDown(VK_LEFT))
 	{
-		m_player.LeftWalk(_DelayTime);
+		PLAYER_MGR->m_player->LeftWalk(_DelayTime);
 
 	}
 	if (OnceKeyUp(VK_LEFT) || OnceKeyUp(VK_RIGHT))
 	{
-		m_player.StopWalk();
+		PLAYER_MGR->m_player->StopWalk();
 
 	}
 
 	if (StayKeyDown(VK_RIGHT))
 	{
-		m_player.RightWalk(_DelayTime);
+		PLAYER_MGR->m_player->RightWalk(_DelayTime);
 
 	}
 
 	if (OnceKeyDown(VK_F1))
 	{
-		m_player.ChangeCoat(101);
+		PLAYER_MGR->m_player->ChangeCoat(101);
 	}
 
 	if (OnceKeyDown(VK_F2))
 	{
-		m_player.ChangeCoat(100);
+		PLAYER_MGR->m_player->ChangeCoat(100);
 	}
 
 	/*if (OnceKeyDown(VK_F5))
@@ -823,7 +837,12 @@ void IngameScene::Update(float _DelayTime)
 
 	if (OnceKeyDown(VK_MENU))
 	{
-		m_player.JumpMove();
+		PLAYER_MGR->m_player->JumpMove();
+	}
+
+	if (OnceKeyDown(VK_F9))
+	{
+		MOB_MGR->m_MobList.front()->Hit();
 	}
 }
 
@@ -833,14 +852,16 @@ void IngameScene::Render()
 	MAP_MGR->BackRender();
 	//m_monster.Render();
 
-	if (m_player.PlayerState() == PLAYER_LADDER || m_player.PlayerState() == PLAYER_LADDERMOVE)
+	MOB_MGR->Render();
+
+	if (PLAYER_MGR->m_player->PlayerState() == PLAYER_LADDER || PLAYER_MGR->m_player->PlayerState() == PLAYER_LADDERMOVE)
 	{
 		MAP_MGR->LadderRender();
-		m_player.Render();
+		PLAYER_MGR->m_player->Render();
 	}
 	else
 	{
-		m_player.Render();
+		PLAYER_MGR->m_player->Render();
 		MAP_MGR->LadderRender();
 	}
 
@@ -849,6 +870,7 @@ void IngameScene::Render()
 	MAP_MGR->FrontRender();
 
 	UI_MGR->Render();
+
 }
 
 void IngameScene::SendText()

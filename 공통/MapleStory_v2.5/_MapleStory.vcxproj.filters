@@ -183,6 +183,9 @@
     <ClInclude Include="cMushroom.h">
       <Filter>소스 파일\Mob</Filter>
     </ClInclude>
+    <ClInclude Include="cPlayerMgr.h">
+      <Filter>소스 파일\Manager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MK_KeyMgr.cpp">
@@ -272,9 +275,6 @@
     <ClCompile Include="cMap.cpp">
       <Filter>소스 파일\Map</Filter>
     </ClCompile>
-    <ClCompile Include="cErebMap.cpp">
-      <Filter>소스 파일\Map</Filter>
-    </ClCompile>
     <ClCompile Include="cArcana.cpp">
       <Filter>소스 파일\Map</Filter>
     </ClCompile>
@@ -292,6 +292,12 @@
     </ClCompile>
     <ClCompile Include="cMushroom.cpp">
       <Filter>소스 파일\Mob</Filter>
+    </ClCompile>
+    <ClCompile Include="cPlayerMgr.cpp">
+      <Filter>소스 파일\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="cErebMap.cpp">
+      <Filter>소스 파일\Map</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

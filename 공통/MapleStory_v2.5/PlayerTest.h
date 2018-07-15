@@ -14,8 +14,9 @@ enum ePlayerState
 	PLAYER_LADDERMOVE,
 	PLAYER_FIGHT,
 	PLAYER_PRONE,
-	PLAYER_PRONESTEB
-
+	PLAYER_PRONESTEB,
+	PLAYER_HIT,
+	PLAYER_DIE,
 };
 
 enum ePlayerParts
@@ -84,6 +85,17 @@ private:
 
 	bool		m_isAttack = false;
 	bool	    m_AttackStart = false;
+	D2D1_POINT_2F m_AttackEffectPos = {};
+
+	bool		m_isHitted = false;
+	float		m_HitTime = 0.5f;
+	bool		m_isAlpha = false;
+	float		m_AlphaTime = 1.5f;
+	float		m_IntervalTime = 0.02f;
+	bool		m_isProtected = false;
+
+	bool		m_isDead = false;
+	float		m_DeadTime = 2.0f;
 
 	//D2D1_POINT_2F m_MapPos = {};
 
@@ -121,7 +133,10 @@ public:
 
 	///////////////////// 스탯 //////////////////////////////////////////////////////
 
-
+	int		m_HP = 0;
+	int		m_MP = 0;
+	int		m_HPmax = 0;
+	int		m_MPmax = 0;
 
 	// 이속률 (캐릭터가 가지는 이동 스탯)  100.0f == 1배
 	float	m_MoveSpeedRatio = 100.0f;
@@ -131,6 +146,8 @@ public:
 	int		m_DEX = 0;
 	int		m_INT = 0;
 	int		m_LUK = 0;
+
+	int		m_AttackPower = 50;
 
 	////////////////////////////////////////////////////////////////////////////////
 
@@ -144,6 +161,7 @@ public:
 	void Render();
 
 	bool CrashCheckMap(cMapObj *_obj);
+	bool CrashCheckMob(cMob *_obj, D2D1_POINT_2F _pos);
 	void Landing(cMapObj* _pLandingTile);
 	void BlowJumpTile();
 

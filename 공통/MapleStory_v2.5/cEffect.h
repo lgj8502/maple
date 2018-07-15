@@ -9,6 +9,9 @@ public:
 	
 	float m_NowTime = 0.0f;
 
+	bool  m_isNumber = false;
+
+	bool  m_NotDestroy = false;
 
 	bool CheckTime(float _time);
 };

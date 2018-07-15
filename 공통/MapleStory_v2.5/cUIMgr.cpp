@@ -28,6 +28,24 @@ void cUIMgr::Destroy()
 		i = nullptr;
 	}
 	m_UIList.clear();
+
+	for (auto &i : m_HP)
+	{
+		i = {};
+		delete i;
+		i = nullptr;
+	}
+
+	m_HP.clear();
+
+	for (auto &i : m_HPmax)
+	{
+		i = {};
+		delete i;
+		i = nullptr;
+	}
+
+	m_HPmax.clear();
 }
 
 
@@ -688,7 +706,7 @@ void cUIMgr::AddToggle(string _name, wstring _bitmapName, D2D1_RECT_F _rect, flo
 
 
 
-void cUIMgr::AddToggleGroup(string _name, D2D1_POINT_2F _pos, int _count, cUI* _UI, ...)
+void cUIMgr::AddToggleGroup(string _name, D2D1_POINT_2F _pos, int _count, cUI* _pUI, ...)
 {
 	if (FindUI(_name) != nullptr)
 	{
@@ -824,7 +842,7 @@ void cUIMgr::AddInputField(string _name, wstring _bitmapName, D2D1_POINT_2F _pos
 	SetParent(UI, UI_Text);
 }
 
-void cUIMgr::AddPanel(string _name, D2D1_POINT_2F _pos,  int _count, cUI* _UI, ...)
+void cUIMgr::AddPanel(string _name, D2D1_POINT_2F _pos,  int _count, cUI* _pUI, ...)
 {
 	if (FindUI(_name) != nullptr)
 	{
@@ -919,6 +937,277 @@ void cUIMgr::AddAnimation(string _name, D2D1_RECT_F _rect, float _time, vector<w
 	m_UIList.push_back(UI);
 }
 
+void cUIMgr::AddHPgauge(D2D1_POINT_2F _pos)
+{
+
+	cUI *UI = new cUI;
+
+	UI->m_Type = UI_IMAGE;
+	UI->m_Name = "HPgauge";
+
+	UI->m_Renderer.AddBitmap_LeftBottom(IMG_MGR->GetImage(L"gauge.hp.layer0"));
+
+	UI->m_Transform.SetPos(_pos);
+
+	m_UIList.push_back(UI);
+
+
+	auto FUNC1 = [](void) { 
+
+		if (PLAYER_MGR->m_player->m_HP <= 0) PLAYER_MGR->m_player->m_HP = 0;
+
+		float ratio = (float)PLAYER_MGR->m_player->m_HP / PLAYER_MGR->m_player->m_HPmax;
+		UI_MGR->FindUI("HPgauge")->m_Transform.SetScale(ratio * 1.5f, 1.3333f);
+		};
+
+
+	AddEvent("HPgauge", ADDEVENT_Update, FUNC1);
+
+}
+
+void cUIMgr::AddMPgauge(D2D1_POINT_2F _pos)
+{
+	cUI *UI = new cUI;
+
+	UI->m_Type = UI_IMAGE;
+	UI->m_Name = "MPgauge";
+
+	UI->m_Renderer.AddBitmap_LeftBottom(IMG_MGR->GetImage(L"gauge.mp.layer0"));
+
+	UI->m_Transform.SetPos(_pos);
+
+	m_UIList.push_back(UI);
+
+
+	auto FUNC1 = [](void) {
+
+		float ratio = (float)PLAYER_MGR->m_player->m_MP / PLAYER_MGR->m_player->m_MPmax;
+		UI_MGR->FindUI("MPgauge")->m_Transform.SetScale(ratio * 1.5f, 1.3333f);
+	};
+
+
+	AddEvent("MPgauge", ADDEVENT_Update, FUNC1);
+}
+
+void cUIMgr::HPSetting(int _Number)
+{
+	for (auto &i : m_HP)
+	{
+		i = {};
+		delete i;
+		i = nullptr;
+	}
+
+	m_HP.clear();
+
+	if (_Number < 0) _Number = 0;
+
+	int Cipher = EFF_MGR->CipherCalc(_Number);
+
+	for (int i = 0; i < Cipher; i++)
+	{
+		D2D1_POINT_2F pos = { 165, 740 };
+
+		pos.x -= 8.0f * i;
+
+		Object2D *obj = new Object2D;
+
+		obj->m_Transform.SetPos(pos);
+
+		int Num = _Number % (int)pow(10, (i + 1)) / (int)pow(10, i);
+
+		wstring wstr = L"";
+
+		switch (Num)
+		{
+		case 0: wstr = L"status.0"; break;
+		case 1: wstr = L"status.1"; break;
+		case 2: wstr = L"status.2"; break;
+		case 3: wstr = L"status.3"; break;
+		case 4: wstr = L"status.4"; break;
+		case 5: wstr = L"status.5"; break;
+		case 6: wstr = L"status.6"; break;
+		case 7: wstr = L"status.7"; break;
+		case 8: wstr = L"status.8"; break;
+		case 9: wstr = L"status.9"; break;
+
+		default:
+			break;
+		}
+
+		obj->m_Renderer.AddBitmap(IMG_MGR->GetImage(wstr));
+
+		m_HP.push_back(obj);
+
+	}
+
+	//if (m_HPgage == nullptr)
+	//{
+	//	m_HPgage = new Object2D;
+	//
+	//	m_HPgage->m_Renderer.AddBitmap_LeftBottom(IMG_MGR->GetImage(L"gauge.hp.layer0"));
+	//
+	//	m_HPgage->m_Transform.SetPos(150, 745);
+	//}
+
+
+
+
+}
+
+void cUIMgr::HPMaxSetting(int _Number)
+{
+	for (auto &i : m_HPmax)
+	{
+		i = {};
+		delete i;
+		i = nullptr;
+	}
+
+	m_HPmax.clear();
+
+	int Cipher = EFF_MGR->CipherCalc(_Number);
+
+	for (int i = 0; i < Cipher; i++)
+	{
+		D2D1_POINT_2F pos = { 185, 740 };
+
+		pos.x += 8.0f * i;
+
+		Object2D *obj = new Object2D;
+
+		obj->m_Transform.SetPos(pos);
+
+		int Num = _Number % (int)pow(10, (Cipher -i)) / (int)pow(10, Cipher - i - 1);
+
+		wstring wstr = L"";
+
+		switch (Num)
+		{
+		case 0: wstr = L"status.0"; break;
+		case 1: wstr = L"status.1"; break;
+		case 2: wstr = L"status.2"; break;
+		case 3: wstr = L"status.3"; break;
+		case 4: wstr = L"status.4"; break;
+		case 5: wstr = L"status.5"; break;
+		case 6: wstr = L"status.6"; break;
+		case 7: wstr = L"status.7"; break;
+		case 8: wstr = L"status.8"; break;
+		case 9: wstr = L"status.9"; break;
+
+		default:
+			break;
+		}
+
+		obj->m_Renderer.AddBitmap(IMG_MGR->GetImage(wstr));
+
+		m_HPmax.push_back(obj);
+
+	}
+}
+
+void cUIMgr::MPSetting(int _Number)
+{
+	for (auto &i : m_MP)
+	{
+		i = {};
+		delete i;
+		i = nullptr;
+	}
+
+	m_MP.clear();
+
+	int Cipher = EFF_MGR->CipherCalc(_Number);
+
+	for (int i = 0; i < Cipher; i++)
+	{
+		D2D1_POINT_2F pos = { 165, 761 };
+
+		pos.x -= 8.0f * i;
+
+		Object2D *obj = new Object2D;
+
+		obj->m_Transform.SetPos(pos);
+
+		int Num = _Number % (int)pow(10, (i + 1)) / (int)pow(10, i);
+
+		wstring wstr = L"";
+
+		switch (Num)
+		{
+		case 0: wstr = L"status.0"; break;
+		case 1: wstr = L"status.1"; break;
+		case 2: wstr = L"status.2"; break;
+		case 3: wstr = L"status.3"; break;
+		case 4: wstr = L"status.4"; break;
+		case 5: wstr = L"status.5"; break;
+		case 6: wstr = L"status.6"; break;
+		case 7: wstr = L"status.7"; break;
+		case 8: wstr = L"status.8"; break;
+		case 9: wstr = L"status.9"; break;
+
+		default:
+			break;
+		}
+
+		obj->m_Renderer.AddBitmap(IMG_MGR->GetImage(wstr));
+
+		m_MP.push_back(obj);
+
+	}
+}
+
+void cUIMgr::MPMaxSetting(int _Number)
+{
+	for (auto &i : m_MPmax)
+	{
+		i = {};
+		delete i;
+		i = nullptr;
+	}
+
+	m_MPmax.clear();
+
+	int Cipher = EFF_MGR->CipherCalc(_Number);
+
+	for (int i = 0; i < Cipher; i++)
+	{
+		D2D1_POINT_2F pos = { 185, 761 };
+
+		pos.x += 8.0f * i;
+
+		Object2D *obj = new Object2D;
+
+		obj->m_Transform.SetPos(pos);
+
+		int Num = _Number % (int)pow(10, (Cipher - i)) / (int)pow(10, Cipher - i - 1);
+
+		wstring wstr = L"";
+
+		switch (Num)
+		{
+		case 0: wstr = L"status.0"; break;
+		case 1: wstr = L"status.1"; break;
+		case 2: wstr = L"status.2"; break;
+		case 3: wstr = L"status.3"; break;
+		case 4: wstr = L"status.4"; break;
+		case 5: wstr = L"status.5"; break;
+		case 6: wstr = L"status.6"; break;
+		case 7: wstr = L"status.7"; break;
+		case 8: wstr = L"status.8"; break;
+		case 9: wstr = L"status.9"; break;
+
+		default:
+			break;
+		}
+
+		obj->m_Renderer.AddBitmap(IMG_MGR->GetImage(wstr));
+
+		m_MPmax.push_back(obj);
+
+	}
+}
+
 void cUIMgr::Update(float _DelayTime)
 {
 	for (auto &i : m_UIList)
@@ -954,6 +1243,29 @@ void cUIMgr::Update(float _DelayTime)
 		}
 	}
 
+
+	for (auto &i : m_HP)
+	{
+		i->Update(_DelayTime);
+	}
+
+	for (auto &i : m_HPmax)
+	{
+		i->Update(_DelayTime);
+	}
+
+	for (auto &i : m_MP)
+	{
+		i->Update(_DelayTime);
+	}
+
+	for (auto &i : m_MPmax)
+	{
+		i->Update(_DelayTime);
+	}
+
+
+
 }
 
 void cUIMgr::Render()
@@ -977,5 +1289,26 @@ void cUIMgr::Render()
 
 		if (i->m_Type == UI_INPUTFIELD && m_isChating == true ) i->TextRender();
 	}
+
+	for (auto &i : m_HP)
+	{
+		i->Render();
+	}
+
+	for (auto &i : m_HPmax)
+	{
+		i->Render();
+	}
+
+	for (auto &i : m_MP)
+	{
+		i->Render();
+	}
+
+	for (auto &i : m_MPmax)
+	{
+		i->Render();
+	}
+
 }
 
