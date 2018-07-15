@@ -8,8 +8,6 @@ class IngameScene: public Scene
 {
 	POINT m_MousePos = { 0,0 };
 
-
-
 	bool m_isClicked = false;
 
 	//  IME ¿ë
@@ -25,7 +23,7 @@ public:
 
 	void Init(HWND hWnd);
 	void Update(float _DelayTime = 0.0f);
-	void Render();
+	void Render();	
 
 	void SendText();
 

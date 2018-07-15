@@ -131,8 +131,8 @@ void cErebMap::Init()
 	MAP_MGR->AddPortal(3, { 500, 493 }, portalImgList, MNAME_ARCANA, 3);
 
 
-	MOB_MGR->Init();
-	MOB_MGR->MobSetting(MOB_MUSHROOM, 1, { 450, 670 }, 470);
+	//MOB_MGR->Init();
+	MOB_MGR->MobSetting(MOB_MUSHROOM, 3, { 450, 670 }, 470);
 
 
 	

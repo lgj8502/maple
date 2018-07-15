@@ -1,6 +1,18 @@
 #include "stdafx.h"
 #include "cMob.h"
 
+
+void cMob::HPBarRender()
+{
+	if (m_isActiveHPBar == true)
+	{
+		for (int i = 0; i < 3; i++)
+		{
+			m_HPBar[i].Render();
+		}
+	}
+}
+
 void cMob::LeftWalk(float _DelayTime)
 {
 	if (m_Transform.GetPos().x < m_minX)
@@ -30,6 +42,8 @@ void cMob::RightWalk(float _DelayTime)
 void cMob::Die()
 {
 	MOB_MGR->DelMob(this);
+
+	m_isDead = true;
 }
 
 

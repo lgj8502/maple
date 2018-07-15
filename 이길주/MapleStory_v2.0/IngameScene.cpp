@@ -23,6 +23,13 @@ void IngameScene::Init(HWND hWnd)
 
 	MAP_MGR->m_CameraPos = {0, 300};
 
+	///// HP, MP, LV 등등...
+
+	UI_MGR->HPSetting(PLAYER_MGR->m_player->m_HP);
+	UI_MGR->HPMaxSetting(PLAYER_MGR->m_player->m_HPmax);
+	UI_MGR->MPSetting(PLAYER_MGR->m_player->m_MP);
+	UI_MGR->MPMaxSetting(PLAYER_MGR->m_player->m_MPmax);
+
 	///////////////////////////////////
 
 	UI_MGR->AddImage("800.back", L"800.back", { 600, 794 }, { 1.5f, 1.3333f });
@@ -44,31 +51,35 @@ void IngameScene::Init(HWND hWnd)
 
 	UI_MGR->AddImage("backgrnd", L"backgrnd", { 743 + ingameScenePosX, 750 }, { 1.5f, 1.3333f });
 	// 조정해야함 hp :: 간격 8
-	UI_MGR->AddImage("gauge.hp.layer0", L"gauge.hp.layer0", { 756 + ingameScenePosX, 739 }, { 1.5f, 1.3333f });
-	UI_MGR->AddImage("status.1.0", L"status.1", { 726 + ingameScenePosX, 740 }, { 1.5f, 1.0f });
-	UI_MGR->AddImage("status.0.0", L"status.0", { 734 + ingameScenePosX, 740 }, { 1.0f, 1.0f });
-	UI_MGR->AddImage("status.0.1", L"status.0", { 742 + ingameScenePosX, 740 }, { 1.0f, 1.0f });
+
+	UI_MGR->AddHPgauge({ 54, 747 });
+	UI_MGR->AddMPgauge({ 54, 767 });
+
+	//UI_MGR->AddImage("gauge.hp.layer0", L"gauge.hp.layer0", { 756 + ingameScenePosX, 739 }, { 1.5f, 1.3333f });
+	//UI_MGR->AddImage("status.1.0", L"status.1", { 726 + ingameScenePosX, 740 }, { 1.5f, 1.0f });
+	//UI_MGR->AddImage("status.0.0", L"status.0", { 734 + ingameScenePosX, 740 }, { 1.0f, 1.0f });
+	//UI_MGR->AddImage("status.0.1", L"status.0", { 742 + ingameScenePosX, 740 }, { 1.0f, 1.0f });
 	UI_MGR->AddImage("status.slash.0", L"status.slash", { 750 + ingameScenePosX, 740 }, { 1.0f, 1.0f });
-	UI_MGR->AddImage("status.1.1", L"status.1", { 758 + ingameScenePosX, 740 }, { 1.5f, 1.0f });
-	UI_MGR->AddImage("status.0.2", L"status.0", { 766 + ingameScenePosX, 740 }, { 1.0f, 1.0f });
-	UI_MGR->AddImage("status.0.3", L"status.0", { 774 + ingameScenePosX, 740 }, { 1.0f, 1.0f });
+	//UI_MGR->AddImage("status.1.1", L"status.1", { 758 + ingameScenePosX, 740 }, { 1.5f, 1.0f });
+	//UI_MGR->AddImage("status.0.2", L"status.0", { 766 + ingameScenePosX, 740 }, { 1.0f, 1.0f });
+	//UI_MGR->AddImage("status.0.3", L"status.0", { 774 + ingameScenePosX, 740 }, { 1.0f, 1.0f });
 
 	// 조정해야함 mp ::
-	UI_MGR->AddImage("gauge.mp.layer0", L"gauge.mp.layer0", { 756 + ingameScenePosX, 760 }, { 1.5f, 1.3333f });
-	UI_MGR->AddImage("status.1.2", L"status.1", { 726 + ingameScenePosX, 761 }, { 1.5f, 1.0f });
-	UI_MGR->AddImage("status.0.4", L"status.0", { 734 + ingameScenePosX, 761 }, { 1.0f, 1.0f });
-	UI_MGR->AddImage("status.0.5", L"status.0", { 742 + ingameScenePosX, 761 }, { 1.0f, 1.0f });
+	//UI_MGR->AddImage("gauge.mp.layer0", L"gauge.mp.layer0", { 756 + ingameScenePosX, 760 }, { 1.5f, 1.3333f });
+	//UI_MGR->AddImage("status.1.2", L"status.1", { 726 + ingameScenePosX, 761 }, { 1.5f, 1.0f });
+	//UI_MGR->AddImage("status.0.4", L"status.0", { 734 + ingameScenePosX, 761 }, { 1.0f, 1.0f });
+	//UI_MGR->AddImage("status.0.5", L"status.0", { 742 + ingameScenePosX, 761 }, { 1.0f, 1.0f });
 	UI_MGR->AddImage("status.slash.1", L"status.slash", { 750 + ingameScenePosX, 761 }, { 1.0f, 1.0f });
-	UI_MGR->AddImage("status.1.3", L"status.1", { 758 + ingameScenePosX, 761 }, { 1.5f, 1.0f });
-	UI_MGR->AddImage("status.0.6", L"status.0", { 766 + ingameScenePosX, 761 }, { 1.0f, 1.0f });
-	UI_MGR->AddImage("status.0.7", L"status.0", { 774 + ingameScenePosX, 761 }, { 1.0f, 1.0f });
+	//UI_MGR->AddImage("status.1.3", L"status.1", { 758 + ingameScenePosX, 761 }, { 1.5f, 1.0f });
+	//UI_MGR->AddImage("status.0.6", L"status.0", { 766 + ingameScenePosX, 761 }, { 1.0f, 1.0f });
+	//UI_MGR->AddImage("status.0.7", L"status.0", { 774 + ingameScenePosX, 761 }, { 1.0f, 1.0f });
 
 	UI_MGR->AddImage("status.layer.cover", L"status.layer.cover", { 743 + ingameScenePosX, 740 }, { 1.5f, 1.3333f }); // 600
 
 	UI_MGR->AddImage("status.layer.lv", L"status.layer.lv", { 648 + ingameScenePosX, 710 }, { 1.5f, 1.3333f }); // 
 																												// 케릭터 레벨에 따라 변화해야할 ui  // 525 부터 시작하여 15 간격
-	UI_MGR->AddImage("lvNumber.1", L"lvNumber.1", { 668 + ingameScenePosX, 710 }, { 1.5f, 1.3333f }); // 525
-	UI_MGR->AddImage("lvNumber.0", L"lvNumber.0", { 683 + ingameScenePosX, 710 }, { 1.5f, 1.3333f }); // 540
+	//UI_MGR->AddImage("lvNumber.1", L"lvNumber.1", { 668 + ingameScenePosX, 710 }, { 1.5f, 1.3333f }); // 525
+	//UI_MGR->AddImage("lvNumber.0", L"lvNumber.0", { 683 + ingameScenePosX, 710 }, { 1.5f, 1.3333f }); // 540
 																									  ///////////////////////////////////////////////////////////////////////////////////
 																									  //quickSlot
 
@@ -571,6 +582,8 @@ void IngameScene::Init(HWND hWnd)
 	auto menuFunc20 = [](void) { UI_MGR->FindUI("claim.normal")->m_Renderer.ChangeBitmap(0);  checkEvent = false; };
 	UI_MGR->AddEvent("claim.normal", ADDEVENT_OnMouseOver, menuFunc19);
 	UI_MGR->AddEvent("claim.normal", ADDEVENT_OnMouseExit, menuFunc20);
+
+
 	//부모 설정
 
 
@@ -591,11 +604,6 @@ void IngameScene::Init(HWND hWnd)
 
 	UI_MGR->SetParent("submenu.backgrnd.0.menu", "submenu.backgrnd.1.menu");
 	UI_MGR->SetParent("submenu.backgrnd.0.menu", "submenu.backgrnd.2.menu");
-
-
-
-
-
 
 }
 
@@ -862,6 +870,7 @@ void IngameScene::Render()
 	MAP_MGR->FrontRender();
 
 	UI_MGR->Render();
+
 }
 
 void IngameScene::SendText()

@@ -7,14 +7,29 @@ cMushroom::~cMushroom()
 
 void cMushroom::Init()
 {
-	m_stateTime = (float)(rand() % 3) + 4.0f;
+	m_HP = 150;
+	m_MaxHp = 150;
+	m_AttackPower = 250;
 
-	m_HP = 100;
+	m_HPBar[0].m_Renderer.AddBitmap_LeftBottom(IMG_MGR->GetImage(L"Mob_HP_0"));
+	m_HPBar[1].m_Renderer.AddBitmap_LeftBottom(IMG_MGR->GetImage(L"Mob_HP_2"));
+	m_HPBar[2].m_Renderer.AddBitmap_LeftBottom(IMG_MGR->GetImage(L"Mob_HP_1"));
+
+	m_HPBar[1].m_Transform.m_pParent = &(m_HPBar[0].m_Transform);
+	m_HPBar[2].m_Transform.m_pParent = &(m_HPBar[0].m_Transform);
+	//m_HPBar[0].m_Transform.m_pParent = &(m_Transform);
+
+	m_HPBar[0].m_Transform.m_isCamera = true;
+	m_HPBar[1].m_Transform.SetPos(3.0f, -4.0f);
+	m_HPBar[2].m_Transform.SetPos(3.0f, -4.0f);
+
 }
 
 void cMushroom::StateUpdate(float _DelayTime)
 {
 	if (MAP_MGR->m_isPlaying == false) return;
+
+	HPBarUpdate(_DelayTime);
 
 	switch (m_state)
 	{
@@ -152,7 +167,7 @@ void cMushroom::StateSetting()
 	}break;
 	case MOBSTATE_DIE:
 	{
-		m_stateTime = 1.5f;
+		m_stateTime = 1.4f;
 		m_Renderer.m_State = MOBSTATE_DIE;
 	}
 		break;
@@ -185,6 +200,20 @@ void cMushroom::Hit()
 {
 	m_HP -= PLAYER_MGR->m_player->m_AttackPower;
 
+	m_isActiveHPBar = true;
+	m_HitBar = true;
+
+	vector<wstring> str;
+
+	str.push_back(L"sword1.0");
+	str.push_back(L"sword1.1");
+	str.push_back(L"sword1.2");	
+
+	if (m_state == MOBSTATE_DIE) return;	
+
+	EFF_MGR->EffectMultiBtimap_const(str, m_Transform.GetPos(), 0.2f);
+	EFF_MGR->NumberEffect(NUMC_PINK, PLAYER_MGR->m_player->m_AttackPower, m_Transform.GetPos());
+
 	if (m_HP <= 0)
 	{
 		m_state = MOBSTATE_DIE;
@@ -206,5 +235,43 @@ void cMushroom::Hit()
 
 	StateChagne();
 
+}
+
+void cMushroom::HPBarUpdate(float _DelayTime)
+{
+	if (m_isActiveHPBar == false) return;
+		
+	m_HPBar[0].m_Transform.SetPos(m_Transform.GetPos().x - 40.0f, m_Transform.GetPos().y - 80.0f);
+
+	for (int i = 0; i < 3; i++)
+	{
+		m_HPBar[i].Update(_DelayTime);
+	}
+
+	if (m_HitBar == true)
+	{
+		
+
+		float ratio = (float)m_HP / (float)m_MaxHp;
+
+		if (ratio < 0) ratio = 0;
+
+		m_HPBar[2].m_Transform.SetScale(ratio, 1.0f);
+
+		m_RedBarTime -= _DelayTime;
+
+		if (m_RedBarTime < 0)
+		{
+			m_HPBar[1].m_Transform.SetScale(ratio, 1.0f);
+
+			m_HitBar = false;
+
+			m_RedBarTime = 0.5f;
+		}
+
+
+	}
+
+	
 }
 

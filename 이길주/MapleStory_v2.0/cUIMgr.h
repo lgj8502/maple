@@ -17,6 +17,7 @@ enum eUI_Type
 	UI_PANEL,
 	UI_SCROLLVIEW,
 	UI_SLIDER,
+	UI_GAGE,
 };
 
 enum eEvent_Type
@@ -47,6 +48,12 @@ class cUIMgr : public TemplateSingleton<cUIMgr>
 	cUI* m_ClickedUI = nullptr;
 
 	float m_time = 0.0f;
+
+	vector<Object2D*> m_HP;
+	vector<Object2D*> m_HPmax;
+	vector<Object2D*> m_MP;
+	vector<Object2D*> m_MPmax;
+
 
 private:
 
@@ -120,6 +127,14 @@ public:
 
 	void AddAnimation(string _name, D2D1_POINT_2F _pos, float _time, vector<wstring> _bitmapList);
 	void AddAnimation(string _name, D2D1_RECT_F _rect, float _time, vector<wstring> _bitmapList);
+
+	void AddHPgauge(D2D1_POINT_2F _pos);
+	void AddMPgauge(D2D1_POINT_2F _pos);
+
+	void HPSetting(int _Number);
+	void HPMaxSetting(int _Number);
+	void MPSetting(int _Number);
+	void MPMaxSetting(int _Number);
 
 	void Update(float _DelayTime = 0);
 	void Render();

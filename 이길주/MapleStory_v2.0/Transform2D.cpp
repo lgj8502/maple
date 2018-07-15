@@ -65,7 +65,7 @@ void Transform2D::VelocityTransX(float _time)
 
 void Transform2D::VelocityTransY(float _time)
 {
-	Translate(0, m_velocityY = _time);
+	Translate(0, m_velocityY * _time);
 }
 
 void Transform2D::VelocityTrans_Map(float _time)

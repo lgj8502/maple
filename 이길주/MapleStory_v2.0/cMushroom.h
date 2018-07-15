@@ -13,5 +13,7 @@ public:
 
 	void Hit();
 
+	void HPBarUpdate(float _DelayTime);
+	
 };
 
