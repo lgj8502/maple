@@ -53,6 +53,7 @@ class cUIMgr : public TemplateSingleton<cUIMgr>
 	vector<Object2D*> m_HPmax;
 	vector<Object2D*> m_MP;
 	vector<Object2D*> m_MPmax;
+	vector<Object2D*> m_Level;
 
 
 private:
@@ -131,10 +132,13 @@ public:
 	void AddHPgauge(D2D1_POINT_2F _pos);
 	void AddMPgauge(D2D1_POINT_2F _pos);
 
+
 	void HPSetting(int _Number);
 	void HPMaxSetting(int _Number);
 	void MPSetting(int _Number);
 	void MPMaxSetting(int _Number);
+	void LevelSetting(int _Lv);
+
 
 	void Update(float _DelayTime = 0);
 	void Render();

@@ -15,6 +15,8 @@ PlayerTest::~PlayerTest()
 
 void PlayerTest::Init()
 {
+
+	m_Level = 1;
 	m_HP = 200;
 	m_HPmax = 200;
 	m_MP = 200;
@@ -771,17 +773,7 @@ void PlayerTest::Update(float _DelayTime)
 				m_isHitted = true;
 				m_isProtected = true;
 
-				m_HP -= (*Iter)->m_AttackPower;
-				UI_MGR->HPSetting(PLAYER_MGR->m_player->m_HP);
-
-				EFF_MGR->NumberEffect(NUMC_RED, (*Iter)->m_AttackPower, GetPos());
-
-				if (m_HP <= 0)
-				{	
-					m_isDead = true;
-
-					//return;					
-				}
+				Hitted((*Iter)->m_AttackPower);
 
 				if ((*Iter)->m_Transform.GetPos().x < GetPos().x)
 				{
@@ -1453,6 +1445,22 @@ void PlayerTest::Attack()
 void PlayerTest::NotAttack()
 {
 	m_isAttack = false;
+}
+
+void PlayerTest::Hitted(int _Damage)
+{
+	m_HP -= _Damage;
+	UI_MGR->HPSetting(PLAYER_MGR->m_player->m_HP);
+
+	EFF_MGR->NumberEffect(NUMC_RED, _Damage, GetPos());
+
+	if (m_HP <= 0)
+	{
+		m_isDead = true;
+
+		//return;					
+	}
+
 }
 
 void PlayerTest::StopWalk()

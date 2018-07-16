@@ -989,6 +989,8 @@ void cUIMgr::AddMPgauge(D2D1_POINT_2F _pos)
 	AddEvent("MPgauge", ADDEVENT_Update, FUNC1);
 }
 
+
+
 void cUIMgr::HPSetting(int _Number)
 {
 	for (auto &i : m_HP)
@@ -1208,6 +1210,57 @@ void cUIMgr::MPMaxSetting(int _Number)
 	}
 }
 
+void cUIMgr::LevelSetting(int _Lv)
+{
+	for (auto &i : m_Level)
+	{
+		i = {};
+		delete i;
+		i = nullptr;
+	}
+
+	m_Level.clear();
+
+	int Cipher = EFF_MGR->CipherCalc(_Lv);
+
+	for (int i = 0; i < Cipher; i++)
+	{
+		D2D1_POINT_2F pos = { 95, 710 };
+
+		pos.x += 8.0f * i;
+
+		Object2D *obj = new Object2D;
+
+		obj->m_Transform.SetPos(pos);
+
+		int Num = _Lv % (int)pow(10, (Cipher - i)) / (int)pow(10, Cipher - i - 1);
+
+		wstring wstr = L"";
+
+		switch (Num)
+		{
+		case 0: wstr = L"lvNumber.0"; break;
+		case 1: wstr = L"lvNumber.1"; break;
+		case 2: wstr = L"lvNumber.2"; break;
+		case 3: wstr = L"lvNumber.3"; break;
+		case 4: wstr = L"lvNumber.4"; break;
+		case 5: wstr = L"lvNumber.5"; break;
+		case 6: wstr = L"lvNumber.6"; break;
+		case 7: wstr = L"lvNumber.7"; break;
+		case 8: wstr = L"lvNumber.8"; break;
+		case 9: wstr = L"lvNumber.9"; break;
+
+		default:
+			break;
+		}
+
+		obj->m_Renderer.AddBitmap(IMG_MGR->GetImage(wstr));
+
+		m_Level.push_back(obj);
+
+	}
+}
+
 void cUIMgr::Update(float _DelayTime)
 {
 	for (auto &i : m_UIList)
@@ -1264,7 +1317,10 @@ void cUIMgr::Update(float _DelayTime)
 		i->Update(_DelayTime);
 	}
 
-
+	for (auto &i : m_Level)
+	{
+		i->Update(_DelayTime);
+	}
 
 }
 
@@ -1306,6 +1362,11 @@ void cUIMgr::Render()
 	}
 
 	for (auto &i : m_MPmax)
+	{
+		i->Render();
+	}
+
+	for (auto &i : m_Level)
 	{
 		i->Render();
 	}

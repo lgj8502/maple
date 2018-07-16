@@ -29,7 +29,7 @@ void IngameScene::Init(HWND hWnd)
 	UI_MGR->HPMaxSetting(PLAYER_MGR->m_player->m_HPmax);
 	UI_MGR->MPSetting(PLAYER_MGR->m_player->m_MP);
 	UI_MGR->MPMaxSetting(PLAYER_MGR->m_player->m_MPmax);
-
+	UI_MGR->LevelSetting(PLAYER_MGR->m_player->m_Level);
 	///////////////////////////////////
 
 	UI_MGR->AddImage("800.back", L"800.back", { 600, 794 }, { 1.5f, 1.3333f });

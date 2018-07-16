@@ -133,6 +133,8 @@ public:
 
 	///////////////////// Ω∫≈» //////////////////////////////////////////////////////
 
+	int		m_Level = 0;
+
 	int		m_HP = 0;
 	int		m_MP = 0;
 	int		m_HPmax = 0;
@@ -186,6 +188,8 @@ public:
 
 	void Attack();
 	void NotAttack();
+
+	void Hitted(int _Damage);
 
 	void StopWalk();
 
