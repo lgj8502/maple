@@ -62,9 +62,10 @@ void LoginScene::Init(HWND hWnd)
 
 	auto Func2 = [](void) { UI_MGR->FindUI("createId_default")->m_Renderer.ChangeBitmap(1); checkEvent = true; };
 	auto Func3 = [](void) { UI_MGR->FindUI("createId_default")->m_Renderer.ChangeBitmap(0);  checkEvent = false; };
+	auto ID_Create_Button = [](void) { UI_MGR->FindUI("IdCreate")->m_isActive = true; UI_MGR->DrawFirst(UI_MGR->FindUI("IdCreate")); };
 	UI_MGR->AddEvent("createId_default", ADDEVENT_OnMouseOver, Func2);
 	UI_MGR->AddEvent("createId_default", ADDEVENT_OnMouseExit, Func3);
-
+	UI_MGR->AddEvent("createId_default", ADDEVENT_OnMouseClick, ID_Create_Button);
 
 
 	//void Func22 = [](Object2D oo) ->void{ oo.m_Renderer.ChangeBitmap(2); }(obj);
@@ -81,8 +82,11 @@ void LoginScene::Init(HWND hWnd)
 	UI_MGR->BitMapAdd("HomePage_default", L"loginScene_01_HomePage_Over");
 	auto Func4 = [](void) { UI_MGR->FindUI("HomePage_default")->m_Renderer.ChangeBitmap(1); checkEvent = true; };
 	auto Func5 = [](void) { UI_MGR->FindUI("HomePage_default")->m_Renderer.ChangeBitmap(0); checkEvent = false; };
+
+	auto HomPageOpen = [](void) { system("explorer http://maplestory.nexon.com/MapleStory/Event/2018/TheBlack/OpeningActIntro.aspx"); };
 	UI_MGR->AddEvent("HomePage_default", ADDEVENT_OnMouseOver, Func4);
 	UI_MGR->AddEvent("HomePage_default", ADDEVENT_OnMouseExit, Func5);
+	UI_MGR->AddEvent("HomePage_default", ADDEVENT_OnMouseClick, HomPageOpen);
 
 	//loginScene_03_Finish_default
 	UI_MGR->AddButton("Finish_default", L"loginScene_03_Finish_default", { 699,499 }, { 1.50188f, 1.34003f });
@@ -167,9 +171,110 @@ void LoginScene::Init(HWND hWnd)
 	UI_MGR->AddButton("nexonEmail", L"loginScene_nexonEmail", { 553,393 }, { 1.50188f, 1.34003f });
 	UI_MGR->AddButton("password", L"loginScene_password", { 553,427 }, { 1.50188f, 1.34003f });
 	////////////////추가예정
+
+	//UI_MGR->FindUI("loginScene_textBar1")->m_SonUI[0]->m_Text = "";
+	
+	
+	auto InputFieldID = [](void) { 
+		if (UI_MGR->m_InputField == UI_MGR->FindUI("loginScene_textBar1") || UI_MGR->FindUI("loginScene_textBar1")->m_SonUI[0]->m_Text != "")
+		{
+			UI_MGR->FindUI("loginScene_textBar1")->m_Renderer.SetAlpha(1.0f);
+		}
+		else
+		{
+			UI_MGR->FindUI("loginScene_textBar1")->m_Renderer.SetAlpha(0.0f);
+		}
+	};
+
+	auto InputFieldPW = [](void) {
+		if (UI_MGR->m_InputField == UI_MGR->FindUI("loginScene_textBar2") || UI_MGR->FindUI("loginScene_textBar2")->m_SonUI[0]->m_Text != "")
+		{
+			UI_MGR->FindUI("loginScene_textBar2")->m_Renderer.SetAlpha(1.0f);
+		}
+		else
+		{
+			UI_MGR->FindUI("loginScene_textBar2")->m_Renderer.SetAlpha(0.0f);
+		}
+	};
+	
+
 	UI_MGR->AddInputField("loginScene_textBar1", L"loginScene_textBar_", { 553,393 }, { 1.50188f, 1.34003f }, ((D2D1::ColorF)(ColorF::Black)), L"고딕", 1.0f, 15.0f);
 	UI_MGR->AddInputField("loginScene_textBar2", L"loginScene_textBar_", { 553,427 }, { 1.50188f, 1.34003f }, ((D2D1::ColorF)(ColorF::Black)), L"고딕", 1.0f, 15.0f);
 
+	UI_MGR->AddEvent("loginScene_textBar1", ADDEVENT_Update, InputFieldID);
+	UI_MGR->AddEvent("loginScene_textBar2", ADDEVENT_Update, InputFieldPW);	
+
+	////// 아이디 생성창
+
+	UI_MGR->AddButton("IdCreate", L"IDcreate", { 592, 400 }, { 1.5f, 1.5f }, 1.0f, false, true);
+
+	// 확인 버튼
+	UI_MGR->AddButton("IDCreate_OK", L"ChannelScene_returnPage_ok_Default", { -30, 90 }, { 1.0f, 1.0 });
+	UI_MGR->BitMapAdd("IDCreate_OK", L"ChannelScene_returnPage_ok_Over");
+	UI_MGR->SetParent("IdCreate", "IDCreate_OK");
+	auto IDC_OK_OVER = [](void) { UI_MGR->FindUI("IDCreate_OK")->m_Renderer.ChangeBitmap(1); checkEvent = true; };
+	auto IDC_OK_EXIT = [](void) { UI_MGR->FindUI("IDCreate_OK")->m_Renderer.ChangeBitmap(0); checkEvent = false; };
+	UI_MGR->AddEvent("IDCreate_OK", ADDEVENT_OnMouseOver, IDC_OK_OVER);
+	UI_MGR->AddEvent("IDCreate_OK", ADDEVENT_OnMouseExit, IDC_OK_EXIT);
+	auto IDC_OK_CLICK = [](void) { UI_MGR->FindUI("IdCreate")->m_isActive = false; };
+	UI_MGR->AddEvent("IDCreate_OK", ADDEVENT_OnMouseClick, IDC_OK_CLICK);
+
+
+	// 취소 버튼
+	UI_MGR->AddButton("IDCreate_Cancel", L"ChannelScene_returnPage_no_Default", { 30, 90 }, { 1.0f, 1.0f });
+	UI_MGR->BitMapAdd("IDCreate_Cancel", L"ChannelScene_returnPage_no_Over");
+	UI_MGR->SetParent("IdCreate", "IDCreate_Cancel");
+	auto IDC_CANCEL_OVER = [](void) { UI_MGR->FindUI("IDCreate_Cancel")->m_Renderer.ChangeBitmap(1); checkEvent = true; };
+	auto IDC_CANCEL_EXIT = [](void) { UI_MGR->FindUI("IDCreate_Cancel")->m_Renderer.ChangeBitmap(0); checkEvent = false; };
+	UI_MGR->AddEvent("IDCreate_Cancel", ADDEVENT_OnMouseOver, IDC_CANCEL_OVER);
+	UI_MGR->AddEvent("IDCreate_Cancel", ADDEVENT_OnMouseExit, IDC_CANCEL_EXIT);
+	auto IDC_CANCEL_CLICK = [](void) { UI_MGR->FindUI("IdCreate")->m_isActive = false; };
+	UI_MGR->AddEvent("IDCreate_Cancel", ADDEVENT_OnMouseClick, IDC_CANCEL_CLICK);
+
+	UI_MGR->AddInputField("ID_Create_Input", L"ID_Create_IF", { 22, -53 }, { 1.0f, 1.0f }, ((D2D1::ColorF)(ColorF::Black)), L"고딕", 1.0f, 15.0f);
+	UI_MGR->SetParent("IdCreate", "ID_Create_Input");
+	UI_MGR->FindUI("ID_Create_Input_S")->m_Transform.SetPos( -12, -214);
+	auto IDC_ID_INPUT = [](void) {
+		if (UI_MGR->m_InputField == UI_MGR->FindUI("ID_Create_Input") || UI_MGR->FindUI("ID_Create_Input")->m_SonUI[0]->m_Text != "")
+		{
+			UI_MGR->FindUI("ID_Create_Input")->m_Renderer.SetAlpha(1.0f);
+		}
+		else
+		{
+			UI_MGR->FindUI("ID_Create_Input")->m_Renderer.SetAlpha(0.0f);
+		}
+	};
+	UI_MGR->AddEvent("ID_Create_Input", ADDEVENT_Update, IDC_ID_INPUT);
+
+	UI_MGR->AddInputField("ID_Create_PW", L"ID_Create_IF", { 22, -17 }, { 1.0f, 1.0f }, ((D2D1::ColorF)(ColorF::Black)), L"고딕", 1.0f, 15.0f);
+	UI_MGR->SetParent("IdCreate", "ID_Create_PW");
+	UI_MGR->FindUI("ID_Create_PW_S")->m_Transform.SetPos(-12, -162);
+	auto IDC_PW_INPUT = [](void) {
+		if (UI_MGR->m_InputField == UI_MGR->FindUI("ID_Create_PW") || UI_MGR->FindUI("ID_Create_PW")->m_SonUI[0]->m_Text != "")
+		{
+			UI_MGR->FindUI("ID_Create_PW")->m_Renderer.SetAlpha(1.0f);
+		}
+		else
+		{
+			UI_MGR->FindUI("ID_Create_PW")->m_Renderer.SetAlpha(0.0f);
+		}
+	};
+	UI_MGR->AddEvent("ID_Create_PW", ADDEVENT_Update, IDC_PW_INPUT);
+
+	UI_MGR->AddInputField("ID_Create_PW2", L"ID_Create_IF", { 22, 19 }, { 1.0f, 1.0f }, ((D2D1::ColorF)(ColorF::Black)), L"고딕", 1.0f, 15.0f);
+	UI_MGR->SetParent("IdCreate", "ID_Create_PW2");
+	UI_MGR->FindUI("ID_Create_PW2_S")->m_Transform.SetPos(-12, -110);
+	auto IDC_PW2_INPUT = [](void) {
+		if (UI_MGR->m_InputField == UI_MGR->FindUI("ID_Create_PW2") || UI_MGR->FindUI("ID_Create_PW2")->m_SonUI[0]->m_Text != "")
+		{
+			UI_MGR->FindUI("ID_Create_PW2")->m_Renderer.SetAlpha(1.0f);
+		}
+		else
+		{
+			UI_MGR->FindUI("ID_Create_PW2")->m_Renderer.SetAlpha(0.0f);
+		}
+	};
+	UI_MGR->AddEvent("ID_Create_PW2", ADDEVENT_Update, IDC_PW2_INPUT);
 
 	//============================================================================================
 	//게임 종료 창
@@ -395,11 +500,27 @@ LRESULT LoginScene::MyWndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lP
 				UI_MGR->m_InputField->m_FontColor.a = 0.0f;
 				UI_MGR->m_InputField = UI_MGR->FindUI("loginScene_textBar2");				
 			}
-			else
+			else if (UI_MGR->m_InputField == UI_MGR->FindUI("loginScene_textBar2"))
 			{
 				UI_MGR->m_InputField->m_FontColor.a = 0.0f;
 				UI_MGR->m_InputField = UI_MGR->FindUI("loginScene_textBar1");
 			}
+			else if (UI_MGR->m_InputField == UI_MGR->FindUI("ID_Create_Input"))
+			{
+				UI_MGR->m_InputField->m_FontColor.a = 0.0f;
+				UI_MGR->m_InputField = UI_MGR->FindUI("ID_Create_PW");
+			}
+			else if (UI_MGR->m_InputField == UI_MGR->FindUI("ID_Create_PW"))
+			{
+				UI_MGR->m_InputField->m_FontColor.a = 0.0f;
+				UI_MGR->m_InputField = UI_MGR->FindUI("ID_Create_PW2");
+			}
+			else if (UI_MGR->m_InputField == UI_MGR->FindUI("ID_Create_PW2"))
+			{
+				UI_MGR->m_InputField->m_FontColor.a = 0.0f;
+				UI_MGR->m_InputField = UI_MGR->FindUI("ID_Create_Input");
+			}
+
 
 			UI_MGR->m_InputField->OnMouseDown();
 			
@@ -413,7 +534,10 @@ LRESULT LoginScene::MyWndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lP
 				break;
 			}
 
-			if (UI_MGR->m_InputField == UI_MGR->FindUI("loginScene_textBar2"))
+			if (UI_MGR->m_InputField == UI_MGR->FindUI("loginScene_textBar2") || 
+				UI_MGR->m_InputField == UI_MGR->FindUI("ID_Create_PW") ||
+				UI_MGR->m_InputField == UI_MGR->FindUI("ID_Create_PW2")
+				)
 			{
 				m_szBuf += '*';
 
