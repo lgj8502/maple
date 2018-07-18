@@ -789,7 +789,7 @@ void cUIMgr::AddScrollBar(string _name, wstring _barBitmap, wstring _handleBitma
 
 }
 
-void cUIMgr::AddInputField(string _name, wstring _bitmapName, D2D1_POINT_2F _pos, D2D1_POINT_2F _scale, D2D1_COLOR_F _FontColor, wstring _FontName, 
+void cUIMgr::AddInputField(string _name, wstring _bitmapName, D2D1_POINT_2F _pos, D2D1_POINT_2F _scale, D2D1_COLOR_F _FontColor, wstring _FontName,
 	                       float _alpha, float _FontSize, bool _isActive, bool _isRayCast)
 {
 	if (FindUI(_name) != nullptr)

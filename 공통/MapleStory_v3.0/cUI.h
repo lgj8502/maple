@@ -57,6 +57,10 @@ public:
 	vector<FUNC> m_ToggleOff;
 	vector<FUNC> m_Update;
 
+	// PassWord ¿ë
+
+	bool m_isPassword = false;
+
 public:
 	cUI();
 	~cUI();

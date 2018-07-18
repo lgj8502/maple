@@ -34,10 +34,24 @@ void cUI::TextRender()
 
 		pos.x = m_Renderer.GetImgRT().left + (10 / m_Transform.GetScale().x) + (m_SonUI[0]->m_Font.m_Metrics.width);
 		pos.y = 0;
-
 	}
 
-	m_Font.TextLayOut(m_pRT, IMG_MGR->GetBrush(), m_FontSize, pos, m_Text.c_str());		
+	if (m_parentUI != nullptr && m_parentUI->m_isPassword == true)
+	{
+		string str = m_Text;
+
+		for (int i = 0; i < str.size(); i++)
+		{
+			str[i] = '*';
+		}
+		m_Font.TextLayOut(m_pRT, IMG_MGR->GetBrush(), m_FontSize, pos, str.c_str());
+	}
+	else
+	{
+		m_Font.TextLayOut(m_pRT, IMG_MGR->GetBrush(), m_FontSize, pos, m_Text.c_str());
+	}
+
+	
 
 	IMG_MGR->GetBrush()->SetColor(oldColor);
 }

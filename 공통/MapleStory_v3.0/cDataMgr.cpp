@@ -39,7 +39,7 @@ void cDataMgr::Init()
 
 }
 
-void cDataMgr::Save_UserInfo(sUserInfo _Info)
+bool cDataMgr::Save_UserInfo(sUserInfo _Info)
 {
 	m_pDataFile = _fsopen(DataTypeList[DTT_USERINFO].c_str(), "a", SH_DENYNO);
 
@@ -48,28 +48,106 @@ void cDataMgr::Save_UserInfo(sUserInfo _Info)
 	strcpy_s(a, _Info.m_ID.c_str());
 	strcpy_s(b, _Info.m_PassWard.c_str());
 
-	if (m_pDataFile != NULL)
+	if (m_pDataFile == NULL)
 	{
-		fprintf_s(m_pDataFile, "%s, %s\n", a, b);
-
-		fclose(m_pDataFile);
-		m_pDataFile = NULL;
+		MK_LOG("데이타 파일 불러오기 실패");
+		return false;
 	}
+
+	fprintf_s(m_pDataFile, "ID %s\n", a);
+	fprintf_s(m_pDataFile, "PW %s\n", b);
+
+	fclose(m_pDataFile);
+	m_pDataFile = NULL;
+
+	return true;
+
 }
 
-void cDataMgr::Load_UserInfo(sUserInfo & _Info)
+bool cDataMgr::Check_ID(string _ID)
 {
 	m_pDataFile = _fsopen(DataTypeList[DTT_USERINFO].c_str(), "r", SH_DENYNO);
 
-	if (m_pDataFile != NULL)
+	if (m_pDataFile == NULL)
 	{
-		char buf[256] = "";
-		
-		fread_s(buf , 6, 3, 2, m_pDataFile);
-
-		
-
-		fclose(m_pDataFile);
-		m_pDataFile = NULL;
+		MK_LOG("데이타 파일 불러오기 실패");
+		return false;
 	}
+
+	char buf[256];
+
+	string ID;
+
+
+	while (feof(m_pDataFile) == false)
+	{
+		fgets(buf, sizeof(buf), m_pDataFile);
+
+		if (buf[0] == 'I'&& buf[1] == 'D')
+		{
+			char* Data;
+			strtok_s(buf, " ", &Data);
+
+			ID = Data;
+
+			if (ID == _ID + "\n") return true;
+		}
+
+
+	}
+
+	return false;
+}
+
+bool cDataMgr::Check_UserInfo(sUserInfo _Info)
+{
+	m_pDataFile = _fsopen(DataTypeList[DTT_USERINFO].c_str(), "r", SH_DENYNO);
+
+	if (m_pDataFile == NULL)
+	{
+		MK_LOG("데이타 파일 불러오기 실패");
+		return false;
+	}
+
+	char buf[256];
+
+	string ID;
+	string PW;
+
+	while (feof(m_pDataFile) == false)
+	{
+		fgets(buf, sizeof(buf), m_pDataFile);
+
+
+		if (buf[0] == 'I'&& buf[1] == 'D')
+		{
+			char* Data;
+			strtok_s(buf," ", &Data);
+
+			ID = Data;
+
+			if (ID == _Info.m_ID + "\n")
+			{
+				fgets(buf, sizeof(buf), m_pDataFile);
+
+				if (buf[0] == 'P'&& buf[1] == 'W')
+				{
+					char* Data;
+					strtok_s(buf, " ", &Data);
+
+					PW = Data;
+
+					if (PW == _Info.m_PassWard + "\n") return true;
+
+					return false;
+
+				}
+			}
+		}
+
+
+	}	
+
+	return false;
+
 }

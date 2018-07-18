@@ -160,8 +160,23 @@ void LoginScene::Init(HWND hWnd)
 	UI_MGR->BitMapAdd("login_default", L"loginScene_08_login_Over");
 	auto Func16 = [](void) { UI_MGR->FindUI("login_default")->m_Renderer.ChangeBitmap(1); checkEvent = true; };
 	auto Func17 = [](void) { UI_MGR->FindUI("login_default")->m_Renderer.ChangeBitmap(0); checkEvent = false; };
+
+
+
+
 	auto Func18 = [](void) { 		//SOUND_MGRSoundStop(L"Sound_Login");
-	SCENE_MGR->ChangeScene(SCENE_CHANNEL); checkEvent = false;
+		sUserInfo User;
+
+		User.m_ID = UI_MGR->FindUI("loginScene_textBar1")->m_SonUI[0]->m_Text;
+		User.m_PassWard = UI_MGR->FindUI("loginScene_textBar2")->m_SonUI[0]->m_Text;
+
+		bool result = DATA_MGR->Check_UserInfo(User);
+
+		if (result == true)
+		{
+			SCENE_MGR->ChangeScene(SCENE_CHANNEL);
+			checkEvent = false;
+		}
 	};
 	UI_MGR->AddEvent("login_default", ADDEVENT_OnMouseOver, Func16);
 	UI_MGR->AddEvent("login_default", ADDEVENT_OnMouseExit, Func17);
@@ -203,6 +218,7 @@ void LoginScene::Init(HWND hWnd)
 
 	UI_MGR->AddEvent("loginScene_textBar1", ADDEVENT_Update, InputFieldID);
 	UI_MGR->AddEvent("loginScene_textBar2", ADDEVENT_Update, InputFieldPW);	
+	UI_MGR->FindUI("loginScene_textBar2")->m_isPassword = true;
 
 	////// 아이디 생성창
 
@@ -216,7 +232,28 @@ void LoginScene::Init(HWND hWnd)
 	auto IDC_OK_EXIT = [](void) { UI_MGR->FindUI("IDCreate_OK")->m_Renderer.ChangeBitmap(0); checkEvent = false; };
 	UI_MGR->AddEvent("IDCreate_OK", ADDEVENT_OnMouseOver, IDC_OK_OVER);
 	UI_MGR->AddEvent("IDCreate_OK", ADDEVENT_OnMouseExit, IDC_OK_EXIT);
-	auto IDC_OK_CLICK = [](void) { UI_MGR->FindUI("IdCreate")->m_isActive = false; };
+
+
+	auto IDC_OK_CLICK = [](void) { 
+		sUserInfo User;
+		User.m_ID = UI_MGR->FindUI("ID_Create_Input")->m_SonUI[0]->m_Text;
+		User.m_PassWard = UI_MGR->FindUI("ID_Create_PW")->m_SonUI[0]->m_Text;
+
+		if (DATA_MGR->Check_ID(User.m_ID) == false)
+		{
+			bool result = DATA_MGR->Save_UserInfo(User);
+
+			if (result == true)
+			{
+				UI_MGR->FindUI("IdCreate")->m_isActive = false;
+			}
+		}
+
+
+
+
+	};
+
 	UI_MGR->AddEvent("IDCreate_OK", ADDEVENT_OnMouseClick, IDC_OK_CLICK);
 
 
@@ -247,6 +284,7 @@ void LoginScene::Init(HWND hWnd)
 	UI_MGR->AddEvent("ID_Create_Input", ADDEVENT_Update, IDC_ID_INPUT);
 
 	UI_MGR->AddInputField("ID_Create_PW", L"ID_Create_IF", { 22, -17 }, { 1.0f, 1.0f }, ((D2D1::ColorF)(ColorF::Black)), L"고딕", 1.0f, 15.0f);
+	UI_MGR->FindUI("ID_Create_PW")->m_isPassword = true;
 	UI_MGR->SetParent("IdCreate", "ID_Create_PW");
 	UI_MGR->FindUI("ID_Create_PW_S")->m_Transform.SetPos(-12, -162);
 	auto IDC_PW_INPUT = [](void) {
@@ -262,6 +300,7 @@ void LoginScene::Init(HWND hWnd)
 	UI_MGR->AddEvent("ID_Create_PW", ADDEVENT_Update, IDC_PW_INPUT);
 
 	UI_MGR->AddInputField("ID_Create_PW2", L"ID_Create_IF", { 22, 19 }, { 1.0f, 1.0f }, ((D2D1::ColorF)(ColorF::Black)), L"고딕", 1.0f, 15.0f);
+	UI_MGR->FindUI("ID_Create_PW2")->m_isPassword = true;
 	UI_MGR->SetParent("IdCreate", "ID_Create_PW2");
 	UI_MGR->FindUI("ID_Create_PW2_S")->m_Transform.SetPos(-12, -110);
 	auto IDC_PW2_INPUT = [](void) {
@@ -339,19 +378,14 @@ void LoginScene::Update(float _DelayTime)
 
 	if (OnceKeyDown(VK_F1))
 	{
-		sUserInfo a;
-		a.m_ID = "이길주";
-		a.m_PassWard = "1234";
+		sUserInfo A;
 
-		DATA_MGR->Save_UserInfo(a);
+		A.m_ID = "AAA";
+		A.m_PassWard = "1234";
+
+		DATA_MGR->Save_UserInfo(A);
 	}
 
-	if (OnceKeyDown(VK_F2))
-	{
-		sUserInfo b;
-
-		DATA_MGR->Load_UserInfo(b);
-	}
 }
 
 void LoginScene::Render()
@@ -550,18 +584,20 @@ LRESULT LoginScene::MyWndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lP
 				break;
 			}
 
-			if (UI_MGR->m_InputField == UI_MGR->FindUI("loginScene_textBar2") || 
-				UI_MGR->m_InputField == UI_MGR->FindUI("ID_Create_PW") ||
-				UI_MGR->m_InputField == UI_MGR->FindUI("ID_Create_PW2")
-				)
-			{
-				m_szBuf += '*';
+			m_szBuf += (char)wParam;
 
-			}
-			else
-			{
-				m_szBuf += (char)wParam;
-			}
+			//if (UI_MGR->m_InputField == UI_MGR->FindUI("loginScene_textBar2") || 
+			//	UI_MGR->m_InputField == UI_MGR->FindUI("ID_Create_PW") ||
+			//	UI_MGR->m_InputField == UI_MGR->FindUI("ID_Create_PW2")
+			//	)
+			//{
+			//	m_szBuf += '*';
+			//
+			//}
+			//else
+			//{
+			//	m_szBuf += (char)wParam;
+			//}
 		}
 
 		SendText();
@@ -590,13 +626,13 @@ LRESULT LoginScene::MyWndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lP
 	{
 		if (UI_MGR->m_isChating == false) break;
 
-		if (UI_MGR->m_InputField == UI_MGR->FindUI("loginScene_textBar2"))
-		{
-			m_szMixingString[0] = '*';
-			m_szMixingString[1] = NULL;
-			
-			break;
-		}
+		//if (UI_MGR->m_InputField == UI_MGR->FindUI("loginScene_textBar2"))
+		//{
+		//	m_szMixingString[0] = '*';
+		//	m_szMixingString[1] = NULL;
+		//	
+		//	break;
+		//}
 
 		if (m_szBuf.size() >= m_maxText)
 		{

@@ -34,9 +34,9 @@ public:
 
 	void Init();
 
-	void Save_UserInfo(sUserInfo _Info);
-
-	void Load_UserInfo(sUserInfo &_Info);
+	bool Save_UserInfo(sUserInfo _Info);
+	bool Check_ID(string _ID);
+	bool Check_UserInfo(sUserInfo _Info);
 
 
 
