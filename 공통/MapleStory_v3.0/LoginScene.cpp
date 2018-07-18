@@ -329,12 +329,28 @@ void LoginScene::Update(float _DelayTime)
 	//m_player.Update(_DelayTime);
 	obj.Update(_DelayTime);
 
-	if (GetAsyncKeyState(VK_RETURN) & 0x8000)
+	if (OnceKeyDown(VK_RETURN))
 	{
 		if (UI_MGR->m_isChating == false)
 		{
 			UI_MGR->m_isChating = true;
 		}
+	}
+
+	if (OnceKeyDown(VK_F1))
+	{
+		sUserInfo a;
+		a.m_ID = "ÀÌ±æÁÖ";
+		a.m_PassWard = "1234";
+
+		DATA_MGR->Save_UserInfo(a);
+	}
+
+	if (OnceKeyDown(VK_F2))
+	{
+		sUserInfo b;
+
+		DATA_MGR->Load_UserInfo(b);
 	}
 }
 

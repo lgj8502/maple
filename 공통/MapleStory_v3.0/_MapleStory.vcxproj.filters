@@ -201,6 +201,9 @@
     <ClInclude Include="cJunierYetti.h">
       <Filter>소스 파일\Mob</Filter>
     </ClInclude>
+    <ClInclude Include="cDataMgr.h">
+      <Filter>소스 파일\Manager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MK_KeyMgr.cpp">
@@ -328,6 +331,9 @@
     </ClCompile>
     <ClCompile Include="cJunierYetti.cpp">
       <Filter>소스 파일\Mob</Filter>
+    </ClCompile>
+    <ClCompile Include="cDataMgr.cpp">
+      <Filter>소스 파일\Manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

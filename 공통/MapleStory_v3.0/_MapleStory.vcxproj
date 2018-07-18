@@ -148,6 +148,7 @@
     <ClInclude Include="cCokeTown.h" />
     <ClInclude Include="cCokeTownBoss.h" />
     <ClInclude Include="cCokeTownNormal.h" />
+    <ClInclude Include="cDataMgr.h" />
     <ClInclude Include="cJunierYetti.h" />
     <ClInclude Include="cMob.h" />
     <ClInclude Include="cEffect.h" />
@@ -194,6 +195,7 @@
     <ClCompile Include="cCokeTown.cpp" />
     <ClCompile Include="cCokeTownBoss.cpp" />
     <ClCompile Include="cCokeTownNormal.cpp" />
+    <ClCompile Include="cDataMgr.cpp" />
     <ClCompile Include="cJunierYetti.cpp" />
     <ClCompile Include="cMob.cpp" />
     <ClCompile Include="cEffect.cpp" />
