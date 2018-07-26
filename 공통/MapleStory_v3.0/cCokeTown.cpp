@@ -8,6 +8,36 @@ cCokeTown::~cCokeTown()
 
 void cCokeTown::Init()
 {
+	m_MapName = "ÄÚÅ©Å¸¿î";
+
+	//SOUND_MGR->SoundStop(L"Sound_Login");
+	//SOUND_MGR->SoundStop(L"QueensGarden");
+	//SOUND_MGR->SoundBGM(L"CokeTown");
+
+	MAP_MGR->AddMinimapWindow(L"minimap_0", { 50,50 }, { 1.0f, 1.0f });
+	MAP_MGR->AddMinimapWindow(L"minimap_1", { 130,50 }, { 1.5f, 1.0f });
+	MAP_MGR->AddMinimapWindow(L"minimap_2", { 210,50 }, { 1.0f, 1.0f });
+	MAP_MGR->AddMinimapWindow(L"minimap_3", { 50,123 }, { 1.0f, 3.0f });
+	MAP_MGR->AddMinimapWindow(L"minimap_4", { 210,123 }, { 1.0f, 3.0f });
+	MAP_MGR->AddMinimapWindow(L"minimap_5", { 50,175 }, { 1.0f, 1.0f });
+	MAP_MGR->AddMinimapWindow(L"minimap_6", { 130,175 }, { 1.5f, 1.0f });
+	MAP_MGR->AddMinimapWindow(L"minimap_7", { 210,175 }, { 1.0f, 1.0f });
+	MAP_MGR->AddMinimapWindow_Rect(L"minimap_base", { 27, 78, 232, 180 });
+
+	MAP_MGR->AddMinimapWindow(L"CokeTown", { 50, 52 }, { 1.0f, 1.0f });
+
+
+	//UI_MGR->AddImage("¹Ì´Ï¸Ê0", L"minimap_0", { 50,50 }, { 1.0f, 1.0f });
+	//UI_MGR->AddImage("¹Ì´Ï¸Ê1", L"minimap_1", { 130, 50 }, { 1.5f, 1.0f });
+	//UI_MGR->AddImage("¹Ì´Ï¸Ê2", L"minimap_2", { 210, 50 }, { 1.0f, 1.0f });
+	//UI_MGR->AddImage("¹Ì´Ï¸Ê3", L"minimap_3", { 50, 123 }, { 1.0f, 3.0f });
+	//UI_MGR->AddImage("¹Ì´Ï¸Ê4", L"minimap_4", { 210, 123 }, { 1.0f, 3.0f });
+	//UI_MGR->AddImage("¹Ì´Ï¸Ê5", L"minimap_5", { 50, 175 }, { 1.0f, 1.0f });
+	//UI_MGR->AddImage("¹Ì´Ï¸Ê6", L"minimap_6", { 130, 175 }, { 1.5f, 1.0f });
+	//UI_MGR->AddImage("¹Ì´Ï¸Ê7", L"minimap_7", { 210, 175 }, { 1.0f, 1.0f });
+	//
+	//UI_MGR->AddImage("¹Ì´Ï¸Êº£ÀÌ½º", L"minimap_base", { 27, 78, 232, 180 });
+
 	IMG_MGR->FileFindDir_Take(L".\\Img\\map\\CokeTown\\", m_MapImgList);
 	//IMG_MGR->FileFindDir(L".\\Img\\CokeTown\\");
 	// Á¦ÀÏ µÞ ¹è°æ 1
@@ -89,10 +119,10 @@ void cCokeTown::Init()
 
 
 	// Å¸ÀÏ _ º£ÀÌ½º  // ¹Ù´Ú
-	MAP_MGR->AddFlatTileH({ 0, 1018 }, 30, true);
-	MAP_MGR->AddFlatTileM({ 0, 1048 }, 30);
-	MAP_MGR->AddFlatTileM({ 0, 1108 }, 30);
-	MAP_MGR->AddFlatTileM({ 0, 1168 }, 30);
+	MAP_MGR->AddFlatTileH({ 0, 1018 }, 22, true);
+	MAP_MGR->AddFlatTileM({ 0, 1048 }, 22);
+	MAP_MGR->AddFlatTileM({ 0, 1108 }, 22);
+	MAP_MGR->AddFlatTileM({ 0, 1168 }, 22);
 	//
 
 	
@@ -172,13 +202,17 @@ void cCokeTown::Init()
 	//bossPortalImgList.push_back(L"bossPotal1.5");
 
 
-	MAP_MGR->AddPortal(1, { 320, 493 }, portalImgList, MNAME_ARCANA, 2);
+	MAP_MGR->AddPortal(1, { 320, 495 }, portalImgList, MNAME_EREB, 1);
 
-	MAP_MGR->AddPortal(2, { 150, 991 }, portalImgList, MNAME_COKETOWNNORMAL, 6);
+	MAP_MGR->AddPortal(2, { 150, 1000 }, portalImgList, MNAME_COKETOWNNORMAL, 6);
 	//MAP_MGR->AddPortal(0, { 1500, 991 }, bossPortalImgList, MNAME_COKETOWNBOSS, 4);
 
-	MAP_MGR->AddPortal(3, { 500, 493 }, portalImgList, MNAME_ARCANA, 3);
+	MAP_MGR->AddPortal(3, { 500, 495 }, portalImgList, MNAME_ARCANA, 3);
 
+
+	MAP_MGR->AddMinimapWindow(L"minimap.portal", { 67.0f, 94.5f }, { 1.0f, 1.0f });
+	MAP_MGR->AddMinimapWindow(L"minimap.portal", { 50.0f, 145.0f }, { 1.0f, 1.0f });
+	MAP_MGR->AddMinimapWindow(L"minimap.portal", { 85.0f, 94.5f }, { 1.0f, 1.0f });
 
 	///// ·¹ÀÌ¾Æ¿ô Ä«¸Þ¶ó ºñÀ² ¼³Á¤
 
@@ -201,6 +235,12 @@ void cCokeTown::Init()
 	m_LayOut6.m_Transform.m_CameraRate.y = (m_LayOut6_Size.y - WIN_HEIGHT) / (m_LayOut6_Size.y - WIN_HEIGHT);
 
 
-	m_MiniMap.m_Transform.SetPos({ 50,0 });
+	m_MiniMap.m_Transform.SetPos({ 35,50 });
 	m_MiniMap.m_Transform.SetScale(0.1f, 0.1f);
+
+
+
+
+
+	
 }

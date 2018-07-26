@@ -40,7 +40,10 @@ public:
 	D2D1_POINT_2F m_LayOut5_Size = {};
 	D2D1_POINT_2F m_LayOut6_Size = {};
 
+	// 부활 지점
+	D2D1_POINT_2F m_RevivalPos = {};
 
+	string m_MapName = "";
 
 public:
 	virtual ~cMap() = default;

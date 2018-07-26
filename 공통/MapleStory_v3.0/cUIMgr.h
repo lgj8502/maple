@@ -127,7 +127,7 @@ public:
 	void AddPanel(string _name, D2D1_POINT_2F _pos, int _count ,cUI* _pUI, ...);
 
 	void AddAnimation(string _name, D2D1_POINT_2F _pos, float _time, vector<wstring> _bitmapList);
-	void AddAnimation(string _name, D2D1_RECT_F _rect, float _time, vector<wstring> _bitmapList);
+	//void AddAnimation(string _name, D2D1_RECT_F _rect, float _time, vector<wstring> _bitmapList);
 
 	void AddHPgauge(D2D1_POINT_2F _pos);
 	void AddMPgauge(D2D1_POINT_2F _pos);
@@ -137,7 +137,7 @@ public:
 	void HPMaxSetting(int _Number);
 	void MPSetting(int _Number);
 	void MPMaxSetting(int _Number);
-	void LevelSetting(int _Lv);
+	void LevelSetting(int _Lv, D2D1_POINT_2F _pos = { 95, 710 }, D2D1_POINT_2F _scale = { 1.0f, 1.0f });
 
 
 	void Update(float _DelayTime = 0);

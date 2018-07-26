@@ -8,6 +8,26 @@ cErebMap::~cErebMap()
 
 void cErebMap::Init()
 {
+	m_MapName = "에레브";
+
+	m_RevivalPos = { 320,950 };
+	//SOUND_MGR->SoundStop(L"Sound_Login");
+	//SOUND_MGR->SoundStop(L"CokeTown");
+	//
+	//SOUND_MGR->SoundBGM(L"QueensGarden");
+
+	MAP_MGR->AddMinimapWindow(L"minimap_0", { 50,50 }, { 1.0f, 1.0f });
+	MAP_MGR->AddMinimapWindow(L"minimap_1", { 130,50 }, { 1.5f, 1.0f });
+	MAP_MGR->AddMinimapWindow(L"minimap_2", { 210,50 }, { 1.0f, 1.0f });
+	MAP_MGR->AddMinimapWindow(L"minimap_3", { 50,123 }, { 1.0f, 3.0f });
+	MAP_MGR->AddMinimapWindow(L"minimap_4", { 210,123 }, { 1.0f, 3.0f });
+	MAP_MGR->AddMinimapWindow(L"minimap_5", { 50,175 }, { 1.0f, 1.0f });
+	MAP_MGR->AddMinimapWindow(L"minimap_6", { 130,175 }, { 1.5f, 1.0f });
+	MAP_MGR->AddMinimapWindow(L"minimap_7", { 210,175 }, { 1.0f, 1.0f });
+	MAP_MGR->AddMinimapWindow_Rect(L"minimap_base", { 27, 78, 232, 180 });
+
+	MAP_MGR->AddMinimapWindow(L"Ereb", { 50, 52 }, { 1.0f, 1.0f });
+
 	IMG_MGR->FileFindDir_Take(L".\\Img\\map\\Ereb\\", m_MapImgList);
 
 	// 제일 뒷 배경 1
@@ -31,9 +51,14 @@ void cErebMap::Init()
 
 	m_LayOut2_Size = { 1400, 850 };
 
-	MAP_MGR->AddBackGround2(L"back.9",	{ 201.0f,  368.0f });
+	MAP_MGR->AddBackGround2(L"back.9",	{ 201.0f,  468.0f });
+	MAP_MGR->AddBackGround2(L"back.9", { 600.5f,   468.0f });
+	MAP_MGR->AddBackGround2(L"back.9",	{ 1000.0f, 468.0f });
+	MAP_MGR->AddBackGround2(L"back.9", { 1400.0f,  468.0f });
+
+	MAP_MGR->AddBackGround2(L"back.9", { 201.0f,  368.0f });
 	MAP_MGR->AddBackGround2(L"back.9", { 600.5f,   368.0f });
-	MAP_MGR->AddBackGround2(L"back.9",	{ 1000.0f, 368.0f });
+	MAP_MGR->AddBackGround2(L"back.9", { 1000.0f, 368.0f });
 	MAP_MGR->AddBackGround2(L"back.9", { 1400.0f,  368.0f });
 	// 배경 3
 
@@ -74,10 +99,10 @@ void cErebMap::Init()
 
 	// 타일 _ 베이스
 
-	MAP_MGR->AddFlatTileH({ 0, 1018 }, 23, true);
-	MAP_MGR->AddFlatTileM({ 0, 1048 }, 23);
-	MAP_MGR->AddFlatTileM({ 0, 1108 }, 23);
-	MAP_MGR->AddFlatTileM({ 0, 1168 }, 23);
+	MAP_MGR->AddFlatTileH({ 0, 1018 }, 22, true);
+	MAP_MGR->AddFlatTileM({ 0, 1048 }, 22);
+	MAP_MGR->AddFlatTileM({ 0, 1108 }, 22);
+	MAP_MGR->AddFlatTileM({ 0, 1168 }, 22);
 
 
 	// 로프용 타일
@@ -124,7 +149,7 @@ void cErebMap::Init()
 	portalImgList.push_back(L"pv.default.7");
 
 
-	MAP_MGR->AddPortal(1, { 320, 493 }, portalImgList, MNAME_ARCANA, 2);
+	MAP_MGR->AddPortal(1, { 320, 493 }, portalImgList, MNAME_COKETOWN, 1);
 
 	MAP_MGR->AddPortal(2, { 320, 991 }, portalImgList, MNAME_ARCANA, 1);
 
@@ -157,7 +182,7 @@ void cErebMap::Init()
 	m_LayOut6.m_Transform.m_CameraRate.y = (m_LayOut6_Size.y - WIN_HEIGHT) / (m_LayOut6_Size.y - WIN_HEIGHT);
 
 
-	m_MiniMap.m_Transform.SetPos({ 50,0 });
+	m_MiniMap.m_Transform.SetPos({ 35,50 });
 	m_MiniMap.m_Transform.SetScale(0.1f, 0.1f);
 
 }

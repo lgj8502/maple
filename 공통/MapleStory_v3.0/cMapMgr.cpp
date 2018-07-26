@@ -8,13 +8,14 @@
 
 cMapMgr::~cMapMgr()
 {
-	delete m_pMap;
+	Destroy();
 }
 
 
 void cMapMgr::SetMap()
 {
 	delete m_pMap;
+	delete m_pMapName;
 
 	switch (m_MapName)
 	{
@@ -37,7 +38,11 @@ void cMapMgr::SetMap()
 
 	}
 
-	m_pMap->Init();	
+	m_pMap->Init();
+
+	m_pMapName = new Text2D;
+
+	m_pMapName->SetFont(L"°íµñ");
 
 	m_isChange = false;
 }
@@ -414,6 +419,33 @@ void cMapMgr::AddFlatTileL(D2D1_POINT_2F _pos, int _count)
 	}
 }
 
+void cMapMgr::AddMinimapWindow(wstring _bitmapName, D2D1_POINT_2F _pos, D2D1_POINT_2F _scale)
+{
+	cMapObj *MAP = new cMapObj;
+
+	ID2D1Bitmap* AddBitmap = IMG_MGR->GetImage(_bitmapName);
+
+	MAP->m_Renderer.AddBitmap(AddBitmap);
+
+	MAP->m_Transform.SetPos(_pos);
+	MAP->m_Transform.SetScale(_scale);
+
+	m_pMap->m_Minimap_List.push_back(MAP);
+}
+
+void cMapMgr::AddMinimapWindow_Rect(wstring _bitmapName, D2D1_RECT_F _rect)
+{
+	cMapObj *MAP = new cMapObj;
+
+	ID2D1Bitmap* AddBitmap = IMG_MGR->GetImage(_bitmapName);
+
+	MAP->m_Renderer.AddBitmap(AddBitmap);
+
+	MAP->m_Renderer.SetImgRT(_rect);
+
+	m_pMap->m_Minimap_List.push_back(MAP);
+}
+
 void cMapMgr::AddBackGround1(wstring _bitmapName, D2D1_POINT_2F _pos)
 {
 	cMapObj *MAP = new cMapObj;
@@ -688,6 +720,8 @@ void cMapMgr::Update(float _DelayTime)
 	{
 		m_pMap->Update(_DelayTime);
 	}
+
+
 }
 
 void cMapMgr::BackRender()
@@ -696,6 +730,7 @@ void cMapMgr::BackRender()
 	{
 		m_pMap->BackRender();
 	}
+
 }
 
 void cMapMgr::FrontRender()
@@ -703,7 +738,20 @@ void cMapMgr::FrontRender()
 	if (m_pMap != nullptr)
 	{
 		m_pMap->FrontRender();
+
+		if (m_pMapName != nullptr)
+		{
+			D2D1_COLOR_F oldColor = IMG_MGR->GetBrush()->GetColor();
+
+			IMG_MGR->GetBrush()->SetColor(ColorF(ColorF::White));
+
+			m_pMapName->TextRender(IMG_MGR->GetpRT(), IMG_MGR->GetBrush(), 15.0f, { 80,50 }, m_pMap->m_MapName.c_str());
+
+			IMG_MGR->GetBrush()->SetColor(oldColor);
+		}
 	}
+
+
 
 
 }
@@ -724,15 +772,18 @@ void cMapMgr::PortalRender()
 	}
 }
 
-
-
-
 void cMapMgr::ChangeMap(int _MapName)
 {
 	m_MapName = _MapName;
 	m_isChange = true;
 
 	MOB_MGR->Destoy();
+
+	sCharacter info = PLAYER_MGR->m_player->m_CharacInfo;
+
+	info.m_Map = _MapName;	
+
+	DATA_MGR->Save_Charater(info);
 
 	srand(GetTickCount());
 
@@ -741,5 +792,11 @@ void cMapMgr::ChangeMap(int _MapName)
 void cMapMgr::SetParent(cMapObj *_parent, cMapObj *_son)
 {
 	_son->m_Transform.m_pParent = &(_parent->m_Transform);
+}
+
+void cMapMgr::Destroy()
+{
+	delete m_pMap;
+	delete m_pMapName;
 }
 

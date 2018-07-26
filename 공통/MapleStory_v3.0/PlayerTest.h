@@ -1,6 +1,7 @@
 #pragma once
 
 #include <atlbase.h>
+#include "cDataMgr.h"
 
 enum ePlayerState
 {
@@ -37,15 +38,15 @@ enum ePlayerParts
 	PART_SHOES,
 	PART_WEAPON,
 	PART_ARM,
-	PART_LONGCOATARM,
-
 	PART_CAP,
 	PART_COATARM,
-
+	PART_LONGCOATARM,
 	PART_HAND,
-
 	PART_END,
 };
+
+
+
 
 class PlayerTest
 {
@@ -55,7 +56,6 @@ class PlayerTest
 private:
 
 	Object2D m_Parts[PART_END];
-
 
 	bool   m_isJumping = false;
 	bool   m_JumpStart = false;
@@ -98,7 +98,7 @@ private:
 	float		m_IntervalTime = 0.02f;
 	bool		m_isProtected = false;
 
-	bool		m_isLongcoat = false;
+	//bool		m_isLongcoat = false;
 
 	bool		m_isDead = false;
 	float		m_DeadTime = 2.0f;
@@ -119,41 +119,44 @@ private:
 	void SettingCoat();
 	void SettingPants();
 	void SettingShoes();
-
 	void SettingWeapon();
-
-	void ChangeState(ePlayerState _state);
-
 
 public:
 
+	bool		m_isCreate = false;
+
 	D2D1_POINT_2F m_startPos = {};
 
-	size_t m_Base = 100;
-	size_t m_Hair = 100;
-	size_t m_Face = 100;
-	size_t m_Coat = 100;
-	size_t m_Pants = 101;
-	size_t m_Shoes = 101;
-	size_t m_Weapon = 101;
+	sCharacter m_CharacInfo = {};
+
+	//1050286
+	//size_t m_Base = 100;
+	//size_t m_Hair = 100;
+	//size_t m_Face = 100;
+	//size_t m_Coat = 200;
+	//size_t m_Pants = 0;
+	//size_t m_Shoes = 101;
+	//size_t m_Weapon = 1302000;
+
+
 
 	///////////////////// 스탯 //////////////////////////////////////////////////////
 
-	int		m_Level = 0;
-
-	int		m_HP = 0;
-	int		m_MP = 0;
-	int		m_HPmax = 0;
-	int		m_MPmax = 0;
+	//int		m_Level = 0;
+	//
+	//int		m_HP = 0;
+	//int		m_MP = 0;
+	//int		m_HPmax = 0;
+	//int		m_MPmax = 0;
 
 	// 이속률 (캐릭터가 가지는 이동 스탯)  100.0f == 1배
 	float	m_MoveSpeedRatio = 100.0f;
 	float	m_JumpPowerRatio = 100.0f;
 
-	int		m_STR = 0;
-	int		m_DEX = 0;
-	int		m_INT = 0;
-	int		m_LUK = 0;
+	//int		m_STR = 0;
+	//int		m_DEX = 0;
+	//int		m_INT = 0;
+	//int		m_LUK = 0;
 
 	int		m_AttackPower = 50;
 
@@ -166,11 +169,12 @@ public:
 
 	void Init();
 	void UpdateCreateSceneIdle(float _DelayTime);
+	void UpdateLobby(float _DelayTime);
 	void Update(float _DelayTime = 0.0f);
 	void Render();
 
-	void PutLongcoat();
-	void OffLongcoat();
+	//void PutLongcoat();
+	//void OffLongcoat();
 	bool CrashCheckMap(cMapObj *_obj);
 	bool CrashCheckMob(cMob *_obj, D2D1_POINT_2F _pos);
 	void Landing(cMapObj* _pLandingTile);
@@ -204,6 +208,9 @@ public:
 
 	void JumpMove();
 
+	void Revival();
+	void CalcAttackPower();
+
 	void ChangeBase(size_t _itemNo);
 	void ChangeHair(size_t _itemNo);
 	void ChangeFace(size_t _itemNo);
@@ -211,6 +218,8 @@ public:
 	void ChangePants(size_t _itemNo);
 	void ChangeShoes(size_t _itemNo);
 	void ChangeWeapon(size_t _itemNo);
+
+	void ChangeState(ePlayerState _state);
 
 	void LoadImg(char *_path, size_t _ItemNo, map<wstring, ImgInfo> &_BotmapList);
 
@@ -231,6 +240,10 @@ public:
 		return (ePlayerState)(m_Parts[0].m_Renderer.m_State);
 	}
 
+	inline void SetScale(float _x, float _y)
+	{
+		m_Parts->m_Transform.SetScale(_x, _y);
+	}
 
 };
 

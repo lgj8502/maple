@@ -56,6 +56,9 @@ public:
 		m_pBrush = _pBrush;
 	}
 
+	void Destroy();
+
+
 	LRESULT MyWndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam);
 };
 

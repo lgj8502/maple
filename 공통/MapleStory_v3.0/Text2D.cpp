@@ -38,7 +38,7 @@ HRESULT Text2D::SetFont(const wchar_t *_FontName)
 	hr = m_pWriteFactory->CreateTextFormat(
 		_FontName,
 		nullptr,
-		DWRITE_FONT_WEIGHT_NORMAL,
+		m_FontWeight,
 		DWRITE_FONT_STYLE_NORMAL,
 		DWRITE_FONT_STRETCH_NORMAL,
 		BASE_FONTSIZE,
@@ -48,6 +48,7 @@ HRESULT Text2D::SetFont(const wchar_t *_FontName)
 
 	return hr;
 }
+
 
 VOID Text2D::TextRender(ID2D1RenderTarget * _pRT, ID2D1Brush *_pBrush, D2D1_POINT_2F _Pos, const char *_Format, ...)
 {

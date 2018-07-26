@@ -1,6 +1,7 @@
 #pragma once
 
 #include "cUI.h"
+//#include "PlayerTest.h"
 
 //#include "stdafx.h"
 
@@ -25,7 +26,7 @@ class LobbyScene : public Scene
 	string m_oldText = "";
 
 	Object2D obj;
-
+	
 
 public:
 

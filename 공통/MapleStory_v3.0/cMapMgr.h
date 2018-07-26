@@ -47,7 +47,7 @@ public:
 
 	cMap *m_pMap = nullptr;
 
-	Object2D m_Fade;
+	Text2D *m_pMapName = nullptr;
 
 	int m_MapName = MNAME_NONE;
 	bool m_isChange = false;
@@ -70,6 +70,8 @@ public:
 	void AddFlatTileM(D2D1_POINT_2F _pos, int _count);
 	void AddFlatTileL(D2D1_POINT_2F _pos, int _count);
 
+	void AddMinimapWindow(wstring _bitmapName, D2D1_POINT_2F _pos, D2D1_POINT_2F _scale);
+	void AddMinimapWindow_Rect(wstring _bitmapName, D2D1_RECT_F _rect);
 	void AddBackGround1(wstring _bitmapName, D2D1_POINT_2F _pos);
 	void AddBackGround1_Back1();
 
@@ -91,8 +93,6 @@ public:
 
 	void AddAnimation(D2D1_POINT_2F _pos, eMap_Type _Type, float _time, vector<wstring> _bitmapNamelist);
 
-
-
 	void Update(float _DelayTime = 0);
 	void BackRender();
 	void FrontRender();
@@ -103,6 +103,7 @@ public:
 
 	void SetParent(cMapObj *_parent, cMapObj *_son);
 
+	void Destroy();
 
 };
 

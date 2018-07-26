@@ -6,30 +6,74 @@ bool menuCheck = false;
 
 IngameScene::~IngameScene()
 {
-
+	
 }
 
 void IngameScene::Init(HWND hWnd)
 {
 	IMG_MGR->FileFindDir(L".\\Img\\IngameScene\\");
+	SOUND_MGR->SoundStop(L"Sound_Login");
+	//	mouse default image 
+	obj.m_Renderer.AddBitmap(IMG_MGR->GetImage(L"mouseDefault"));	//0
+	obj.m_Renderer.AddBitmap(IMG_MGR->GetImage(L"mouseClick"));		// 1
 
-	MAP_MGR->ChangeMap(MNAME_COKETOWN);
+																	//mouse animation
+	obj.m_Renderer.AddBitmap(IMG_MGR->GetImage(L"mouseOver0"));		// 2
+	obj.m_Renderer.AddBitmap(IMG_MGR->GetImage(L"mouseOver1"));		// 3
+	obj.m_Renderer.AddAnimation(0, 2, 3, 0.5, 0.5);
+	obj.m_Renderer.m_State = -1;
+
+
 
 	PLAYER_MGR->CreatePlayer();
 
 	PLAYER_MGR->m_player->Init();
 
-	PLAYER_MGR->m_player->SetPos({ 200,900 });
+	PLAYER_MGR->m_player->SetPos({ PLAYER_MGR->m_player->m_CharacInfo.m_X, PLAYER_MGR->m_player->m_CharacInfo.m_Y });
+
+	MAP_MGR->ChangeMap(PLAYER_MGR->m_player->m_CharacInfo.m_Map);
 
 	MAP_MGR->m_CameraPos = {0, 300};
 
+	// 닉네임 UI
+
+	//string Name = PLAYER_MGR->m_player->m_CharacInfo.m_Name;
+
+	
+
+
+
+	UI_MGR->AddText("닉네임Text", PLAYER_MGR->m_player->m_CharacInfo.m_Name, { -600,0 }, ColorF(ColorF::White), L"고딕", 15.0f);
+
+
+	UI_MGR->FindUI("닉네임Text")->TextRender();
+	UI_MGR->FindUI("닉네임Text")->m_Font.m_WidthAlignment = DWRITE_TEXT_ALIGNMENT_CENTER;
+
+	float TextW = UI_MGR->FindUI("닉네임Text")->m_Font.m_Metrics.width;
+
+	UI_MGR->AddImage("닉네임BG", L"NameBG", {  - TextW / 2.0f - 3.0f, -9, TextW / 2.0f + 3.0f, 9 }, 1.0f);
+
+	UI_MGR->SetParent("닉네임BG", "닉네임Text");
+	UI_MGR->FindUI("닉네임BG")->m_Transform.m_isCamera = true;
+
+	auto NickName1 = [](void) {
+		D2D1_POINT_2F pos = PLAYER_MGR->m_player->GetPos();
+		pos.y += 28.0f;
+		UI_MGR->FindUI("닉네임BG")->m_Transform.SetPos(pos);
+	};
+
+	UI_MGR->AddEvent("닉네임BG", ADDEVENT_Update, NickName1);
+
+	
+
+
 	///// HP, MP, LV 등등...
 
-	UI_MGR->HPSetting(PLAYER_MGR->m_player->m_HP);
-	UI_MGR->HPMaxSetting(PLAYER_MGR->m_player->m_HPmax);
-	UI_MGR->MPSetting(PLAYER_MGR->m_player->m_MP);
-	UI_MGR->MPMaxSetting(PLAYER_MGR->m_player->m_MPmax);
-	UI_MGR->LevelSetting(PLAYER_MGR->m_player->m_Level);
+	UI_MGR->HPSetting(PLAYER_MGR->m_player->m_CharacInfo.m_HP);
+	UI_MGR->HPMaxSetting(PLAYER_MGR->m_player->m_CharacInfo.m_HPmax);
+	UI_MGR->MPSetting(PLAYER_MGR->m_player->m_CharacInfo.m_MP);
+	UI_MGR->MPMaxSetting(PLAYER_MGR->m_player->m_CharacInfo.m_MPmax);
+	UI_MGR->LevelSetting(PLAYER_MGR->m_player->m_CharacInfo.m_Level);
 	///////////////////////////////////
 
 	UI_MGR->AddImage("800.back", L"800.back", { 600, 794 }, { 1.5f, 1.3333f });
@@ -229,6 +273,7 @@ void IngameScene::Init(HWND hWnd)
 		UI_MGR->FindUI("submenu.backgrnd.0.community")->m_isActive = false;
 		UI_MGR->FindUI("submenu.backgrnd.0.setting")->m_isActive = false;
 		UI_MGR->FindUI("submenu.backgrnd.0.menu")->m_isActive = false;
+		UI_MGR->FindUI("submenu.notReady")->m_isActive = false;
 	}
 	else {
 		UI_MGR->FindUI("submenu.backgrnd.0.event")->m_isActive = true;
@@ -236,6 +281,7 @@ void IngameScene::Init(HWND hWnd)
 		UI_MGR->FindUI("submenu.backgrnd.0.community")->m_isActive = false;
 		UI_MGR->FindUI("submenu.backgrnd.0.setting")->m_isActive = false;
 		UI_MGR->FindUI("submenu.backgrnd.0.menu")->m_isActive = false;
+		UI_MGR->FindUI("submenu.notReady")->m_isActive = false;
 	}};
 	UI_MGR->AddEvent("mainBar.menu.button.event.normal.0", ADDEVENT_OnMouseOver, IngameFunc3);
 	UI_MGR->AddEvent("mainBar.menu.button.event.normal.0", ADDEVENT_OnMouseExit, IngameFunc4);
@@ -253,6 +299,34 @@ void IngameScene::Init(HWND hWnd)
 	auto eventFunc2 = [](void) { UI_MGR->FindUI("schedule.normal")->m_Renderer.ChangeBitmap(0);  checkEvent = false; };
 	UI_MGR->AddEvent("schedule.normal", ADDEVENT_OnMouseOver, eventFunc1);
 	UI_MGR->AddEvent("schedule.normal", ADDEVENT_OnMouseExit, eventFunc2);
+	/////////////////////////////////////////////////////////////////
+	//준비중
+	UI_MGR->AddImage("submenu.notReady", L"submenu.notReady", { 600, 400 }, { 1.5f, 1.33333f });
+	UI_MGR->FindUI("submenu.notReady")->m_RayCast = true;
+	UI_MGR->FindUI("submenu.notReady")->m_isActive = false;
+	auto notReady = [](void) { 	
+		if (UI_MGR->FindUI("submenu.notReady")->m_isActive == true)
+		{
+			UI_MGR->FindUI("submenu.notReady")->m_isActive = false;
+		}
+		else
+		{
+			if (UI_MGR->FindUI("submenu.backgrnd.0.menu")->m_isActive == true)
+			{
+				UI_MGR->FindUI("submenu.notReady")->m_Transform.SetPos({ 716, 400 });
+			}
+			else
+			{
+				UI_MGR->FindUI("submenu.notReady")->m_Transform.SetPos({ 600, 400 });
+			}
+			UI_MGR->FindUI("submenu.notReady")->m_isActive = true;
+		}
+		 };
+	UI_MGR->AddEvent("schedule.normal", ADDEVENT_OnMouseClick, notReady);
+
+	//////////////////////////////////////////////////////////////////
+
+
 
 	UI_MGR->AddImage("dailyGift.normal", L"dailyGift.normal", { 0, 60 }, { 1.0f, 1.0f });
 	UI_MGR->FindUI("dailyGift.normal")->m_RayCast = true;
@@ -261,6 +335,7 @@ void IngameScene::Init(HWND hWnd)
 	auto eventFunc4 = [](void) { UI_MGR->FindUI("dailyGift.normal")->m_Renderer.ChangeBitmap(0);  checkEvent = false; };
 	UI_MGR->AddEvent("dailyGift.normal", ADDEVENT_OnMouseOver, eventFunc3);
 	UI_MGR->AddEvent("dailyGift.normal", ADDEVENT_OnMouseExit, eventFunc4);
+	UI_MGR->AddEvent("dailyGift.normal", ADDEVENT_OnMouseClick, notReady);
 
 	UI_MGR->SetParent("submenu.backgrnd.0.event", "title.event");
 	UI_MGR->SetParent("submenu.backgrnd.0.event", "schedule.normal");
@@ -286,6 +361,7 @@ void IngameScene::Init(HWND hWnd)
 		UI_MGR->FindUI("submenu.backgrnd.0.community")->m_isActive = false;
 		UI_MGR->FindUI("submenu.backgrnd.0.setting")->m_isActive = false;
 		UI_MGR->FindUI("submenu.backgrnd.0.menu")->m_isActive = false;
+		UI_MGR->FindUI("submenu.notReady")->m_isActive = false;
 	}
 	else {
 		UI_MGR->FindUI("submenu.backgrnd.0.character")->m_isActive = true;
@@ -294,6 +370,7 @@ void IngameScene::Init(HWND hWnd)
 		UI_MGR->FindUI("submenu.backgrnd.0.community")->m_isActive = false;
 		UI_MGR->FindUI("submenu.backgrnd.0.setting")->m_isActive = false;
 		UI_MGR->FindUI("submenu.backgrnd.0.menu")->m_isActive = false;
+		UI_MGR->FindUI("submenu.notReady")->m_isActive = false;
 	}};
 	UI_MGR->AddEvent("mainBar.menu.button.character.normal.0", ADDEVENT_OnMouseOver, IngameFunc6);
 	UI_MGR->AddEvent("mainBar.menu.button.character.normal.0", ADDEVENT_OnMouseExit, IngameFunc7);
@@ -312,6 +389,7 @@ void IngameScene::Init(HWND hWnd)
 	auto characterFunc2 = [](void) { UI_MGR->FindUI("info.normal")->m_Renderer.ChangeBitmap(0);  checkEvent = false; };
 	UI_MGR->AddEvent("info.normal", ADDEVENT_OnMouseOver, characterFunc1);
 	UI_MGR->AddEvent("info.normal", ADDEVENT_OnMouseExit, characterFunc2);
+	UI_MGR->AddEvent("info.normal", ADDEVENT_OnMouseClick, notReady);
 
 	UI_MGR->AddImage("stat.normal", L"stat.normal", { 0, 60 }, { 1.0f, 1.0f });
 	UI_MGR->FindUI("stat.normal")->m_RayCast = true;
@@ -320,6 +398,7 @@ void IngameScene::Init(HWND hWnd)
 	auto characterFunc4 = [](void) { UI_MGR->FindUI("stat.normal")->m_Renderer.ChangeBitmap(0);  checkEvent = false; };
 	UI_MGR->AddEvent("stat.normal", ADDEVENT_OnMouseOver, characterFunc3);
 	UI_MGR->AddEvent("stat.normal", ADDEVENT_OnMouseExit, characterFunc4);
+	UI_MGR->AddEvent("stat.normal", ADDEVENT_OnMouseClick, notReady);
 
 	UI_MGR->AddImage("skill.normal", L"skill.normal", { 0, 90 }, { 1.0f, 1.0f });
 	UI_MGR->FindUI("skill.normal")->m_RayCast = true;
@@ -328,6 +407,7 @@ void IngameScene::Init(HWND hWnd)
 	auto characterFunc6 = [](void) { UI_MGR->FindUI("skill.normal")->m_Renderer.ChangeBitmap(0);  checkEvent = false; };
 	UI_MGR->AddEvent("skill.normal", ADDEVENT_OnMouseOver, characterFunc5);
 	UI_MGR->AddEvent("skill.normal", ADDEVENT_OnMouseExit, characterFunc6);
+	UI_MGR->AddEvent("skill.normal", ADDEVENT_OnMouseClick, notReady);
 
 	UI_MGR->AddImage("Equip.normal", L"Equip.normal", { 0, 120 }, { 1.0f, 1.0f });
 	UI_MGR->FindUI("Equip.normal")->m_RayCast = true;
@@ -336,6 +416,7 @@ void IngameScene::Init(HWND hWnd)
 	auto characterFunc8 = [](void) { UI_MGR->FindUI("Equip.normal")->m_Renderer.ChangeBitmap(0);  checkEvent = false; };
 	UI_MGR->AddEvent("Equip.normal", ADDEVENT_OnMouseOver, characterFunc7);
 	UI_MGR->AddEvent("Equip.normal", ADDEVENT_OnMouseExit, characterFunc8);
+	UI_MGR->AddEvent("Equip.normal", ADDEVENT_OnMouseClick, notReady);
 
 	UI_MGR->AddImage("inven.normal", L"inven.normal", { 0, 150 }, { 1.0f, 1.0f });
 	UI_MGR->FindUI("inven.normal")->m_RayCast = true;
@@ -344,6 +425,7 @@ void IngameScene::Init(HWND hWnd)
 	auto characterFunc10 = [](void) { UI_MGR->FindUI("inven.normal")->m_Renderer.ChangeBitmap(0);  checkEvent = false; };
 	UI_MGR->AddEvent("inven.normal", ADDEVENT_OnMouseOver, characterFunc9);
 	UI_MGR->AddEvent("inven.normal", ADDEVENT_OnMouseExit, characterFunc10);
+	UI_MGR->AddEvent("inven.normal", ADDEVENT_OnMouseClick, notReady);
 
 	UI_MGR->AddImage("cabinet.normal", L"cabinet.normal", { 0, 180 }, { 1.0f, 1.0f });
 	UI_MGR->FindUI("cabinet.normal")->m_RayCast = true;
@@ -352,6 +434,7 @@ void IngameScene::Init(HWND hWnd)
 	auto characterFunc12 = [](void) { UI_MGR->FindUI("cabinet.normal")->m_Renderer.ChangeBitmap(0);  checkEvent = false; };
 	UI_MGR->AddEvent("cabinet.normal", ADDEVENT_OnMouseOver, characterFunc11);
 	UI_MGR->AddEvent("cabinet.normal", ADDEVENT_OnMouseExit, characterFunc12);
+	UI_MGR->AddEvent("cabinet.normal", ADDEVENT_OnMouseClick, notReady);
 
 	UI_MGR->SetParent("submenu.backgrnd.0.character", "title.character");
 	UI_MGR->SetParent("submenu.backgrnd.0.character", "info.normal");
@@ -381,6 +464,7 @@ void IngameScene::Init(HWND hWnd)
 		UI_MGR->FindUI("submenu.backgrnd.0.community")->m_isActive = false;
 		UI_MGR->FindUI("submenu.backgrnd.0.setting")->m_isActive = false;
 		UI_MGR->FindUI("submenu.backgrnd.0.menu")->m_isActive = false;
+		UI_MGR->FindUI("submenu.notReady")->m_isActive = false;
 	}
 	else {
 		UI_MGR->FindUI("submenu.backgrnd.0.community")->m_isActive = true;
@@ -389,6 +473,7 @@ void IngameScene::Init(HWND hWnd)
 		//UI_MGR->FindUI("submenu.backgrnd.0.community")->m_isActive = false;
 		UI_MGR->FindUI("submenu.backgrnd.0.setting")->m_isActive = false;
 		UI_MGR->FindUI("submenu.backgrnd.0.menu")->m_isActive = false;
+		UI_MGR->FindUI("submenu.notReady")->m_isActive = false;
 	}};
 	UI_MGR->AddEvent("mainBar.menu.button.community.normal.0", ADDEVENT_OnMouseOver, IngameFunc9);
 	UI_MGR->AddEvent("mainBar.menu.button.community.normal.0", ADDEVENT_OnMouseExit, IngameFunc10);
@@ -406,6 +491,7 @@ void IngameScene::Init(HWND hWnd)
 	auto communityFunc2 = [](void) { UI_MGR->FindUI("friends.normal")->m_Renderer.ChangeBitmap(0);  checkEvent = false; };
 	UI_MGR->AddEvent("friends.normal", ADDEVENT_OnMouseOver, communityFunc1);
 	UI_MGR->AddEvent("friends.normal", ADDEVENT_OnMouseExit, communityFunc2);
+	UI_MGR->AddEvent("friends.normal", ADDEVENT_OnMouseClick, notReady);
 
 	UI_MGR->AddImage("bossParty.normal", L"bossParty.normal", { 0, 60 }, { 1.0f, 1.0f });
 	UI_MGR->FindUI("bossParty.normal")->m_RayCast = true;
@@ -414,6 +500,7 @@ void IngameScene::Init(HWND hWnd)
 	auto communityFunc4 = [](void) { UI_MGR->FindUI("bossParty.normal")->m_Renderer.ChangeBitmap(0);  checkEvent = false; };
 	UI_MGR->AddEvent("bossParty.normal", ADDEVENT_OnMouseOver, communityFunc3);
 	UI_MGR->AddEvent("bossParty.normal", ADDEVENT_OnMouseExit, communityFunc4);
+	UI_MGR->AddEvent("bossParty.normal", ADDEVENT_OnMouseClick, notReady);
 
 	UI_MGR->AddImage("guild.normal", L"guild.normal", { 0, 90 }, { 1.0f, 1.0f });
 	UI_MGR->FindUI("guild.normal")->m_RayCast = true;
@@ -422,6 +509,7 @@ void IngameScene::Init(HWND hWnd)
 	auto communityFunc6 = [](void) { UI_MGR->FindUI("guild.normal")->m_Renderer.ChangeBitmap(0);  checkEvent = false; };
 	UI_MGR->AddEvent("guild.normal", ADDEVENT_OnMouseOver, communityFunc5);
 	UI_MGR->AddEvent("guild.normal", ADDEVENT_OnMouseExit, communityFunc6);
+	UI_MGR->AddEvent("guild.normal", ADDEVENT_OnMouseClick, notReady);
 
 	UI_MGR->AddImage("notice.normal", L"notice.normal", { 0, 120 }, { 1.0f, 1.0f });
 	UI_MGR->FindUI("notice.normal")->m_RayCast = true;
@@ -430,6 +518,7 @@ void IngameScene::Init(HWND hWnd)
 	auto communityFunc8 = [](void) { UI_MGR->FindUI("notice.normal")->m_Renderer.ChangeBitmap(0);  checkEvent = false; };
 	UI_MGR->AddEvent("notice.normal", ADDEVENT_OnMouseOver, communityFunc7);
 	UI_MGR->AddEvent("notice.normal", ADDEVENT_OnMouseExit, communityFunc8);
+	UI_MGR->AddEvent("notice.normal", ADDEVENT_OnMouseClick, notReady);
 
 	UI_MGR->AddImage("mapleChat.normal", L"mapleChat.normal", { 0, 150 }, { 1.0f, 1.0f });
 	UI_MGR->FindUI("mapleChat.normal")->m_RayCast = true;
@@ -438,6 +527,7 @@ void IngameScene::Init(HWND hWnd)
 	auto communityFunc10 = [](void) { UI_MGR->FindUI("mapleChat.normal")->m_Renderer.ChangeBitmap(0);  checkEvent = false; };
 	UI_MGR->AddEvent("mapleChat.normal", ADDEVENT_OnMouseOver, communityFunc9);
 	UI_MGR->AddEvent("mapleChat.normal", ADDEVENT_OnMouseExit, communityFunc10);
+	UI_MGR->AddEvent("mapleChat.normal", ADDEVENT_OnMouseClick, notReady);
 
 	UI_MGR->SetParent("submenu.backgrnd.0.community", "title.community");
 	UI_MGR->SetParent("submenu.backgrnd.0.community", "friends.normal");
@@ -466,6 +556,7 @@ void IngameScene::Init(HWND hWnd)
 		UI_MGR->FindUI("submenu.backgrnd.0.community")->m_isActive = false;
 		UI_MGR->FindUI("submenu.backgrnd.0.setting")->m_isActive = false;
 		UI_MGR->FindUI("submenu.backgrnd.0.menu")->m_isActive = false;
+		UI_MGR->FindUI("submenu.notReady")->m_isActive = false;
 	}
 	else {
 		UI_MGR->FindUI("submenu.backgrnd.0.setting")->m_isActive = true;
@@ -474,6 +565,7 @@ void IngameScene::Init(HWND hWnd)
 		UI_MGR->FindUI("submenu.backgrnd.0.community")->m_isActive = false;
 		//UI_MGR->FindUI("submenu.backgrnd.0.setting")->m_isActive = false;
 		UI_MGR->FindUI("submenu.backgrnd.0.menu")->m_isActive = false;
+		UI_MGR->FindUI("submenu.notReady")->m_isActive = false;
 	}	};
 	UI_MGR->AddEvent("mainBar.menu.button.setting.normal.0", ADDEVENT_OnMouseOver, IngameFunc12);
 	UI_MGR->AddEvent("mainBar.menu.button.setting.normal.0", ADDEVENT_OnMouseExit, IngameFunc13);
@@ -491,6 +583,7 @@ void IngameScene::Init(HWND hWnd)
 	auto settingFunc2 = [](void) { UI_MGR->FindUI("channel.normal")->m_Renderer.ChangeBitmap(0);  checkEvent = false; };
 	UI_MGR->AddEvent("channel.normal", ADDEVENT_OnMouseOver, settingFunc1);
 	UI_MGR->AddEvent("channel.normal", ADDEVENT_OnMouseExit, settingFunc2);
+	UI_MGR->AddEvent("channel.normal", ADDEVENT_OnMouseClick, notReady);
 
 	UI_MGR->AddImage("option.normal", L"option.normal", { 0, 60 }, { 1.0f, 1.0f });
 	UI_MGR->FindUI("option.normal")->m_RayCast = true;
@@ -499,6 +592,7 @@ void IngameScene::Init(HWND hWnd)
 	auto settingFunc4 = [](void) { UI_MGR->FindUI("option.normal")->m_Renderer.ChangeBitmap(0);  checkEvent = false; };
 	UI_MGR->AddEvent("option.normal", ADDEVENT_OnMouseOver, settingFunc3);
 	UI_MGR->AddEvent("option.normal", ADDEVENT_OnMouseExit, settingFunc4);
+	UI_MGR->AddEvent("option.normal", ADDEVENT_OnMouseClick, notReady);
 
 	UI_MGR->AddImage("keySetting.normal", L"keySetting.normal", { 0, 90 }, { 1.0f, 1.0f });
 	UI_MGR->FindUI("keySetting.normal")->m_RayCast = true;
@@ -508,6 +602,212 @@ void IngameScene::Init(HWND hWnd)
 	UI_MGR->AddEvent("keySetting.normal", ADDEVENT_OnMouseOver, settingFunc5);
 	UI_MGR->AddEvent("keySetting.normal", ADDEVENT_OnMouseExit, settingFunc6);
 
+
+	//UI_MGR->FindUI("keyConfig.backgrnd")->m_isActive = false;
+	///
+	//////////////////////////////////////////
+	// keyConfig
+	UI_MGR->AddImage("keyConfig.backgrnd", L"keyConfig.backgrnd", { 600, 400 }, { 1.5f, 1.33333f });
+	UI_MGR->AddImage("keyConfig.backgrnd2", L"keyConfig.backgrnd2", { 0, 0 }, { 1.0f, 1.0f });
+	//UI_MGR->AddImage("keyConfig.backgrnd3", L"keyConfig.backgrnd3", { 0, -80 }, { 1.0f, 1.0f });
+	UI_MGR->AddImage("keyConfig.backgrnd3", L"KeyConfigSetting", { 0, 0 }, { 1.0f, 1.0f });
+
+
+	//키 모양
+	//1열
+	//UI_MGR->AddImage("keyConfig.key.1", L"key.1", { -284, -90 }, { 1.0f, 1.0f });
+	//UI_MGR->AddImage("keyConfig.key.59", L"key.59", { -223, -90 }, { 1.0f, 1.0f });
+	//UI_MGR->AddImage("keyConfig.key.60", L"key.60", { -191, -90 }, { 1.0f, 1.0f });
+	//UI_MGR->AddImage("keyConfig.key.61", L"key.61", { -157, -90 }, { 1.0f, 1.0f });
+	//UI_MGR->AddImage("keyConfig.key.62", L"key.62", { -123, -90 }, { 1.0f, 1.0f });
+	//UI_MGR->AddImage("keyConfig.key.63", L"key.63", { -74, -90 }, { 1.0f, 1.0f });
+	//UI_MGR->AddImage("keyConfig.key.64", L"key.64", { -40, -90 }, { 1.0f, 1.0f });
+	//UI_MGR->AddImage("keyConfig.key.65", L"key.65", { -8, -90 }, { 1.0f, 1.0f });
+	//UI_MGR->AddImage("keyConfig.key.66", L"key.66", { 26, -90 }, { 1.0f, 1.0f });
+	//UI_MGR->AddImage("keyConfig.key.67", L"key.67", { 75, -90 }, { 1.0f, 1.0f });
+	//UI_MGR->AddImage("keyConfig.key.68", L"key.68", { 109, -90 }, { 1.0f, 1.0f });
+	//
+	//UI_MGR->AddImage("keyConfig.key.87", L"key.87", { 143, -90 }, { 1.0f, 1.0f });
+	//UI_MGR->AddImage("keyConfig.key.88", L"key.88", { 177, -90 }, { 1.0f, 1.0f });
+	//UI_MGR->AddImage("keyConfig.key.70", L"key.70", { 250, -90 }, { 1.0f, 1.0f });
+	//
+	////2열 // -50
+	//UI_MGR->AddImage("keyConfig.key.41", L"key.41", { -288, -50 }, { 1.0f, 1.0f });
+	//UI_MGR->AddImage("keyConfig.key.2", L"key.2", { -257, -50 }, { 1.0f, 1.0f });
+	//UI_MGR->AddImage("keyConfig.key.3", L"key.3", { -223, -50 }, { 1.0f, 1.0f });
+	//UI_MGR->AddImage("keyConfig.key.4", L"key.4", { -191, -50 }, { 1.0f, 1.0f });
+	//UI_MGR->AddImage("keyConfig.key.5", L"key.5", { -161, -50 }, { 1.0f, 1.0f });
+	//UI_MGR->AddImage("keyConfig.key.6", L"key.6", { -127, -50 }, { 1.0f, 1.0f });
+	//UI_MGR->AddImage("keyConfig.key.7", L"key.7", { -95, -50 }, { 1.0f, 1.0f });
+	//UI_MGR->AddImage("keyConfig.key.8", L"key.8", { -62, -50 }, { 1.0f, 1.0f });
+	//UI_MGR->AddImage("keyConfig.key.9", L"key.9", { -29, -50 }, { 1.0f, 1.0f });
+	//UI_MGR->AddImage("keyConfig.key.10", L"key.10", { 4, -50 }, { 1.0f, 1.0f });
+	//UI_MGR->AddImage("keyConfig.key.11", L"key.11", { 37, -50 }, { 1.0f, 1.0f });
+	//UI_MGR->AddImage("keyConfig.key.12", L"key.12", { 71, -50 }, { 1.0f, 1.0f });
+	//UI_MGR->AddImage("keyConfig.key.13", L"key.13", { 105, -50 }, { 1.0f, 1.0f });
+	//
+	//UI_MGR->AddImage("keyConfig.key.82", L"key.82", { 216, -50 }, { 1.0f, 1.0f });
+	//UI_MGR->AddImage("keyConfig.key.71", L"key.71", { 250, -50 }, { 1.0f, 1.0f });
+	//UI_MGR->AddImage("keyConfig.key.73", L"key.73", { 284, -50 }, { 1.0f, 1.0f });
+	//
+	////3열 16 ~ 27 // 43 = \//
+	//UI_MGR->AddImage("keyConfig.key.16", L"key.16", { -244,		-17 }, { 1.0f, 1.0f });
+	//UI_MGR->AddImage("keyConfig.key.17", L"key.17", { -210,		-17 }, { 1.0f, 1.0f });
+	//UI_MGR->AddImage("keyConfig.key.18", L"key.18", { -176,		-17 }, { 1.0f, 1.0f });
+	//UI_MGR->AddImage("keyConfig.key.19", L"key.19", { -142,	-17 }, { 1.0f, 1.0f });
+	//UI_MGR->AddImage("keyConfig.key.20", L"key.20", { -109,		-17 }, { 1.0f, 1.0f });
+	//UI_MGR->AddImage("keyConfig.key.21", L"key.21", { -76,		-17 }, { 1.0f, 1.0f });
+	//UI_MGR->AddImage("keyConfig.key.22", L"key.22", { -43,		-17 }, { 1.0f, 1.0f });
+	//UI_MGR->AddImage("keyConfig.key.23", L"key.23", { -10,	-17 }, { 1.0f, 1.0f });
+	//UI_MGR->AddImage("keyConfig.key.24", L"key.11", { 23,		-17 }, { 1.0f, 1.0f });
+	//UI_MGR->AddImage("keyConfig.key.25", L"key.25", { 56,		-17 }, { 1.0f, 1.0f });
+	//UI_MGR->AddImage("keyConfig.key.26", L"key.26", { 89,		-17 }, { 1.0f, 1.0f });
+	//UI_MGR->AddImage("keyConfig.key.27", L"key.27", { 123,	-17 }, { 1.0f, 1.0f });
+	//
+	//UI_MGR->AddImage("keyConfig.key.83", L"key.83", { 216, -17 }, { 1.0f, 1.0f });
+	//UI_MGR->AddImage("keyConfig.key.79", L"key.79", { 250, -17 }, { 1.0f, 1.0f });
+	//UI_MGR->AddImage("keyConfig.key.81", L"key.81", { 284, -17 }, { 1.0f, 1.0f });
+
+	//4열 30 ~ 40
+
+
+
+
+	//5열
+
+	//6열
+
+	////////기본버튼
+	//초기화
+	UI_MGR->AddImage("keyConfig.button.Default.normal", L"keyConfig.button.Default.normal", { -270, 215 }, { 1.0f, 1.0f });
+	UI_MGR->FindUI("keyConfig.button.Default.normal")->m_RayCast = true;
+	UI_MGR->BitMapAdd("keyConfig.button.Default.normal", L"keyConfig.button.Default.mouseOver");
+	UI_MGR->BitMapAdd("keyConfig.button.Default.normal", L"keyConfig.button.Default.pressed");
+	auto settingkeyConfig_Clear0 = [](void) { UI_MGR->FindUI("keyConfig.button.Default.normal")->m_Renderer.ChangeBitmap(1); checkEvent = true; };
+	auto settingkeyConfig_Clear1 = [](void) { UI_MGR->FindUI("keyConfig.button.Default.normal")->m_Renderer.ChangeBitmap(0);  checkEvent = false; };
+	auto settingkeyConfig_Clear2 = [](void) { UI_MGR->FindUI("keyConfig.button.Default.normal")->m_Renderer.ChangeBitmap(2);  };
+	UI_MGR->AddEvent("keyConfig.button.Default.normal", ADDEVENT_OnMouseOver, settingkeyConfig_Clear0);
+	UI_MGR->AddEvent("keyConfig.button.Default.normal", ADDEVENT_OnMouseExit, settingkeyConfig_Clear1);
+	UI_MGR->AddEvent("keyConfig.button.Default.normal", ADDEVENT_OnMouseClick, settingkeyConfig_Clear2);
+	//모두없애기
+	UI_MGR->AddImage("keyConfig.button.delete.normal", L"keyConfig.button.delete.normal", { -180, 215 }, { 1.0f, 1.0f });
+	UI_MGR->FindUI("keyConfig.button.delete.normal")->m_RayCast = true;
+	UI_MGR->BitMapAdd("keyConfig.button.delete.normal", L"keyConfig.button.delete.mouseOver");
+	UI_MGR->BitMapAdd("keyConfig.button.delete.normal", L"keyConfig.button.delete.pressed");
+	auto settingkeyConfig_Delete0 = [](void) { UI_MGR->FindUI("keyConfig.button.delete.normal")->m_Renderer.ChangeBitmap(1); checkEvent = true; };
+	auto settingkeyConfig_Delete1 = [](void) { UI_MGR->FindUI("keyConfig.button.delete.normal")->m_Renderer.ChangeBitmap(0);  checkEvent = false; };
+	auto settingkeyConfig_Delete2 = [](void) { UI_MGR->FindUI("keyConfig.button.delete.normal")->m_Renderer.ChangeBitmap(2);  };
+	UI_MGR->AddEvent("keyConfig.button.delete.normal", ADDEVENT_OnMouseOver, settingkeyConfig_Delete0);
+	UI_MGR->AddEvent("keyConfig.button.delete.normal", ADDEVENT_OnMouseExit, settingkeyConfig_Delete1);
+	UI_MGR->AddEvent("keyConfig.button.delete.normal", ADDEVENT_OnMouseClick, settingkeyConfig_Delete2);
+	////취소
+	UI_MGR->AddImage("keyConfig.button.cancel.normal", L"keyConfig.button.cancel.normal", { 180, 215 }, { 1.0f, 1.0f });
+	UI_MGR->FindUI("keyConfig.button.cancel.normal")->m_RayCast = true;
+	UI_MGR->BitMapAdd("keyConfig.button.cancel.normal", L"keyConfig.button.cancel.mouseOver");
+	UI_MGR->BitMapAdd("keyConfig.button.cancel.normal", L"keyConfig.button.cancel.pressed");
+	auto settingkeyConfig_cancel0 = [](void) { UI_MGR->FindUI("keyConfig.button.cancel.normal")->m_Renderer.ChangeBitmap(1); checkEvent = true; };
+	auto settingkeyConfig_cancel1 = [](void) { UI_MGR->FindUI("keyConfig.button.cancel.normal")->m_Renderer.ChangeBitmap(0);  checkEvent = false; };
+	auto settingkeyConfig_cancel2 = [](void) { UI_MGR->FindUI("keyConfig.button.cancel.normal")->m_Renderer.ChangeBitmap(2);  
+	UI_MGR->FindUI("keyConfig.backgrnd")->m_isActive = false;
+	};
+	UI_MGR->AddEvent("keyConfig.button.cancel.normal", ADDEVENT_OnMouseOver, settingkeyConfig_cancel0);
+	UI_MGR->AddEvent("keyConfig.button.cancel.normal", ADDEVENT_OnMouseExit, settingkeyConfig_cancel1);
+	UI_MGR->AddEvent("keyConfig.button.cancel.normal", ADDEVENT_OnMouseClick, settingkeyConfig_cancel2);
+	////확인
+	UI_MGR->AddImage("keyConfig.button.ok.normal", L"keyConfig.button.ok.normal", { 270, 215 }, { 1.0f, 1.0f });
+	UI_MGR->FindUI("keyConfig.button.ok.normal")->m_RayCast = true;
+	UI_MGR->BitMapAdd("keyConfig.button.ok.normal", L"keyConfig.button.ok.mouseOver");
+	UI_MGR->BitMapAdd("keyConfig.button.ok.normal", L"keyConfig.button.ok.pressed");
+	auto settingkeyConfig_ok0 = [](void) { UI_MGR->FindUI("keyConfig.button.ok.normal")->m_Renderer.ChangeBitmap(1); checkEvent = true; };
+	auto settingkeyConfig_ok1 = [](void) { UI_MGR->FindUI("keyConfig.button.ok.normal")->m_Renderer.ChangeBitmap(0);  checkEvent = false; };
+	auto settingkeyConfig_ok2 = [](void) { UI_MGR->FindUI("keyConfig.button.ok.normal")->m_Renderer.ChangeBitmap(2); 
+	UI_MGR->FindUI("keyConfig.backgrnd")->m_isActive = false;
+	};
+	UI_MGR->AddEvent("keyConfig.button.ok.normal", ADDEVENT_OnMouseOver, settingkeyConfig_ok0);
+	UI_MGR->AddEvent("keyConfig.button.ok.normal", ADDEVENT_OnMouseExit, settingkeyConfig_ok1);
+	UI_MGR->AddEvent("keyConfig.button.ok.normal", ADDEVENT_OnMouseClick, settingkeyConfig_ok2);
+
+	//키 모양
+	//keyConfig.key.1
+	//UI_MGR->SetParent("keyConfig.backgrnd3", "keyConfig.key.1");
+	//UI_MGR->SetParent("keyConfig.backgrnd3", "keyConfig.key.59");
+	//UI_MGR->SetParent("keyConfig.backgrnd3", "keyConfig.key.60");
+	//UI_MGR->SetParent("keyConfig.backgrnd3", "keyConfig.key.61");
+	//UI_MGR->SetParent("keyConfig.backgrnd3", "keyConfig.key.62");
+	//UI_MGR->SetParent("keyConfig.backgrnd3", "keyConfig.key.63");
+	//UI_MGR->SetParent("keyConfig.backgrnd3", "keyConfig.key.64");
+	//UI_MGR->SetParent("keyConfig.backgrnd3", "keyConfig.key.65");
+	//UI_MGR->SetParent("keyConfig.backgrnd3", "keyConfig.key.66");
+	//UI_MGR->SetParent("keyConfig.backgrnd3", "keyConfig.key.67");
+	//UI_MGR->SetParent("keyConfig.backgrnd3", "keyConfig.key.68");
+	//UI_MGR->SetParent("keyConfig.backgrnd3", "keyConfig.key.87");
+	//UI_MGR->SetParent("keyConfig.backgrnd3", "keyConfig.key.88");
+	//UI_MGR->SetParent("keyConfig.backgrnd3", "keyConfig.key.70");
+	////2열
+	//UI_MGR->SetParent("keyConfig.backgrnd3", "keyConfig.key.41");
+	//UI_MGR->SetParent("keyConfig.backgrnd3", "keyConfig.key.2");
+	//UI_MGR->SetParent("keyConfig.backgrnd3", "keyConfig.key.3");
+	//UI_MGR->SetParent("keyConfig.backgrnd3", "keyConfig.key.4");
+	//UI_MGR->SetParent("keyConfig.backgrnd3", "keyConfig.key.5");
+	//UI_MGR->SetParent("keyConfig.backgrnd3", "keyConfig.key.6");
+	//UI_MGR->SetParent("keyConfig.backgrnd3", "keyConfig.key.7");
+	//UI_MGR->SetParent("keyConfig.backgrnd3", "keyConfig.key.8");
+	//UI_MGR->SetParent("keyConfig.backgrnd3", "keyConfig.key.9");
+	//UI_MGR->SetParent("keyConfig.backgrnd3", "keyConfig.key.10");
+	//UI_MGR->SetParent("keyConfig.backgrnd3", "keyConfig.key.11");
+	//UI_MGR->SetParent("keyConfig.backgrnd3", "keyConfig.key.12");
+	//UI_MGR->SetParent("keyConfig.backgrnd3", "keyConfig.key.13");
+	//UI_MGR->SetParent("keyConfig.backgrnd3", "keyConfig.key.82");
+	//UI_MGR->SetParent("keyConfig.backgrnd3", "keyConfig.key.71");
+	//UI_MGR->SetParent("keyConfig.backgrnd3", "keyConfig.key.73");
+	////3열
+	//UI_MGR->SetParent("keyConfig.backgrnd3", "keyConfig.key.16");
+	//UI_MGR->SetParent("keyConfig.backgrnd3", "keyConfig.key.17");
+	//UI_MGR->SetParent("keyConfig.backgrnd3", "keyConfig.key.18");
+	//UI_MGR->SetParent("keyConfig.backgrnd3", "keyConfig.key.19");
+	//UI_MGR->SetParent("keyConfig.backgrnd3", "keyConfig.key.20");
+	//UI_MGR->SetParent("keyConfig.backgrnd3", "keyConfig.key.21");
+	//UI_MGR->SetParent("keyConfig.backgrnd3", "keyConfig.key.22");
+	//UI_MGR->SetParent("keyConfig.backgrnd3", "keyConfig.key.23");
+	//UI_MGR->SetParent("keyConfig.backgrnd3", "keyConfig.key.24");
+	//UI_MGR->SetParent("keyConfig.backgrnd3", "keyConfig.key.25");
+	//UI_MGR->SetParent("keyConfig.backgrnd3", "keyConfig.key.26");
+	//UI_MGR->SetParent("keyConfig.backgrnd3", "keyConfig.key.27");
+	//
+	//UI_MGR->SetParent("keyConfig.backgrnd3", "keyConfig.key.83");
+	//UI_MGR->SetParent("keyConfig.backgrnd3", "keyConfig.key.79");
+	//UI_MGR->SetParent("keyConfig.backgrnd3", "keyConfig.key.81");
+
+	UI_MGR->FindUI("keyConfig.backgrnd")->m_isActive = false;
+
+
+
+	//기본버튼
+	UI_MGR->SetParent("keyConfig.backgrnd", "keyConfig.button.ok.normal");
+	UI_MGR->SetParent("keyConfig.backgrnd", "keyConfig.button.cancel.normal");
+	UI_MGR->SetParent("keyConfig.backgrnd", "keyConfig.button.delete.normal");
+	UI_MGR->SetParent("keyConfig.backgrnd", "keyConfig.button.Default.normal");
+	UI_MGR->SetParent("keyConfig.backgrnd", "keyConfig.backgrnd3");
+	UI_MGR->SetParent("keyConfig.backgrnd", "keyConfig.backgrnd2");
+	//keyConfig end
+	///////////////////////////////////////////////////
+	UI_MGR->FindUI("keyConfig.backgrnd")->m_RayCast = true;
+	
+	auto keyConfigFunc = [](void) {
+		if (UI_MGR->FindUI("keyConfig.backgrnd")->m_isActive == true)
+		{
+			UI_MGR->FindUI("keyConfig.backgrnd")->m_isActive = false;
+
+		}
+		else
+		{
+			UI_MGR->FindUI("keyConfig.backgrnd")->m_isActive = true;
+			UI_MGR->FindUI("submenu.backgrnd.0.setting")->m_isActive = false;
+		}
+	};
+	UI_MGR->AddEvent("keySetting.normal", ADDEVENT_OnMouseClick, keyConfigFunc);
+	////
+	///
 	UI_MGR->AddImage("gameQuit.normal", L"gameQuit.normal", { 0, 120 }, { 1.0f, 1.0f });
 	UI_MGR->FindUI("gameQuit.normal")->m_RayCast = true;
 	UI_MGR->BitMapAdd("gameQuit.normal", L"gameQuit.pressed");
@@ -515,6 +815,53 @@ void IngameScene::Init(HWND hWnd)
 	auto settingFunc8 = [](void) { UI_MGR->FindUI("gameQuit.normal")->m_Renderer.ChangeBitmap(0);  checkEvent = false; };
 	UI_MGR->AddEvent("gameQuit.normal", ADDEVENT_OnMouseOver, settingFunc7);
 	UI_MGR->AddEvent("gameQuit.normal", ADDEVENT_OnMouseExit, settingFunc8);
+
+
+	//============================================================================================
+	//게임 종료 창
+	UI_MGR->AddButton("gameEnd", L"Game_End", { 600,400 }, { 1.50f, 1.33333f });
+
+	// 취소 버튼
+	UI_MGR->AddButton("gameEnd_No", L"ChannelScene_returnPage_no_Default", { 30,47 }, { 1.0f, 1.0f });
+	UI_MGR->FindUI("gameEnd_No")->m_RayCast = true;
+	UI_MGR->BitMapAdd("gameEnd_No", L"ChannelScene_returnPage_no_Over");
+	auto End_Func0 = [](void) { UI_MGR->FindUI("gameEnd_No")->m_Renderer.ChangeBitmap(1); checkEvent = true; };
+	auto End_Func1 = [](void) { UI_MGR->FindUI("gameEnd_No")->m_Renderer.ChangeBitmap(0);  checkEvent = false; };
+	UI_MGR->AddEvent("gameEnd_No", ADDEVENT_OnMouseOver, End_Func0);
+	UI_MGR->AddEvent("gameEnd_No", ADDEVENT_OnMouseExit, End_Func1);
+
+	// 확인 버튼
+	UI_MGR->AddButton("gameEnd_Ok", L"ChannelScene_returnPage_ok_Default", { -30,47 }, { 1.0f, 1.0 });
+	UI_MGR->FindUI("gameEnd_Ok")->m_RayCast = true;
+	UI_MGR->BitMapAdd("gameEnd_Ok", L"ChannelScene_returnPage_ok_Over");
+	auto End_Func2 = [](void) { UI_MGR->FindUI("gameEnd_Ok")->m_Renderer.ChangeBitmap(1); checkEvent = true; };
+	auto End_Func3 = [](void) { UI_MGR->FindUI("gameEnd_Ok")->m_Renderer.ChangeBitmap(0);  checkEvent = false; };
+	UI_MGR->AddEvent("gameEnd_Ok", ADDEVENT_OnMouseOver, End_Func2);
+	UI_MGR->AddEvent("gameEnd_Ok", ADDEVENT_OnMouseExit, End_Func3);
+
+	// 부모 설정
+	UI_MGR->SetParent("gameEnd", "gameEnd_No");
+	UI_MGR->SetParent("gameEnd", "gameEnd_Ok");
+	// 초기값 안보이게
+	UI_MGR->FindUI("gameEnd")->m_isActive = false;
+
+	//게임 종료 취소 이벤트
+	auto End_Func5 = [](void) { UI_MGR->FindUI("gameEnd")->m_isActive = false; };
+	UI_MGR->AddEvent("gameEnd_No", ADDEVENT_OnMouseClick, End_Func5);
+	//게임 종료 확인 이벤트
+	auto End_Func6 = [](void) {
+
+		DATA_MGR->AllMgrDestroy();
+
+		PostQuitMessage(WM_DESTROY); 
+	};
+	UI_MGR->AddEvent("gameEnd_Ok", ADDEVENT_OnMouseClick, End_Func6);
+	//============
+	auto End_Func7 = [](void) {	UI_MGR->FindUI("gameEnd")->m_isActive = true; };
+
+	UI_MGR->AddEvent("gameQuit.normal", ADDEVENT_OnMouseClick, End_Func7);
+
+
 
 	UI_MGR->SetParent("submenu.backgrnd.0.setting", "title.setting");
 	UI_MGR->SetParent("submenu.backgrnd.0.setting", "channel.normal");
@@ -542,6 +889,7 @@ void IngameScene::Init(HWND hWnd)
 		UI_MGR->FindUI("submenu.backgrnd.0.community")->m_isActive = false;
 		UI_MGR->FindUI("submenu.backgrnd.0.setting")->m_isActive = false;
 		UI_MGR->FindUI("submenu.backgrnd.0.menu")->m_isActive = false;
+		UI_MGR->FindUI("submenu.notReady")->m_isActive = false;
 	}
 	else {
 		UI_MGR->FindUI("submenu.backgrnd.0.menu")->m_isActive = true;
@@ -549,6 +897,7 @@ void IngameScene::Init(HWND hWnd)
 		UI_MGR->FindUI("submenu.backgrnd.0.character")->m_isActive = false;
 		UI_MGR->FindUI("submenu.backgrnd.0.community")->m_isActive = false;
 		UI_MGR->FindUI("submenu.backgrnd.0.setting")->m_isActive = false;
+		UI_MGR->FindUI("submenu.notReady")->m_isActive = false;
 		//UI_MGR->FindUI("submenu.backgrnd.0.menu")->m_isActive = false;
 	}};
 	UI_MGR->AddEvent("mainBar.menu.button.menu.normal.0", ADDEVENT_OnMouseOver, IngameFunc15);
@@ -568,6 +917,7 @@ void IngameScene::Init(HWND hWnd)
 	auto menuFunc2 = [](void) { UI_MGR->FindUI("quest.normal")->m_Renderer.ChangeBitmap(0);  checkEvent = false; };
 	UI_MGR->AddEvent("quest.normal", ADDEVENT_OnMouseOver, menuFunc1);
 	UI_MGR->AddEvent("quest.normal", ADDEVENT_OnMouseExit, menuFunc2);
+	UI_MGR->AddEvent("quest.normal", ADDEVENT_OnMouseClick, notReady);
 
 	UI_MGR->AddImage("medal.normal", L"medal.normal", { 0, 60 }, { 1.0f, 1.0f });
 	UI_MGR->FindUI("medal.normal")->m_RayCast = true;
@@ -576,6 +926,7 @@ void IngameScene::Init(HWND hWnd)
 	auto menuFunc4 = [](void) { UI_MGR->FindUI("medal.normal")->m_Renderer.ChangeBitmap(0);  checkEvent = false; };
 	UI_MGR->AddEvent("medal.normal", ADDEVENT_OnMouseOver, menuFunc3);
 	UI_MGR->AddEvent("medal.normal", ADDEVENT_OnMouseExit, menuFunc4);
+	UI_MGR->AddEvent("medal.normal", ADDEVENT_OnMouseClick, notReady);
 
 	UI_MGR->AddImage("union.normal", L"union.normal", { 0, 90 }, { 1.0f, 1.0f });
 	UI_MGR->FindUI("union.normal")->m_RayCast = true;
@@ -584,6 +935,7 @@ void IngameScene::Init(HWND hWnd)
 	auto menuFunc6 = [](void) { UI_MGR->FindUI("union.normal")->m_Renderer.ChangeBitmap(0);  checkEvent = false; };
 	UI_MGR->AddEvent("union.normal", ADDEVENT_OnMouseOver, menuFunc5);
 	UI_MGR->AddEvent("union.normal", ADDEVENT_OnMouseExit, menuFunc6);
+	UI_MGR->AddEvent("union.normal", ADDEVENT_OnMouseClick, notReady);
 
 	UI_MGR->AddImage("monsterCollection.normal", L"monsterCollection.normal", { 0, 120 }, { 1.0f, 1.0f });
 	UI_MGR->FindUI("monsterCollection.normal")->m_RayCast = true;
@@ -592,6 +944,7 @@ void IngameScene::Init(HWND hWnd)
 	auto menuFunc8 = [](void) { UI_MGR->FindUI("monsterCollection.normal")->m_Renderer.ChangeBitmap(0);  checkEvent = false; };
 	UI_MGR->AddEvent("monsterCollection.normal", ADDEVENT_OnMouseOver, menuFunc7);
 	UI_MGR->AddEvent("monsterCollection.normal", ADDEVENT_OnMouseExit, menuFunc8);
+	UI_MGR->AddEvent("monsterCollection.normal", ADDEVENT_OnMouseClick, notReady);
 	///////////////
 	UI_MGR->AddImage("auction.normal", L"auction.normal", { 0, 150 }, { 1.0f, 1.0f });
 	UI_MGR->FindUI("auction.normal")->m_RayCast = true;
@@ -600,6 +953,7 @@ void IngameScene::Init(HWND hWnd)
 	auto menuFunc10 = [](void) { UI_MGR->FindUI("auction.normal")->m_Renderer.ChangeBitmap(0);  checkEvent = false; };
 	UI_MGR->AddEvent("auction.normal", ADDEVENT_OnMouseOver, menuFunc9);
 	UI_MGR->AddEvent("auction.normal", ADDEVENT_OnMouseExit, menuFunc10);
+	UI_MGR->AddEvent("auction.normal", ADDEVENT_OnMouseClick, notReady);
 
 	UI_MGR->AddImage("mosterLife.normal", L"mosterLife.normal", { 0, 180 }, { 1.0f, 1.0f });
 	UI_MGR->FindUI("mosterLife.normal")->m_RayCast = true;
@@ -608,6 +962,7 @@ void IngameScene::Init(HWND hWnd)
 	auto menuFunc12 = [](void) { UI_MGR->FindUI("mosterLife.normal")->m_Renderer.ChangeBitmap(0);  checkEvent = false; };
 	UI_MGR->AddEvent("mosterLife.normal", ADDEVENT_OnMouseOver, menuFunc11);
 	UI_MGR->AddEvent("mosterLife.normal", ADDEVENT_OnMouseExit, menuFunc12);
+	UI_MGR->AddEvent("mosterLife.normal", ADDEVENT_OnMouseClick, notReady);
 
 	UI_MGR->AddImage("battleStats.normal", L"battleStats.normal", { 0, 210 }, { 1.0f, 1.0f });
 	UI_MGR->FindUI("battleStats.normal")->m_RayCast = true;
@@ -616,6 +971,7 @@ void IngameScene::Init(HWND hWnd)
 	auto menuFunc14 = [](void) { UI_MGR->FindUI("battleStats.normal")->m_Renderer.ChangeBitmap(0);  checkEvent = false; };
 	UI_MGR->AddEvent("battleStats.normal", ADDEVENT_OnMouseOver, menuFunc13);
 	UI_MGR->AddEvent("battleStats.normal", ADDEVENT_OnMouseExit, menuFunc14);
+	UI_MGR->AddEvent("battleStats.normal", ADDEVENT_OnMouseClick, notReady);
 
 	UI_MGR->AddImage("achievement.normal", L"achievement.normal", { 0, 240 }, { 1.0f, 1.0f });
 	UI_MGR->FindUI("achievement.normal")->m_RayCast = true;
@@ -624,6 +980,7 @@ void IngameScene::Init(HWND hWnd)
 	auto menuFunc16 = [](void) { UI_MGR->FindUI("achievement.normal")->m_Renderer.ChangeBitmap(0);  checkEvent = false; };
 	UI_MGR->AddEvent("achievement.normal", ADDEVENT_OnMouseOver, menuFunc15);
 	UI_MGR->AddEvent("achievement.normal", ADDEVENT_OnMouseExit, menuFunc16);
+	UI_MGR->AddEvent("achievement.normal", ADDEVENT_OnMouseClick, notReady);
 
 	UI_MGR->AddImage("help.normal", L"help.normal", { 0, 270 }, { 1.0f, 1.0f });
 	UI_MGR->FindUI("help.normal")->m_RayCast = true;
@@ -632,6 +989,7 @@ void IngameScene::Init(HWND hWnd)
 	auto menuFunc18 = [](void) { UI_MGR->FindUI("help.normal")->m_Renderer.ChangeBitmap(0);  checkEvent = false; };
 	UI_MGR->AddEvent("help.normal", ADDEVENT_OnMouseOver, menuFunc17);
 	UI_MGR->AddEvent("help.normal", ADDEVENT_OnMouseExit, menuFunc18);
+	UI_MGR->AddEvent("help.normal", ADDEVENT_OnMouseClick, notReady);
 
 	UI_MGR->AddImage("claim.normal", L"claim.normal", { 0, 300 }, { 1.0f, 1.0f });
 	UI_MGR->FindUI("claim.normal")->m_RayCast = true;
@@ -640,6 +998,7 @@ void IngameScene::Init(HWND hWnd)
 	auto menuFunc20 = [](void) { UI_MGR->FindUI("claim.normal")->m_Renderer.ChangeBitmap(0);  checkEvent = false; };
 	UI_MGR->AddEvent("claim.normal", ADDEVENT_OnMouseOver, menuFunc19);
 	UI_MGR->AddEvent("claim.normal", ADDEVENT_OnMouseExit, menuFunc20);
+	UI_MGR->AddEvent("claim.normal", ADDEVENT_OnMouseClick, notReady);
 
 
 	//부모 설정
@@ -662,6 +1021,55 @@ void IngameScene::Init(HWND hWnd)
 
 	UI_MGR->SetParent("submenu.backgrnd.0.menu", "submenu.backgrnd.1.menu");
 	UI_MGR->SetParent("submenu.backgrnd.0.menu", "submenu.backgrnd.2.menu");
+
+
+	///////////////////////////////////////////////////////////////////////////////////
+	//ingame.death.panel
+	UI_MGR->AddImage("ingame.death.panel", L"ingame.death.panel", { 600, 200 }, {1.0f, 1.0f});
+	UI_MGR->AddImage("ingame.death.normal", L"ingame.death.normal", { 108, 42 }, { 1.0f, 1.0f });
+	UI_MGR->FindUI("ingame.death.normal")->m_RayCast = true;
+	UI_MGR->BitMapAdd("ingame.death.normal", L"ingame.death.Over");
+	auto deathFunc01 = [](void) { UI_MGR->FindUI("ingame.death.normal")->m_Renderer.ChangeBitmap(1); checkEvent = true; };
+	auto deathFunc02 = [](void) { UI_MGR->FindUI("ingame.death.normal")->m_Renderer.ChangeBitmap(0);  checkEvent = false; };
+	auto deathFunc03 = [](void) { 
+		UI_MGR->FindUI("ingame.death.panel")->m_isActive = false; 
+		PLAYER_MGR->m_player->SetPos(MAP_MGR->m_pMap->m_RevivalPos);
+		PLAYER_MGR->m_player->Revival();
+		EFF_MGR->Destoy();
+		
+	};
+	UI_MGR->AddEvent("ingame.death.normal", ADDEVENT_OnMouseOver, deathFunc01);
+	UI_MGR->AddEvent("ingame.death.normal", ADDEVENT_OnMouseExit, deathFunc02);
+	UI_MGR->AddEvent("ingame.death.normal", ADDEVENT_OnMouseClick, deathFunc03);
+	UI_MGR->SetParent("ingame.death.panel", "ingame.death.normal");
+
+	UI_MGR->FindUI("ingame.death.panel")->m_isActive = false;
+	//UI_MGR->AddImage("미니맵0", L"minimap_0", { 50,50 }, { 1.0f, 1.0f });
+	//UI_MGR->AddImage("미니맵1", L"minimap_1", { 130, 50 }, { 1.5f, 1.0f });
+	//UI_MGR->AddImage("미니맵2", L"minimap_2", { 210, 50 }, { 1.0f, 1.0f });
+	//UI_MGR->AddImage("미니맵3", L"minimap_3", { 50, 123 }, { 1.0f, 3.0f });
+	//UI_MGR->AddImage("미니맵4", L"minimap_4", { 210, 123 }, { 1.0f, 3.0f });
+	//UI_MGR->AddImage("미니맵5", L"minimap_5", { 50, 175 }, { 1.0f, 1.0f });
+	//UI_MGR->AddImage("미니맵6", L"minimap_6", { 130, 175 }, { 1.5f, 1.0f });
+	//UI_MGR->AddImage("미니맵7", L"minimap_7", { 210, 175 }, { 1.0f, 1.0f });
+	//
+	//UI_MGR->AddImage("미니맵베이스", L"minimap_base", { 27, 78, 232, 180 });
+
+	UI_MGR->AddImage("미니맵유저", L"minimap.user", { 100,100 }, { 1.0f, 1.0f });
+
+	auto Mimimap_User = [](void) { 
+
+		D2D1_POINT_2F pos = PLAYER_MGR->m_player->GetPos();
+
+		pos.x = pos.x * 0.1f + 35.0f;
+		pos.y = pos.y * 0.1f + 50.0f;
+
+		UI_MGR->FindUI("미니맵유저")->m_Transform.SetPos(pos);
+	};
+
+	UI_MGR->AddEvent("미니맵유저", ADDEVENT_Update, Mimimap_User);
+
+
 
 }
 
@@ -898,10 +1306,23 @@ void IngameScene::Update(float _DelayTime)
 		PLAYER_MGR->m_player->JumpMove();
 	}
 
+
+	if (OnceKeyDown(VK_F7))
+	{
+		PLAYER_MGR->m_player->ChangeWeapon(103);
+	}
+
+
+	if (OnceKeyDown(VK_F8))
+	{
+		PLAYER_MGR->m_player->ChangeWeapon(102);
+	}
+
 	if (OnceKeyDown(VK_F9))
 	{
-		MOB_MGR->m_MobList.front()->Hit();
+		PLAYER_MGR->m_player->ChangeWeapon(1312004);
 	}
+	obj.Update(_DelayTime);
 }
 
 void IngameScene::Render()
@@ -945,14 +1366,12 @@ void IngameScene::Render()
 
 		MAP_MGR->LadderRender();
 
-	}
-
-		
+	}		
 		MAP_MGR->FrontRender();
 
 		UI_MGR->Render();
 
-	
+		obj.Render();
 }
 
 void IngameScene::SendText()
@@ -993,6 +1412,21 @@ LRESULT IngameScene::MyWndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM l
 		m_MousePos.x = GET_X_LPARAM(lParam);
 		m_MousePos.y = GET_Y_LPARAM(lParam);
 
+		obj.m_Transform.SetPos((float)m_MousePos.x + 11.0f, (float)m_MousePos.y + 12.0f);
+
+
+		if (checkEvent)
+		{
+			obj.m_Renderer.m_State = 0;
+			//obj.m_Renderer.AddAnimation(PLAYER_IDLE, 2, 3, 0.5, 0.5);
+			//MK_LOG("머징");
+		}
+		else
+		{
+			obj.m_Renderer.m_State = -1;
+			obj.m_Renderer.ChangeBitmap(0);
+		}
+
 		if (m_isClicked == true)
 		{
 			UI_MGR->OnMouseDrag(m_MousePos);
@@ -1016,11 +1450,55 @@ LRESULT IngameScene::MyWndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM l
 
 	case WM_LBUTTONDOWN:
 	{
+		obj.m_Renderer.m_State = -1;
+		obj.m_Renderer.ChangeBitmap(1);
 		MK_LOG("%d, %d 클릭", m_MousePos.x, m_MousePos.y);
 
 		UI_MGR->OnMouseDown(m_MousePos);
 
 		m_isClicked = true;
+
+		if (UI_MGR->FindUI("submenu.backgrnd.0.event")->m_isActive == true &&
+			!(m_MousePos.x > 329 && m_MousePos.x < 488 &&
+				m_MousePos.y < 777 && m_MousePos.y> 614))
+		{
+			UI_MGR->FindUI("submenu.backgrnd.0.event")->m_isActive = false;
+			UI_MGR->FindUI("submenu.notReady")->m_isActive = false;
+		}
+
+		if (UI_MGR->FindUI("submenu.backgrnd.0.character")->m_isActive == true &&
+			!(m_MousePos.x > 372 && m_MousePos.x < 531 &&
+				m_MousePos.y < 777 && m_MousePos.y> 455))
+		{
+			UI_MGR->FindUI("submenu.backgrnd.0.character")->m_isActive = false;
+			UI_MGR->FindUI("submenu.notReady")->m_isActive = false;
+		}
+
+		if (UI_MGR->FindUI("submenu.backgrnd.0.community")->m_isActive == true &&
+			!(m_MousePos.x > 414 && m_MousePos.x < 574 &&
+				m_MousePos.y < 777 && m_MousePos.y> 492))
+		{
+			UI_MGR->FindUI("submenu.backgrnd.0.community")->m_isActive = false;
+			UI_MGR->FindUI("submenu.notReady")->m_isActive = false;
+		}
+
+
+		if (UI_MGR->FindUI("submenu.backgrnd.0.setting")->m_isActive == true &&
+			!(m_MousePos.x > 458 && m_MousePos.x < 614 &&
+				m_MousePos.y < 777 && m_MousePos.y> 534))
+		{
+			UI_MGR->FindUI("submenu.backgrnd.0.setting")->m_isActive = false;
+			UI_MGR->FindUI("submenu.notReady")->m_isActive = false;
+
+		}
+
+		if (UI_MGR->FindUI("submenu.backgrnd.0.menu")->m_isActive == true &&
+			!(m_MousePos.x > 457 && m_MousePos.x < 616 &&
+				m_MousePos.y < 777 && m_MousePos.y> 291))
+		{
+			UI_MGR->FindUI("submenu.backgrnd.0.menu")->m_isActive = false;
+			UI_MGR->FindUI("submenu.notReady")->m_isActive = false;
+		}
 
 		if (
 			UI_MGR->FindUI("submenu.backgrnd.0.event")->m_isActive == true ||
@@ -1030,11 +1508,11 @@ LRESULT IngameScene::MyWndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM l
 			UI_MGR->FindUI("submenu.backgrnd.0.menu")->m_isActive == true
 			)
 		{
-			UI_MGR->FindUI("submenu.backgrnd.0.event")->m_isActive = false;
-			UI_MGR->FindUI("submenu.backgrnd.0.character")->m_isActive = false;
-			UI_MGR->FindUI("submenu.backgrnd.0.community")->m_isActive = false;
-			UI_MGR->FindUI("submenu.backgrnd.0.setting")->m_isActive = false;
-			UI_MGR->FindUI("submenu.backgrnd.0.menu")->m_isActive = false;
+			//UI_MGR->FindUI("submenu.backgrnd.0.event")->m_isActive = false;
+			//UI_MGR->FindUI("submenu.backgrnd.0.character")->m_isActive = false;
+			//UI_MGR->FindUI("submenu.backgrnd.0.community")->m_isActive = false;
+			//UI_MGR->FindUI("submenu.backgrnd.0.setting")->m_isActive = false;
+			//UI_MGR->FindUI("submenu.backgrnd.0.menu")->m_isActive = false;
 
 		}
 
@@ -1043,6 +1521,17 @@ LRESULT IngameScene::MyWndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM l
 
 	case WM_LBUTTONUP:
 	{
+		if (checkEvent)
+		{
+			obj.m_Renderer.m_State = 0;
+			//obj.m_Renderer.AddAnimation(PLAYER_IDLE, 2, 3, 0.5, 0.5);
+
+		}
+		else
+		{
+			obj.m_Renderer.m_State = -1;
+			obj.m_Renderer.ChangeBitmap(0);
+		}
 		UI_MGR->OnMouseUp(m_MousePos);
 
 		m_isClicked = false;
@@ -1156,6 +1645,12 @@ LRESULT IngameScene::MyWndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM l
 	}
 	break;
 
+	case WM_CLOSE:
+		UI_MGR->FindUI("gameEnd")->m_isActive = true;
+		return 0;
+	/*default:
+		return FALSE;*/
+		//====
 	}
 
 

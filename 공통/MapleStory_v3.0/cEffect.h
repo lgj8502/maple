@@ -9,6 +9,8 @@ public:
 	
 	float m_NowTime = 0.0f;
 
+	float m_AplhaTime = 0.5f;
+
 	bool  m_isNumber = false;
 
 	bool  m_NotDestroy = false;

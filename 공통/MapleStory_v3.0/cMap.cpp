@@ -147,6 +147,8 @@ void cMap::FrontRender()
 	{
 		i->Render();
 	}
+
+
 }
 
 void cMap::LadderRender()
@@ -181,6 +183,7 @@ void cMap::Destroy()
 	DeleteMapList(m_Portal_List);
 	DeleteMapList(m_Scroll_List);
 	DeleteMapList(m_Tile_List);
+	DeleteMapList(m_Minimap_List);
 }
 
 void cMap::DeleteMapList(vector<cMapObj*> _list)

@@ -19,6 +19,7 @@ class cEffectMgr : public TemplateSingleton<cEffectMgr>
 
 
 
+
 public:
 
 	~cEffectMgr();

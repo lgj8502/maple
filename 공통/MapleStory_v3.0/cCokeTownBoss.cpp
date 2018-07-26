@@ -8,6 +8,20 @@ cCokeTownBoss::~cCokeTownBoss()
 
 void cCokeTownBoss::Init()
 {
+	m_MapName = "코크타운 보스맵";
+
+	MAP_MGR->AddMinimapWindow(L"minimap_0", { 50,50 }, { 1.0f, 1.0f });
+	MAP_MGR->AddMinimapWindow(L"minimap_1", { 130,50 }, { 1.5f, 1.0f });
+	MAP_MGR->AddMinimapWindow(L"minimap_2", { 210,50 }, { 1.0f, 1.0f });
+	MAP_MGR->AddMinimapWindow(L"minimap_3", { 50,123 }, { 1.0f, 3.0f });
+	MAP_MGR->AddMinimapWindow(L"minimap_4", { 210,123 }, { 1.0f, 3.0f });
+	MAP_MGR->AddMinimapWindow(L"minimap_5", { 50,175 }, { 1.0f, 1.0f });
+	MAP_MGR->AddMinimapWindow(L"minimap_6", { 130,175 }, { 1.5f, 1.0f });
+	MAP_MGR->AddMinimapWindow(L"minimap_7", { 210,175 }, { 1.0f, 1.0f });
+	MAP_MGR->AddMinimapWindow_Rect(L"minimap_base", { 27, 78, 232, 180 });
+
+	MAP_MGR->AddMinimapWindow(L"CokeTown", { 50, 52 }, { 1.0f, 1.0f });
+
 	IMG_MGR->FileFindDir_Take(L".\\Img\\map\\CokeTown\\", m_MapImgList);
 	//IMG_MGR->FileFindDir(L".\\Img\\CokeTown\\");
 	// 제일 뒷 배경 1
@@ -81,10 +95,10 @@ void cCokeTownBoss::Init()
 
 
 	// 타일 _ 베이스  // 바닥
-	MAP_MGR->AddFlatTileH({ 0, 1018 }, 30, true);
-	MAP_MGR->AddFlatTileM({ 0, 1048 }, 30);
-	MAP_MGR->AddFlatTileM({ 0, 1108 }, 30);
-	MAP_MGR->AddFlatTileM({ 0, 1168 }, 30);
+	MAP_MGR->AddFlatTileH({ 0, 1018 }, 22, true);
+	MAP_MGR->AddFlatTileM({ 0, 1048 }, 22);
+	MAP_MGR->AddFlatTileM({ 0, 1108 }, 22);
+	MAP_MGR->AddFlatTileM({ 0, 1168 }, 22);
 	//
 
 
@@ -135,7 +149,7 @@ void cCokeTownBoss::Init()
 	m_LayOut6.m_Transform.m_CameraRate.y = (m_LayOut6_Size.y - WIN_HEIGHT) / (m_LayOut6_Size.y - WIN_HEIGHT);
 
 
-	m_MiniMap.m_Transform.SetPos({ 50,0 });
+	m_MiniMap.m_Transform.SetPos({ 35,50 });
 	m_MiniMap.m_Transform.SetScale(0.1f, 0.1f);
 
 }

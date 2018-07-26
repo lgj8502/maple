@@ -140,7 +140,7 @@ void ChannelScene::Init(HWND hWnd)
 	auto End_Func5 = [](void) { UI_MGR->FindUI("gameEnd")->m_isActive = false; };
 	UI_MGR->AddEvent("gameEnd_No", ADDEVENT_OnMouseClick, End_Func5);
 	//게임 종료 확인 이벤트
-	auto End_Func6 = [](void) {PostQuitMessage(WM_DESTROY); };
+	auto End_Func6 = [](void) {		DATA_MGR->AllMgrDestroy(); PostQuitMessage(WM_DESTROY); };
 	UI_MGR->AddEvent("gameEnd_Ok", ADDEVENT_OnMouseClick, End_Func6);
 
 }

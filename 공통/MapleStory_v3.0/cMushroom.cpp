@@ -216,6 +216,7 @@ void cMushroom::Hit()
 
 	if (m_HP <= 0)
 	{
+		SOUND_MGR->SoundResume(L"0100004.Die");
 		m_state = MOBSTATE_DIE;
 		StateChagne();
 
@@ -230,6 +231,7 @@ void cMushroom::Hit()
 	{
 		m_HitLeft = false;
 	}
+	SOUND_MGR->SoundResume(L"0100004.Damage");
 
 	m_state = MOBSTATE_HIT;
 

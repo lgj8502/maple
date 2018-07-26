@@ -16,11 +16,11 @@ PlayerTest::~PlayerTest()
 void PlayerTest::Init()
 {
 
-	m_Level = 1;
-	m_HP = 200;
-	m_HPmax = 200;
-	m_MP = 200;
-	m_MPmax = 200;
+	//m_CharacInfo.m_Level = 1;
+	//m_CharacInfo.m_HP = 200;
+	//m_CharacInfo.m_HPmax = 200;
+	//m_CharacInfo.m_MP = 200;
+	//m_CharacInfo.m_MPmax = 200;
 
 	SettingBase();
 	SettingHair();
@@ -44,14 +44,14 @@ void PlayerTest::Init()
 	m_Parts[PART_HEAD].m_Transform.SetPos({ 1,-30 });
 	m_Parts[PART_BODY].m_Transform.SetPos({ 0,0 });
 	m_Parts[PART_ARM].m_Transform.SetPos({ 9,-5 });
-	m_Parts[PART_COAT].m_Transform.SetPos({ 1,-5 });
+	m_Parts[PART_COAT].m_Transform.SetPos({ 1,-15 });
 	m_Parts[PART_COATARM].m_Transform.SetPos({ -1 ,-3 });
 	m_Parts[PART_PANTS].m_Transform.SetPos({ 3 , 5 });
 	m_Parts[PART_SHOES].m_Transform.SetPos({ 0 , 12 });
 	m_Parts[PART_HAND].m_Transform.SetPos({ -5 , 5 });
 	m_Parts[PART_FACE].m_Transform.SetPos({ -3,5 });
-	m_Parts[PART_HAIR].m_Transform.SetPos({ 0,-9 });
-	m_Parts[PART_WEAPON].m_Transform.SetPos({ 0, 0 });
+	m_Parts[PART_HAIR].m_Transform.SetPos({ 0, -9 });
+	m_Parts[PART_WEAPON].m_Transform.SetPos({ 3, 0 });
 
 	SetParent(PART_CENTER, PART_BODY);
 	SetParent(PART_CENTER, PART_HEAD);
@@ -116,10 +116,10 @@ void PlayerTest::Init()
 	m_Parts[PART_FACE].m_Transform.AddAniPos({ -3,5 });
 	m_Parts[PART_FACE].m_Transform.AddTransAnimation(PLAYER_IDLE, 0, 3, 0.5, 0.5, 0.5, 0.5);
 
-	m_Parts[PART_HAIR].m_Transform.AddAniPos({ 0,-9 });
-	m_Parts[PART_HAIR].m_Transform.AddAniPos({ 0,-9 });
-	m_Parts[PART_HAIR].m_Transform.AddAniPos({ 0,-9 });
-	m_Parts[PART_HAIR].m_Transform.AddAniPos({ 0,-9 });
+	m_Parts[PART_HAIR].m_Transform.AddAniPos({ -1,-9 });
+	m_Parts[PART_HAIR].m_Transform.AddAniPos({ -1,-9 });
+	m_Parts[PART_HAIR].m_Transform.AddAniPos({ -1,-9 });
+	m_Parts[PART_HAIR].m_Transform.AddAniPos({ -1,-9 });
 	m_Parts[PART_HAIR].m_Transform.AddTransAnimation(PLAYER_IDLE, 0, 3, 0.5, 0.5, 0.5, 0.5);
 
 	m_Parts[PART_HAND].m_Transform.AddAniPos({ -5 , 5 });
@@ -134,10 +134,10 @@ void PlayerTest::Init()
 	//m_Parts[PART_FACE].m_Transform.SetPos({ -3,5 });
 	//m_Parts[PART_HAIR].m_Transform.SetPos({ 0,-9 });
 
-	m_Parts[PART_COAT].m_Transform.AddAniPos({ 1, -5 });
-	m_Parts[PART_COAT].m_Transform.AddAniPos({ 1, -5 });
-	m_Parts[PART_COAT].m_Transform.AddAniPos({ 1, -5 });
-	m_Parts[PART_COAT].m_Transform.AddAniPos({ 1, -5 });
+	m_Parts[PART_COAT].m_Transform.AddAniPos({ 3, -15 });
+	m_Parts[PART_COAT].m_Transform.AddAniPos({ 3, -15 });
+	m_Parts[PART_COAT].m_Transform.AddAniPos({ 3, -15 });
+	m_Parts[PART_COAT].m_Transform.AddAniPos({ 3, -15 });
 	m_Parts[PART_COAT].m_Transform.AddTransAnimation(PLAYER_IDLE, 0, 3, 0.5, 0.5, 0.5, 0.5);
 
 	m_Parts[PART_COATARM].m_Transform.AddAniPos({ -1, -3 });
@@ -163,10 +163,10 @@ void PlayerTest::Init()
 	//m_Parts[PART_WEAPON].m_Transform.AddTransAnimation(PLAYER_IDLE, 0, 0, 2);
 
 	//101
-	m_Parts[PART_WEAPON].m_Transform.AddAniPos({ 0, 5 });
-	m_Parts[PART_WEAPON].m_Transform.AddAniPos({ 0, 5 });
-	m_Parts[PART_WEAPON].m_Transform.AddAniPos({ 0, 5 });
-	m_Parts[PART_WEAPON].m_Transform.AddAniPos({ 0, 5 });
+	m_Parts[PART_WEAPON].m_Transform.AddAniPos({ 7, 10 });
+	m_Parts[PART_WEAPON].m_Transform.AddAniPos({ 7, 10 });
+	m_Parts[PART_WEAPON].m_Transform.AddAniPos({ 7, 10 });
+	m_Parts[PART_WEAPON].m_Transform.AddAniPos({ 7, 10 });
 	m_Parts[PART_WEAPON].m_Transform.AddTransAnimation(PLAYER_IDLE, 0, 3, 0.5, 0.5, 0.5, 0.5);
 
 #pragma endregion IDLE
@@ -224,10 +224,10 @@ void PlayerTest::Init()
 	m_Parts[PART_FACE].m_Transform.AddAniPos({ -3,5 });
 	m_Parts[PART_FACE].m_Transform.AddTransAnimation(PLAYER_WALK, 4, 7, 0.2, 0.2, 0.2, 0.2);
 
-	m_Parts[PART_HAIR].m_Transform.AddAniPos({ 0,-9 });
-	m_Parts[PART_HAIR].m_Transform.AddAniPos({ 0,-9 });
-	m_Parts[PART_HAIR].m_Transform.AddAniPos({ 0,-9 });
-	m_Parts[PART_HAIR].m_Transform.AddAniPos({ 0,-9 });
+	m_Parts[PART_HAIR].m_Transform.AddAniPos({ 0, -9});
+	m_Parts[PART_HAIR].m_Transform.AddAniPos({ 0, -9});
+	m_Parts[PART_HAIR].m_Transform.AddAniPos({ 0, -9});
+	m_Parts[PART_HAIR].m_Transform.AddAniPos({ 0, -9});
 	m_Parts[PART_HAIR].m_Transform.AddTransAnimation(PLAYER_WALK, 4, 7, 0.2, 0.2, 0.2, 0.2);
 
 	m_Parts[PART_HAND].m_Transform.AddAniPos({ -5 , 5 });
@@ -238,10 +238,10 @@ void PlayerTest::Init()
 
 
 
-	m_Parts[PART_COAT].m_Transform.AddAniPos({ 1, -5 });
-	m_Parts[PART_COAT].m_Transform.AddAniPos({ 1, -5 });
-	m_Parts[PART_COAT].m_Transform.AddAniPos({ 1, -5 });
-	m_Parts[PART_COAT].m_Transform.AddAniPos({ 1, -5 });
+	m_Parts[PART_COAT].m_Transform.AddAniPos({ 1, -15 });
+	m_Parts[PART_COAT].m_Transform.AddAniPos({ 1, -15 });
+	m_Parts[PART_COAT].m_Transform.AddAniPos({ 1, -15 });
+	m_Parts[PART_COAT].m_Transform.AddAniPos({ 1, -15 });
 	m_Parts[PART_COAT].m_Transform.AddTransAnimation(PLAYER_IDLE, 4, 7, 0.5, 0.5, 0.5, 0.5);
 
 	m_Parts[PART_COATARM].m_Transform.AddAniPos({ 0, -5 });
@@ -272,10 +272,10 @@ void PlayerTest::Init()
 	//m_Parts[PART_WEAPON].m_Transform.AddAniPos({ -18,14 });
 
 	//101
-	m_Parts[PART_WEAPON].m_Transform.AddAniPos({ 0, 0 });
-	m_Parts[PART_WEAPON].m_Transform.AddAniPos({ 0, 10 });
-	m_Parts[PART_WEAPON].m_Transform.AddAniPos({ 0, 0 });
-	m_Parts[PART_WEAPON].m_Transform.AddAniPos({ 0, 0 });
+	m_Parts[PART_WEAPON].m_Transform.AddAniPos({ 7, 5 });
+	m_Parts[PART_WEAPON].m_Transform.AddAniPos({ 7, 5 });
+	m_Parts[PART_WEAPON].m_Transform.AddAniPos({ 7, 5 });
+	m_Parts[PART_WEAPON].m_Transform.AddAniPos({ 7, 5 });
 
 	m_Parts[PART_WEAPON].m_Transform.AddTransAnimation(PLAYER_WALK, 4, 7, 0.2, 0.2, 0.2, 0.2);
 
@@ -322,7 +322,7 @@ void PlayerTest::Init()
 	m_Parts[PART_HAND].m_Transform.AddTransAnimation(PLAYER_JUMP, 8, 8, 1);
 
 
-	m_Parts[PART_COAT].m_Transform.AddAniPos({ 1, -5 });
+	m_Parts[PART_COAT].m_Transform.AddAniPos({ 1, -15 });
 	m_Parts[PART_COAT].m_Transform.AddTransAnimation(PLAYER_JUMP, 8, 8, 1);
 
 	m_Parts[PART_COATARM].m_Transform.AddAniPos({ 3, 0 });
@@ -338,7 +338,7 @@ void PlayerTest::Init()
 	//m_Parts[PART_HAND].m_Transform.AddTransAnimation(PLAYER_JUMP, 0, 0, 1);
 
 	//m_Parts[PART_WEAPON].m_Transform.AddAniPos({ 5, -17 });
-	m_Parts[PART_WEAPON].m_Transform.AddAniPos({ -5, 0 });
+	m_Parts[PART_WEAPON].m_Transform.AddAniPos({ 14, 5 });
 	m_Parts[PART_WEAPON].m_Transform.AddTransAnimation(PLAYER_JUMP, 8, 8, 1);
 
 
@@ -398,9 +398,9 @@ void PlayerTest::Init()
 	m_Parts[PART_BODY].m_Transform.AddAniPos({ -9, 0 }); // 14
 	m_Parts[PART_BODY].m_Transform.AddTransAnimation(PLAYER_ATTACK, 9, 11, 0.3, 0.3, 0.3);
 
-	m_Parts[PART_COAT].m_Transform.AddAniPos({ 0, -7 });
-	m_Parts[PART_COAT].m_Transform.AddAniPos({ -1, -7 });
-	m_Parts[PART_COAT].m_Transform.AddAniPos({ -6, -5 });
+	m_Parts[PART_COAT].m_Transform.AddAniPos({ 0, -17 });
+	m_Parts[PART_COAT].m_Transform.AddAniPos({ -1, -17 });
+	m_Parts[PART_COAT].m_Transform.AddAniPos({ -6, -15 });
 	m_Parts[PART_COAT].m_Transform.AddTransAnimation(PLAYER_ATTACK, 9, 11, 0.3, 0.3, 0.3);
 
 	m_Parts[PART_COATARM].m_Transform.AddAniPos({ -12, -2 });
@@ -418,9 +418,9 @@ void PlayerTest::Init()
 	m_Parts[PART_SHOES].m_Transform.AddAniPos({ -8, 11 });
 	m_Parts[PART_SHOES].m_Transform.AddTransAnimation(PLAYER_ATTACK, 9, 11, 0.3, 0.3, 0.3);
 
-	m_Parts[PART_WEAPON].m_Transform.AddAniPos({ 0, 0 });
-	m_Parts[PART_WEAPON].m_Transform.AddAniPos({ 0, 0 });
-	m_Parts[PART_WEAPON].m_Transform.AddAniPos({ 0, 0 });
+	m_Parts[PART_WEAPON].m_Transform.AddAniPos({ -15, 0 });
+	m_Parts[PART_WEAPON].m_Transform.AddAniPos({ -5, 0 });
+	m_Parts[PART_WEAPON].m_Transform.AddAniPos({ -5, 0 });
 	m_Parts[PART_WEAPON].m_Transform.AddTransAnimation(PLAYER_ATTACK, 9, 11, 0.3, 0.3, 0.3);
 #pragma endregion ATTACK
 
@@ -462,7 +462,7 @@ void PlayerTest::Init()
 	m_Parts[PART_HAND].m_Transform.AddAniPos({ -5 , 5 });
 	m_Parts[PART_HAND].m_Transform.AddTransAnimation(PLAYER_PRONE, 12, 12, 2);
 
-	m_Parts[PART_COAT].m_Transform.AddAniPos({ -4, 0 });
+	m_Parts[PART_COAT].m_Transform.AddAniPos({ -4, 8 });
 	m_Parts[PART_COAT].m_Transform.AddTransAnimation(PLAYER_PRONE, 12, 12, 2);
 
 	m_Parts[PART_COATARM].m_Transform.AddAniPos({ 5, 0 });
@@ -523,8 +523,8 @@ void PlayerTest::Init()
 	m_Parts[PART_HAND].m_Transform.AddAniPos({ -5 , 5 });
 	m_Parts[PART_HAND].m_Transform.AddTransAnimation(PLAYER_PRONE, 13, 14, 0.4, 0.5);
 
-	m_Parts[PART_COAT].m_Transform.AddAniPos({ -4, 0 });
-	m_Parts[PART_COAT].m_Transform.AddAniPos({ -4, 0 });
+	m_Parts[PART_COAT].m_Transform.AddAniPos({ -4, 5 });
+	m_Parts[PART_COAT].m_Transform.AddAniPos({ -4, 5 });
 	m_Parts[PART_COAT].m_Transform.AddTransAnimation(PLAYER_PRONESTEB, 13, 14, 0.4, 0.5);
 
 	m_Parts[PART_COATARM].m_Transform.AddAniPos({ 5, 0 });
@@ -580,7 +580,7 @@ void PlayerTest::Init()
 	m_Parts[PART_HAND].m_Transform.AddAniPos({ -5 , 5 });
 	m_Parts[PART_HAND].m_Transform.AddTransAnimation(PLAYER_LADDER, 15, 15, 0.8);
 
-	m_Parts[PART_COAT].m_Transform.AddAniPos({ 0, -4 });
+	m_Parts[PART_COAT].m_Transform.AddAniPos({ 0, -12 });
 	m_Parts[PART_COAT].m_Transform.AddTransAnimation(PLAYER_LADDER, 15, 15, 0.8);
 
 	m_Parts[PART_COATARM].m_Transform.AddAniPos({ 5, 0 });
@@ -642,8 +642,8 @@ void PlayerTest::Init()
 	m_Parts[PART_HAND].m_Transform.AddAniPos({ -5 , 5 });
 	m_Parts[PART_HAND].m_Transform.AddTransAnimation(PLAYER_LADDERMOVE, 16, 17, 0.4, 0.4);
 
-	m_Parts[PART_COAT].m_Transform.AddAniPos({ 0, -4 });
-	m_Parts[PART_COAT].m_Transform.AddAniPos({ 0, -4 });
+	m_Parts[PART_COAT].m_Transform.AddAniPos({ 0, -12 });
+	m_Parts[PART_COAT].m_Transform.AddAniPos({ 0, -12 });
 	m_Parts[PART_COAT].m_Transform.AddTransAnimation(PLAYER_LADDERMOVE, 16, 17, 0.4, 0.4);
 
 	m_Parts[PART_COATARM].m_Transform.AddAniPos({ 5, 0 });
@@ -686,7 +686,7 @@ void PlayerTest::Init()
 	m_Parts[PART_SHOES].m_Renderer.AddAnimation(PLAYER_DIE, 20, 20, 1);
 	m_Parts[PART_WEAPON].m_Renderer.AddAnimation(PLAYER_DIE, 12, 12, 1);
 
-
+	CalcAttackPower();
 }
 void PlayerTest::UpdateCreateSceneIdle(float _DelayTime) {
 	ChangeState(PLAYER_IDLE);
@@ -696,9 +696,17 @@ void PlayerTest::UpdateCreateSceneIdle(float _DelayTime) {
 	}
 }
 
+void PlayerTest::UpdateLobby(float _DelayTime)
+{
+	//ChangeState(PLAYER_IDLE);
+	for (int i = 0; i < PART_END; i++)
+	{
+		m_Parts[i].Update(_DelayTime);
+	}
+}
+
 void PlayerTest::Update(float _DelayTime)
 {	
-
 	if (GetPos().y > MAP_MGR->m_pMap->m_LayOut6_Size.y)
 	{
 		D2D1_POINT_2F pos = GetPos();
@@ -887,10 +895,12 @@ void PlayerTest::Update(float _DelayTime)
 				if (CrashCheckMob((*Iter), m_AttackEffectPos) == true)
 				{
 					(*Iter)->Hit();
+					
 				}
 			}
 
 			m_AttackEffectPos = { 0,0 };
+			SOUND_MGR->SoundResume(L"swordL.Attack");
 		}
 
 
@@ -927,6 +937,8 @@ void PlayerTest::Update(float _DelayTime)
 		if (m_JumpStart == false)
 		{
 			m_Parts[0].m_Transform.m_velocityY = -m_JumpPower * m_JumpPowerRatio * 0.01f;
+
+			SOUND_MGR->SoundResume(L"jump");
 
 			m_JumpStart = true;
 		}
@@ -1100,26 +1112,47 @@ void PlayerTest::Render()
 {
 	for (int i = 0; i < PART_END; i++)
 	{
+		if (PlayerState() == PLAYER_ATTACK)
+		{
+			if (i == PART_BODY)
+			{
+				m_Parts[PART_WEAPON].Render();
+				m_Parts[PART_BODY].Render();
+				continue;
+			}
+
+			if (i == PART_WEAPON)
+			{
+				continue;
+			}
+
+
+		}
+
+
+
 		m_Parts[i].Render();
+
+
 	}
 
-	if (m_Parts[0].m_Renderer.m_State == PLAYER_LADDER || m_Parts[0].m_Renderer.m_State == PLAYER_LADDERMOVE)
+	if (PlayerState() == PLAYER_LADDER || PlayerState() == PLAYER_LADDERMOVE)
 	{
 		m_Parts[PART_HEAD].Render();
 		m_Parts[PART_HAIR].Render();
-	}
+	}	
 }
 
-void PlayerTest::PutLongcoat()
-{
-	m_Coat = 101050286;
-	m_isLongcoat = true;
-}
-
-void PlayerTest::OffLongcoat()
-{
-	m_isLongcoat = false;
-}
+//void PlayerTest::PutLongcoat()
+//{
+//	m_Coat = 101050286;
+//	m_isLongcoat = true;
+//}
+//
+//void PlayerTest::OffLongcoat()
+//{
+//	m_isLongcoat = false;
+//}
 
 bool PlayerTest::CrashCheckMap(cMapObj * _obj)
 {
@@ -1229,6 +1262,7 @@ void PlayerTest::BlowJumpTile()
 		//LadderOff();
 
 	}
+	SOUND_MGR->SoundResume(L"jump");
 }
 
 void PlayerTest::CheckLadder(cMapObj * _Ladder)
@@ -1351,7 +1385,7 @@ void PlayerTest::ClimbLadder(float _DelayTime)
 
 	if (m_CrashedTopLadder != nullptr)
 	{
-		if (m_CrashedTopLadder->GetMapPos().y > GetPos().y + 50.0f)
+		if (m_CrashedTopLadder->GetMapPos().y > GetPos().y + 40.0f)
 		{
 			LadderOff();
 			return;
@@ -1460,6 +1494,7 @@ void PlayerTest::NotProne()
 void PlayerTest::ProneSteb()
 {
 	m_isProneSteb = true;
+	SOUND_MGR->SoundResume(L"swordS.Attack");
 }
 
 void PlayerTest::Attack()
@@ -1486,6 +1521,8 @@ void PlayerTest::Attack()
 
 		m_isAttack = true;
 	}
+
+
 }
 
 void PlayerTest::NotAttack()
@@ -1495,14 +1532,16 @@ void PlayerTest::NotAttack()
 
 void PlayerTest::Hitted(int _Damage)
 {
-	m_HP -= _Damage;
-	UI_MGR->HPSetting(PLAYER_MGR->m_player->m_HP);
+	m_CharacInfo.m_HP -= _Damage;
+	UI_MGR->HPSetting(PLAYER_MGR->m_player->m_CharacInfo.m_HP);
 
 	EFF_MGR->NumberEffect(NUMC_RED, _Damage, GetPos());
 
-	if (m_HP <= 0)
+	if (m_CharacInfo.m_HP <= 0)
 	{
 		m_isDead = true;
+		SOUND_MGR->SoundResume(L"Tombstone");
+		UI_MGR->FindUI("ingame.death.panel")->m_isActive = true;
 
 		//return;					
 	}
@@ -1531,56 +1570,108 @@ void PlayerTest::JumpMove()
 	if (m_isAttack == true || m_isDead == true) return;
 
 	m_isJumping = true;
+
+}
+
+void PlayerTest::Revival()
+{
+	ChangeState(PLAYER_IDLE);
+
+	m_CharacInfo.m_HP = m_CharacInfo.m_HPmax;
+	m_CharacInfo.m_MP = m_CharacInfo.m_MPmax;
+
+	m_isDead = false;
+}
+
+void PlayerTest::CalcAttackPower()
+{
+	m_AttackPower = m_CharacInfo.m_STR * 5;
 }
 
 
 
 void PlayerTest::ChangeBase(size_t _itemNo)
 {
-	m_Base = _itemNo;
+	m_CharacInfo.m_Base = _itemNo;
 
 	SettingBase();
+
+	if (m_isCreate == false)
+	{
+		DATA_MGR->Save_Charater(m_CharacInfo);
+	}
+
 }
 
 void PlayerTest::ChangeHair(size_t _itemNo)
 {
-	m_Hair = _itemNo;
+	m_CharacInfo.m_Hair = _itemNo;
 
 	SettingHair();
+
+	if (m_isCreate == false)
+	{
+		DATA_MGR->Save_Charater(m_CharacInfo);
+	}
 }
 
 void PlayerTest::ChangeFace(size_t _itemNo)
 {
-	m_Face = _itemNo;
+	m_CharacInfo.m_Face = _itemNo;
 
 	SettingFace();
+
+	if (m_isCreate == false)
+	{
+		DATA_MGR->Save_Charater(m_CharacInfo);
+	}
 }
 
 void PlayerTest::ChangeCoat(size_t _itemNo)
 {
-	m_Coat = _itemNo;
+	m_CharacInfo.m_Coat = _itemNo;
 
 	SettingCoat();
+
+	if (m_isCreate == false)
+	{
+		DATA_MGR->Save_Charater(m_CharacInfo);
+	}
 }
 
 void PlayerTest::ChangePants(size_t _itemNo)
 {
-	m_Pants = _itemNo;
+	m_CharacInfo.m_Pants = _itemNo;
 
 	SettingPants();
+
+	if (m_isCreate == false)
+	{
+		DATA_MGR->Save_Charater(m_CharacInfo);
+	}
 }
 
 void PlayerTest::ChangeShoes(size_t _itemNo)
 {
-	m_Shoes = _itemNo;
+	m_CharacInfo.m_Shoes = _itemNo;
 
 	SettingShoes();
+
+	if (m_isCreate == false)
+	{
+		DATA_MGR->Save_Charater(m_CharacInfo);
+	}
 }
 
 void PlayerTest::ChangeWeapon(size_t _itemNo)
 {
-	m_Weapon = _itemNo;
+	m_CharacInfo.m_Weapon = _itemNo;
 	SettingWeapon();
+
+	if (m_isCreate == false)
+	{
+		DATA_MGR->Save_Charater(m_CharacInfo);
+	}
 }
 
 void PlayerTest::SettingBase()
@@ -1591,7 +1682,7 @@ void PlayerTest::SettingBase()
 	m_Parts[PART_HAND].m_Renderer.ClearBitmap();
 
 
-	LoadImg("base\\", m_Base, m_BaseList);
+	LoadImg("base\\", m_CharacInfo.m_Base, m_BaseList);
 
 	m_Parts[PART_HEAD].m_Renderer.AddBitmap(m_BaseList[L"HEAD"].m_Bitmap);
 	m_Parts[PART_HEAD].m_Renderer.AddBitmap(m_BaseList[L"HEAD_BACK"].m_Bitmap);
@@ -1662,7 +1753,7 @@ void PlayerTest::SettingHair()
 {
 	m_Parts[PART_HAIR].m_Renderer.ClearBitmap();
 
-	LoadImg("hair\\", m_Hair, m_HairList);
+	LoadImg("hair\\", m_CharacInfo.m_Hair, m_HairList);
 
 	m_Parts[PART_HAIR].m_Renderer.AddBitmap(m_HairList[L"stand1.0.hairOverHead"].m_Bitmap);
 	m_Parts[PART_HAIR].m_Renderer.AddBitmap(m_HairList[L"backDefault.backHair"].m_Bitmap);
@@ -1672,7 +1763,7 @@ void PlayerTest::SettingFace()
 {
 	m_Parts[PART_FACE].m_Renderer.ClearBitmap();
 
-	LoadImg("face\\", m_Face, m_FaceList);
+	LoadImg("face\\", m_CharacInfo.m_Face, m_FaceList);
 
 	m_Parts[PART_FACE].m_Renderer.AddBitmap(m_FaceList[L"default.face"].m_Bitmap);
 	m_Parts[PART_FACE].m_Renderer.AddBitmap(m_FaceList[L"blink.1.face"].m_Bitmap);
@@ -1684,42 +1775,44 @@ void PlayerTest::SettingFace()
 
 void PlayerTest::SettingCoat()
 {
+	if (m_CharacInfo.m_Coat == 0) return;
+
 	m_Parts[PART_COAT].m_Renderer.ClearBitmap();
 	m_Parts[PART_COATARM].m_Renderer.ClearBitmap();
 
-	LoadImg("coat\\", m_Coat, m_CoatList);
+	LoadImg("coat\\", m_CharacInfo.m_Coat, m_CoatList);
 
-	m_Parts[PART_COAT].m_Renderer.AddBitmap(m_CoatList[L"stand1.0.mail"].m_Bitmap);
-	m_Parts[PART_COAT].m_Renderer.AddBitmap(m_CoatList[L"stand1.1.mail"].m_Bitmap);
-	m_Parts[PART_COAT].m_Renderer.AddBitmap(m_CoatList[L"stand1.2.mail"].m_Bitmap);
-	m_Parts[PART_COAT].m_Renderer.AddBitmap(m_CoatList[L"stand1.1.mail"].m_Bitmap);
-	m_Parts[PART_COAT].m_Renderer.AddBitmap(m_CoatList[L"walk1.0.mail"].m_Bitmap);
-	m_Parts[PART_COAT].m_Renderer.AddBitmap(m_CoatList[L"walk1.1.mail"].m_Bitmap);
-	m_Parts[PART_COAT].m_Renderer.AddBitmap(m_CoatList[L"walk1.2.mail"].m_Bitmap);
-	m_Parts[PART_COAT].m_Renderer.AddBitmap(m_CoatList[L"walk1.3.mail"].m_Bitmap);
-	m_Parts[PART_COAT].m_Renderer.AddBitmap(m_CoatList[L"fly.0.mail"].m_Bitmap);
+	m_Parts[PART_COAT].m_Renderer.AddBitmap_Top(m_CoatList[L"stand1.0.mail"].m_Bitmap);
+	m_Parts[PART_COAT].m_Renderer.AddBitmap_Top(m_CoatList[L"stand1.1.mail"].m_Bitmap);
+	m_Parts[PART_COAT].m_Renderer.AddBitmap_Top(m_CoatList[L"stand1.2.mail"].m_Bitmap);
+	m_Parts[PART_COAT].m_Renderer.AddBitmap_Top(m_CoatList[L"stand1.1.mail"].m_Bitmap);
+	m_Parts[PART_COAT].m_Renderer.AddBitmap_Top(m_CoatList[L"walk1.0.mail"].m_Bitmap);
+	m_Parts[PART_COAT].m_Renderer.AddBitmap_Top(m_CoatList[L"walk1.1.mail"].m_Bitmap);
+	m_Parts[PART_COAT].m_Renderer.AddBitmap_Top(m_CoatList[L"walk1.2.mail"].m_Bitmap);
+	m_Parts[PART_COAT].m_Renderer.AddBitmap_Top(m_CoatList[L"walk1.3.mail"].m_Bitmap);
+	m_Parts[PART_COAT].m_Renderer.AddBitmap_Top(m_CoatList[L"fly.0.mail"].m_Bitmap);
 
-	m_Parts[PART_COAT].m_Renderer.AddBitmap(m_CoatList[L"swingO1.0.mail"].m_Bitmap);
-	m_Parts[PART_COAT].m_Renderer.AddBitmap(m_CoatList[L"swingO1.1.mail"].m_Bitmap);
-	m_Parts[PART_COAT].m_Renderer.AddBitmap(m_CoatList[L"swingO1.2.mail"].m_Bitmap); //11
+	m_Parts[PART_COAT].m_Renderer.AddBitmap_Top(m_CoatList[L"swingO1.0.mail"].m_Bitmap);
+	m_Parts[PART_COAT].m_Renderer.AddBitmap_Top(m_CoatList[L"swingO1.1.mail"].m_Bitmap);
+	m_Parts[PART_COAT].m_Renderer.AddBitmap_Top(m_CoatList[L"swingO1.2.mail"].m_Bitmap); //11
 
 																					 //PRONE prone.0.mail
-	m_Parts[PART_COAT].m_Renderer.AddBitmap(m_CoatList[L"prone.0.mail"].m_Bitmap); //12
-	m_Parts[PART_COAT].m_Renderer.AddBitmap(m_CoatList[L"proneStab.0.mail"].m_Bitmap); //13
-	m_Parts[PART_COAT].m_Renderer.AddBitmap(m_CoatList[L"proneStab.1.mail"].m_Bitmap); //14
+	m_Parts[PART_COAT].m_Renderer.AddBitmap_Bottom(m_CoatList[L"prone.0.mail"].m_Bitmap); //12
+	m_Parts[PART_COAT].m_Renderer.AddBitmap_Bottom(m_CoatList[L"proneStab.0.mail"].m_Bitmap); //13
+	m_Parts[PART_COAT].m_Renderer.AddBitmap_Bottom(m_CoatList[L"proneStab.1.mail"].m_Bitmap); //14
 
 																					   //ladder
-	m_Parts[PART_COAT].m_Renderer.AddBitmap(m_CoatList[L"ladder.0.mail"].m_Bitmap); //15
-	m_Parts[PART_COAT].m_Renderer.AddBitmap(m_CoatList[L"ladder.1.mail"].m_Bitmap); //16
+	m_Parts[PART_COAT].m_Renderer.AddBitmap_Top(m_CoatList[L"ladder.0.mail"].m_Bitmap); //15
+	m_Parts[PART_COAT].m_Renderer.AddBitmap_Top(m_CoatList[L"ladder.1.mail"].m_Bitmap); //16
 																					//Attack2
-	m_Parts[PART_COAT].m_Renderer.AddBitmap(m_CoatList[L"swingO2.0.mail"].m_Bitmap);//17
-	m_Parts[PART_COAT].m_Renderer.AddBitmap(m_CoatList[L"swingO2.1.mail"].m_Bitmap);
-	m_Parts[PART_COAT].m_Renderer.AddBitmap(m_CoatList[L"swingO2.2.mail"].m_Bitmap);//19
+	m_Parts[PART_COAT].m_Renderer.AddBitmap_Top(m_CoatList[L"swingO2.0.mail"].m_Bitmap);//17
+	m_Parts[PART_COAT].m_Renderer.AddBitmap_Top(m_CoatList[L"swingO2.1.mail"].m_Bitmap);
+	m_Parts[PART_COAT].m_Renderer.AddBitmap_Top(m_CoatList[L"swingO2.2.mail"].m_Bitmap);//19
 																					//Attack3
-	m_Parts[PART_COAT].m_Renderer.AddBitmap(m_CoatList[L"swingO3.0.mail"].m_Bitmap);//20
-	m_Parts[PART_COAT].m_Renderer.AddBitmap(m_CoatList[L"swingO3.1.mail"].m_Bitmap);
-	m_Parts[PART_COAT].m_Renderer.AddBitmap(m_CoatList[L"swingO3.2.mail"].m_Bitmap);//22
-	m_Parts[PART_COAT].m_Renderer.AddBitmap(m_CoatList[L"hide.coatArm"].m_Bitmap);//22
+	m_Parts[PART_COAT].m_Renderer.AddBitmap_Top(m_CoatList[L"swingO3.0.mail"].m_Bitmap);//20
+	m_Parts[PART_COAT].m_Renderer.AddBitmap_Top(m_CoatList[L"swingO3.1.mail"].m_Bitmap);
+	m_Parts[PART_COAT].m_Renderer.AddBitmap_Top(m_CoatList[L"swingO3.2.mail"].m_Bitmap);//22
+	m_Parts[PART_COAT].m_Renderer.AddBitmap_Top(m_CoatList[L"hide.coatArm"].m_Bitmap);//22
 
 	m_Parts[PART_COATARM].m_Renderer.AddBitmap(m_CoatList[L"stand1.0.mailArm"].m_Bitmap);
 	m_Parts[PART_COATARM].m_Renderer.AddBitmap(m_CoatList[L"stand1.1.mailArm"].m_Bitmap);
@@ -1730,21 +1823,21 @@ void PlayerTest::SettingCoat()
 	m_Parts[PART_COATARM].m_Renderer.AddBitmap(m_CoatList[L"walk1.2.mailArm"].m_Bitmap);
 	m_Parts[PART_COATARM].m_Renderer.AddBitmap(m_CoatList[L"walk1.3.mailArm"].m_Bitmap);
 	m_Parts[PART_COATARM].m_Renderer.AddBitmap(m_CoatList[L"fly.1.mailArm"].m_Bitmap);
-
+										
 	m_Parts[PART_COATARM].m_Renderer.AddBitmap(m_CoatList[L"swingO1.0.mailArm"].m_Bitmap);
 	m_Parts[PART_COATARM].m_Renderer.AddBitmap(m_CoatList[L"swingO1.1.mailArm"].m_Bitmap);
 	m_Parts[PART_COATARM].m_Renderer.AddBitmap(m_CoatList[L"swingO1.2.mailArm"].m_Bitmap); //11
-																						   //PRONE
+																					   //PRONE
 	m_Parts[PART_COATARM].m_Renderer.AddBitmap(m_CoatList[L"prone.0.mailArm"].m_Bitmap); // 12
 	m_Parts[PART_COATARM].m_Renderer.AddBitmap(m_CoatList[L"proneStab.0.mailArm"].m_Bitmap); //13
 	m_Parts[PART_COATARM].m_Renderer.AddBitmap(m_CoatList[L"proneStab.1.mailArm"].m_Bitmap); //14
-																							 //hide.coatArm
+																					 //hide.coatArm
 	m_Parts[PART_COATARM].m_Renderer.AddBitmap(m_CoatList[L"hide.coatArm"].m_Bitmap); //15
-																					  //Attack2
+																			  //Attack2
 	m_Parts[PART_COATARM].m_Renderer.AddBitmap(m_CoatList[L"swingO2.0.mailArm"].m_Bitmap);//16
 	m_Parts[PART_COATARM].m_Renderer.AddBitmap(m_CoatList[L"swingO2.1.mailArm"].m_Bitmap);
 	m_Parts[PART_COATARM].m_Renderer.AddBitmap(m_CoatList[L"swingO2.2.mailArm"].m_Bitmap);//18
-																						  //Attack3
+																				  //Attack3
 	m_Parts[PART_COATARM].m_Renderer.AddBitmap(m_CoatList[L"swingO3.0.mailArm"].m_Bitmap);//19
 	m_Parts[PART_COATARM].m_Renderer.AddBitmap(m_CoatList[L"swingO3.1.mailArm"].m_Bitmap);
 	m_Parts[PART_COATARM].m_Renderer.AddBitmap(m_CoatList[L"swingO3.2.mailArm"].m_Bitmap);//21
@@ -1753,9 +1846,11 @@ void PlayerTest::SettingCoat()
 
 void PlayerTest::SettingPants()
 {
+	if (m_CharacInfo.m_Pants == 0) return;
+
 	m_Parts[PART_PANTS].m_Renderer.ClearBitmap();
 
-	LoadImg("pants\\", m_Pants, m_PantsList);
+	LoadImg("pants\\", m_CharacInfo.m_Pants, m_PantsList);
 
 	m_Parts[PART_PANTS].m_Renderer.AddBitmap(m_PantsList[L"stand1.0.pants"].m_Bitmap);
 	m_Parts[PART_PANTS].m_Renderer.AddBitmap(m_PantsList[L"stand1.1.pants"].m_Bitmap);
@@ -1792,9 +1887,11 @@ void PlayerTest::SettingPants()
 
 void PlayerTest::SettingShoes()
 {
+	if (m_CharacInfo.m_Shoes == 0) return;
+
 	m_Parts[PART_SHOES].m_Renderer.ClearBitmap();
 
-	LoadImg("shoes\\", m_Shoes, m_ShoesList);
+	LoadImg("shoes\\", m_CharacInfo.m_Shoes, m_ShoesList);
 
 	m_Parts[PART_SHOES].m_Renderer.AddBitmap(m_ShoesList[L"stand1.0.shoes"].m_Bitmap);
 	m_Parts[PART_SHOES].m_Renderer.AddBitmap(m_ShoesList[L"walk1.0.shoes"].m_Bitmap);
@@ -1829,23 +1926,25 @@ void PlayerTest::SettingShoes()
 
 void PlayerTest::SettingWeapon()
 {
+	if (m_CharacInfo.m_Weapon == 0) return;
+
 	m_Parts[PART_WEAPON].m_Renderer.ClearBitmap();
 
 	//m_Weapon = 1322005;
 
 	//m_Weapon = 101;
 
-	LoadImg("weapon\\", m_Weapon, m_WeaponList);
+	LoadImg("weapon\\", m_CharacInfo.m_Weapon, m_WeaponList);
 
-	m_Parts[PART_WEAPON].m_Renderer.AddBitmap_RightTop(m_WeaponList[L"walk1.3.weapon"].m_Bitmap);
+	m_Parts[PART_WEAPON].m_Renderer.AddBitmap_Right(m_WeaponList[L"walk1.3.weapon"].m_Bitmap);
 
-	m_Parts[PART_WEAPON].m_Renderer.AddBitmap_RightTop(m_WeaponList[L"walk1.0.weapon"].m_Bitmap);
-	m_Parts[PART_WEAPON].m_Renderer.AddBitmap_RightBottom(m_WeaponList[L"walk1.1.weapon"].m_Bitmap);
-	m_Parts[PART_WEAPON].m_Renderer.AddBitmap_RightTop(m_WeaponList[L"walk1.2.weapon"].m_Bitmap);
-	m_Parts[PART_WEAPON].m_Renderer.AddBitmap_RightTop(m_WeaponList[L"walk1.3.weapon"].m_Bitmap); //4
+	m_Parts[PART_WEAPON].m_Renderer.AddBitmap_Right(m_WeaponList[L"walk1.0.weapon"].m_Bitmap);
+	m_Parts[PART_WEAPON].m_Renderer.AddBitmap_Right(m_WeaponList[L"walk1.1.weapon"].m_Bitmap);
+	m_Parts[PART_WEAPON].m_Renderer.AddBitmap_Right(m_WeaponList[L"walk1.2.weapon"].m_Bitmap);
+	m_Parts[PART_WEAPON].m_Renderer.AddBitmap_Right(m_WeaponList[L"walk1.3.weapon"].m_Bitmap); //4
 
 																								  //m_Parts[PART_WEAPON].m_Renderer.AddBitmap_RightBottom(m_WeaponList[L"fly.0.weapon"].m_Bitmap);
-	m_Parts[PART_WEAPON].m_Renderer.AddBitmap_LeftBottom(m_WeaponList[L"fly.1.weapon"].m_Bitmap); //6 // 5
+	m_Parts[PART_WEAPON].m_Renderer.AddBitmap_RightBottom(m_WeaponList[L"fly.1.weapon"].m_Bitmap); //6 // 5
 
 	m_Parts[PART_WEAPON].m_Renderer.AddBitmap_LeftTop(m_WeaponList[L"swingO1.0.weapon"].m_Bitmap);  //6
 	m_Parts[PART_WEAPON].m_Renderer.AddBitmap_LeftTop(m_WeaponList[L"swingO1.1.weapon"].m_Bitmap);

@@ -10,9 +10,15 @@ public:
 
 	~cPlayerMgr();
 
+	int m_PlayerIndex = -1;
+
 	PlayerTest *m_player = nullptr;
 
+	vector<PlayerTest*> m_PlayerList;
+
 	void CreatePlayer();
+
+	void Destroy();
 
 };
 

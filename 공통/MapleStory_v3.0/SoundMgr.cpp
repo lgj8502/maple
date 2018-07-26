@@ -148,6 +148,8 @@ VOID SoundMgr::SoundResume(wstring _file)
 {
 	SoundStop(_file);
 	SoundPlay(_file);
+
+	
 }
 
 
@@ -192,6 +194,8 @@ void SoundMgr::FileFindDir(wstring _Path)
 				MK_LOG(outputString);
 
 				SoundCreate(outputString);
+
+				delete[] outputString;
 			}
 
 		}

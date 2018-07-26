@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "LobbyScene.h"
 
+#include <io.h>
+
 //////추가 사항
 static bool checkEvent = false;
 static int aniCount = 0;
@@ -15,6 +17,7 @@ void LobbyScene::Init(HWND hWnd)
 {
 	IMG_MGR->FileFindDir(L".\\Img\\LobbyScene\\");
 
+	DATA_MGR->m_CharacterName = "";
 	//	mouse default image 
 	obj.m_Renderer.AddBitmap(IMG_MGR->GetImage(L"mouseDefault"));	//0
 	obj.m_Renderer.AddBitmap(IMG_MGR->GetImage(L"mouseClick"));		// 1
@@ -26,70 +29,8 @@ void LobbyScene::Init(HWND hWnd)
 	obj.m_Renderer.m_State = -1;
 
 	UI_MGR->AddImage("background", L"LobbyScene_background", { 0,0,1200,800 });
-	//800 : 600  -> 1200 800  :: 1.5  1.33333
 
-
-	////케릭터 주변 이펙트 보이기
-	////Object2D charBackground1;
-	//UI_MGR->AddImage("LobbyScene_charBackground1.5.0", L"LobbyScene_charBackground1.5.0", { 400,  400 }, { 1.0f, 1.0f });
-	//UI_MGR->BitMapAdd("LobbyScene_charBackground1.5.0", L"LobbyScene_charBackground1.5.0");//0
-	//UI_MGR->BitMapAdd("LobbyScene_charBackground1.5.0", L"LobbyScene_charBackground1.5.0");//0
-	//UI_MGR->BitMapAdd("LobbyScene_charBackground1.5.0", L"LobbyScene_charBackground1.5.0");//0
-	//UI_MGR->BitMapAdd("LobbyScene_charBackground1.5.0", L"LobbyScene_charBackground1.5.0");//0
-	//UI_MGR->BitMapAdd("LobbyScene_charBackground1.5.0", L"LobbyScene_charBackground1.5.1");//1
-	//UI_MGR->BitMapAdd("LobbyScene_charBackground1.5.0", L"LobbyScene_charBackground1.5.1");//1
-	//UI_MGR->BitMapAdd("LobbyScene_charBackground1.5.0", L"LobbyScene_charBackground1.5.1");//1
-	//UI_MGR->BitMapAdd("LobbyScene_charBackground1.5.0", L"LobbyScene_charBackground1.5.1");//1
-	//UI_MGR->BitMapAdd("LobbyScene_charBackground1.5.0", L"LobbyScene_charBackground1.5.1");//1
-	//UI_MGR->BitMapAdd("LobbyScene_charBackground1.5.0", L"LobbyScene_charBackground1.5.2");//2
-	//UI_MGR->BitMapAdd("LobbyScene_charBackground1.5.0", L"LobbyScene_charBackground1.5.2");//2
-	//UI_MGR->BitMapAdd("LobbyScene_charBackground1.5.0", L"LobbyScene_charBackground1.5.2");//2
-	//UI_MGR->BitMapAdd("LobbyScene_charBackground1.5.0", L"LobbyScene_charBackground1.5.2");//2
-	//UI_MGR->BitMapAdd("LobbyScene_charBackground1.5.0", L"LobbyScene_charBackground1.5.2");//2
-	//UI_MGR->BitMapAdd("LobbyScene_charBackground1.5.0", L"LobbyScene_charBackground1.5.3");//3 15
-	//UI_MGR->BitMapAdd("LobbyScene_charBackground1.5.0", L"LobbyScene_charBackground1.5.3");//3
-	//UI_MGR->BitMapAdd("LobbyScene_charBackground1.5.0", L"LobbyScene_charBackground1.5.3");//3
-	//UI_MGR->BitMapAdd("LobbyScene_charBackground1.5.0", L"LobbyScene_charBackground1.5.3");//3
-	//UI_MGR->BitMapAdd("LobbyScene_charBackground1.5.0", L"LobbyScene_charBackground1.5.3");//3
-	//UI_MGR->BitMapAdd("LobbyScene_charBackground1.5.0", L"LobbyScene_charBackground1.5.4");//4 20 
-	//UI_MGR->BitMapAdd("LobbyScene_charBackground1.5.0", L"LobbyScene_charBackground1.5.4");//4
-	//UI_MGR->BitMapAdd("LobbyScene_charBackground1.5.0", L"LobbyScene_charBackground1.5.4");//4
-	//UI_MGR->BitMapAdd("LobbyScene_charBackground1.5.0", L"LobbyScene_charBackground1.5.4");//4
-	//UI_MGR->BitMapAdd("LobbyScene_charBackground1.5.0", L"LobbyScene_charBackground1.5.4");//4
-	//UI_MGR->BitMapAdd("LobbyScene_charBackground1.5.0", L"LobbyScene_charBackground1.5.4");//4
-	//UI_MGR->BitMapAdd("LobbyScene_charBackground1.5.0", L"LobbyScene_charBackground1.5.5");//5 26
-	//UI_MGR->BitMapAdd("LobbyScene_charBackground1.5.0", L"LobbyScene_charBackground1.5.5");//5
-	//UI_MGR->BitMapAdd("LobbyScene_charBackground1.5.0", L"LobbyScene_charBackground1.5.5");//5
-	//UI_MGR->BitMapAdd("LobbyScene_charBackground1.5.0", L"LobbyScene_charBackground1.5.5");//5
-	//UI_MGR->BitMapAdd("LobbyScene_charBackground1.5.0", L"LobbyScene_charBackground1.5.5");//5
-	//UI_MGR->BitMapAdd("LobbyScene_charBackground1.5.0", L"LobbyScene_charBackground1.5.6");//6 31 
-	//UI_MGR->BitMapAdd("LobbyScene_charBackground1.5.0", L"LobbyScene_charBackground1.5.6");//6
-	//UI_MGR->BitMapAdd("LobbyScene_charBackground1.5.0", L"LobbyScene_charBackground1.5.6");//6
-	//UI_MGR->BitMapAdd("LobbyScene_charBackground1.5.0", L"LobbyScene_charBackground1.5.6");//6
-	//UI_MGR->BitMapAdd("LobbyScene_charBackground1.5.0", L"LobbyScene_charBackground1.5.6");//6
-	//UI_MGR->BitMapAdd("LobbyScene_charBackground1.5.0", L"LobbyScene_charBackground1.5.7");//7  36
-	//UI_MGR->BitMapAdd("LobbyScene_charBackground1.5.0", L"LobbyScene_charBackground1.5.7");//7
-	//UI_MGR->BitMapAdd("LobbyScene_charBackground1.5.0", L"LobbyScene_charBackground1.5.7");//7
-	//UI_MGR->BitMapAdd("LobbyScene_charBackground1.5.0", L"LobbyScene_charBackground1.5.7");//7
-	//UI_MGR->BitMapAdd("LobbyScene_charBackground1.5.0", L"LobbyScene_charBackground1.5.7");//7
-	//UI_MGR->BitMapAdd("LobbyScene_charBackground1.5.0", L"LobbyScene_charBackground1.5.8");//8 41 
-	//UI_MGR->BitMapAdd("LobbyScene_charBackground1.5.0", L"LobbyScene_charBackground1.5.8");//8
-	//UI_MGR->BitMapAdd("LobbyScene_charBackground1.5.0", L"LobbyScene_charBackground1.5.8");//8
-	//UI_MGR->BitMapAdd("LobbyScene_charBackground1.5.0", L"LobbyScene_charBackground1.5.8");//8
-	//UI_MGR->BitMapAdd("LobbyScene_charBackground1.5.0", L"LobbyScene_charBackground1.5.8");//8
-
-	//																					   //charBackground1.m_Renderer.AddBitmap(IMG_MGR->GetImage(L"mouseDefault"));
-	//																					   //케릭터 주변 이펙트 보이기
-
-
-
-
-
-
-
-
-
-																						   //이전으로
+																							   //이전으로
 	UI_MGR->AddButton("ChannelReturn_Default", L"LobbyScene_ChannelReturn_Default", { 59,694 }, { 1.50f, 1.33333f });
 	UI_MGR->FindUI("ChannelReturn_Default")->m_RayCast = true;
 	UI_MGR->BitMapAdd("ChannelReturn_Default", L"LobbyScene_ChannelReturn_Over");
@@ -188,6 +129,41 @@ void LobbyScene::Init(HWND hWnd)
 	auto LobbyScene_Func7 = [](void) {SCENE_MGR->ChangeScene(SCENE_LOGIN); };
 	UI_MGR->AddEvent("returnPage_ok_Default", ADDEVENT_OnMouseClick, LobbyScene_Func7);
 
+	//게임시작 부분
+	UI_MGR->AddButton("LobbyScene_Status_Default", L"LobbyScene_Status_Default", { 1005,448 }, { 1.5f, 1.33333f });
+	UI_MGR->FindUI("LobbyScene_Status_Default")->m_RayCast = false;
+	UI_MGR->AddButton("LobbyScene_GameStart_Default", L"LobbyScene_GameStart_Default", { -2,107 }, { 1.0f, 1.0f });
+	UI_MGR->FindUI("LobbyScene_GameStart_Default")->m_RayCast = true;
+	UI_MGR->BitMapAdd("LobbyScene_GameStart_Default", L"LobbyScene_GameStart_Over");
+	auto LobbyScene_start0 = [](void) { UI_MGR->FindUI("LobbyScene_GameStart_Default")->m_Renderer.ChangeBitmap(1); checkEvent = true; };
+	auto LobbyScene_start1 = [](void) { UI_MGR->FindUI("LobbyScene_GameStart_Default")->m_Renderer.ChangeBitmap(0);  checkEvent = false; };
+	auto LobbyScene_click = [](void) {
+
+		if (PLAYER_MGR->m_PlayerList.size() == 0) return;
+
+		SCENE_MGR->ChangeScene(SCENE_INGAME);
+	};
+	UI_MGR->AddEvent("LobbyScene_GameStart_Default", ADDEVENT_OnMouseOver, LobbyScene_start0);
+	UI_MGR->AddEvent("LobbyScene_GameStart_Default", ADDEVENT_OnMouseExit, LobbyScene_start1);
+	UI_MGR->AddEvent("LobbyScene_GameStart_Default", ADDEVENT_OnMouseClick, LobbyScene_click);
+
+	UI_MGR->SetParent("LobbyScene_Status_Default", "LobbyScene_GameStart_Default");
+
+	UI_MGR->AddImage("LV", L"LV", { -10, -115 }, { 1.0f, 1.0f });
+	auto LVu = [](void) {
+		if (DATA_MGR->m_CharacterName == "")
+		{
+			UI_MGR->FindUI("LV")->m_Renderer.SetAlpha(0.0f);
+		}
+		else
+		{
+			UI_MGR->FindUI("LV")->m_Renderer.SetAlpha(1.0f);
+		}
+	};
+
+	UI_MGR->AddEvent("LV", ADDEVENT_Update, LVu);
+	UI_MGR->SetParent("LobbyScene_Status_Default", "LV");
+
 	//============================================================================================
 	//게임 종료 창
 	UI_MGR->AddButton("gameEnd", L"Game_End", { 600,400 }, { 1.50f, 1.33333f });
@@ -220,9 +196,274 @@ void LobbyScene::Init(HWND hWnd)
 	auto End_Func5 = [](void) { UI_MGR->FindUI("gameEnd")->m_isActive = false; };
 	UI_MGR->AddEvent("gameEnd_No", ADDEVENT_OnMouseClick, End_Func5);
 	//게임 종료 확인 이벤트
-	auto End_Func6 = [](void) {PostQuitMessage(WM_DESTROY); };
+	auto End_Func6 = [](void) {
+		DATA_MGR->AllMgrDestroy();
+		PostQuitMessage(WM_DESTROY); };
 	UI_MGR->AddEvent("gameEnd_Ok", ADDEVENT_OnMouseClick, End_Func6);
 	//=====
+
+	// 캐릭터 표기
+
+	vector<sCharacter> info;
+
+	DATA_MGR->Load_CharacterList(info);
+
+	PLAYER_MGR->Destroy();
+
+	for (size_t i = 0; i < info.size(); i++)
+	{
+		PlayerTest * Charac = new PlayerTest;
+
+		Charac->m_CharacInfo = info[i];
+
+		Charac->Init();
+
+		Charac->ChangeState(PLAYER_IDLE);
+
+		if (i >= (int)2)
+		{
+			Charac->SetScale(1.3f, 1.3f);
+		}
+		else
+		{
+			Charac->SetScale(-1.3f, 1.3f);
+		}
+
+		Charac->SetPos({ 200.0f + (int)i * 184.0f , 295.0f });
+
+		PLAYER_MGR->m_PlayerList.push_back(Charac);
+	}
+
+
+
+	UI_MGR->AddButton("Charac1", L"Hide", { 180, 250, 220, 340 }, 0.0f);
+	auto Charac1 = [](void) { 
+
+		if (PLAYER_MGR->m_PlayerList.size() == 0) return;
+
+		UI_MGR->FindUI("캐릭클릭애니")->m_isActive = true;
+
+		UI_MGR->FindUI("캐릭클릭애니")->m_Transform.SetPos({ 200.0f, 300.0f });
+
+		for (auto &i : PLAYER_MGR->m_PlayerList)
+		{
+			i->ChangeState(PLAYER_IDLE);
+		}
+		
+		PLAYER_MGR->m_PlayerList[0]->ChangeState(PLAYER_WALK);
+
+		DATA_MGR->m_CharacterName = PLAYER_MGR->m_PlayerList[0]->m_CharacInfo.m_Name;
+
+		PLAYER_MGR->m_PlayerIndex = 0;
+
+		UI_MGR->LevelSetting(PLAYER_MGR->m_PlayerList[0]->m_CharacInfo.m_Level, {1020, 295}, {2.0f, 2.0f});
+	};
+
+	UI_MGR->AddEvent("Charac1", ADDEVENT_OnMouseClick, Charac1);
+
+	UI_MGR->AddButton("Charac2", L"Hide", { 365, 250, 405, 340 }, 0.0f);
+	auto Charac2 = [](void) {		
+		if (PLAYER_MGR->m_PlayerList.size() <= 1) return;
+
+		UI_MGR->FindUI("캐릭클릭애니")->m_isActive = true;
+		UI_MGR->FindUI("캐릭클릭애니")->m_Transform.SetPos({ 383.0f, 300.0f });
+		for (auto &i : PLAYER_MGR->m_PlayerList)
+		{
+			i->ChangeState(PLAYER_IDLE);
+		}
+
+		PLAYER_MGR->m_PlayerList[1]->ChangeState(PLAYER_WALK);
+
+		DATA_MGR->m_CharacterName = PLAYER_MGR->m_PlayerList[1]->m_CharacInfo.m_Name;
+
+		PLAYER_MGR->m_PlayerIndex = 1;
+
+		UI_MGR->LevelSetting(PLAYER_MGR->m_PlayerList[1]->m_CharacInfo.m_Level, { 1020, 295 }, { 2.0f, 2.0f });
+	};
+
+	UI_MGR->AddEvent("Charac2", ADDEVENT_OnMouseClick, Charac2);
+
+	UI_MGR->AddButton("Charac3", L"Hide", { 550, 250, 590, 340 }, 0.0f);
+	auto Charac3 = [](void) {
+
+		if (PLAYER_MGR->m_PlayerList.size() <= 2) return;
+
+		UI_MGR->FindUI("캐릭클릭애니")->m_isActive = true;
+		UI_MGR->FindUI("캐릭클릭애니")->m_Transform.SetPos({ 575.0f, 300.0f });
+
+
+		for (auto &i : PLAYER_MGR->m_PlayerList)
+		{
+			i->ChangeState(PLAYER_IDLE);
+		}
+
+		PLAYER_MGR->m_PlayerList[2]->ChangeState(PLAYER_WALK);
+
+		DATA_MGR->m_CharacterName = PLAYER_MGR->m_PlayerList[2]->m_CharacInfo.m_Name;
+
+		PLAYER_MGR->m_PlayerIndex = 2;
+
+		UI_MGR->LevelSetting(PLAYER_MGR->m_PlayerList[2]->m_CharacInfo.m_Level, { 1020, 295 }, { 2.0f, 2.0f });
+	};
+
+	UI_MGR->AddEvent("Charac3", ADDEVENT_OnMouseClick, Charac3);
+
+	UI_MGR->AddButton("Charac4", L"Hide", { 735, 250, 775, 340 }, 0.0f);
+	auto Charac4 = [](void) {
+
+		if (PLAYER_MGR->m_PlayerList.size() <= 3) return;
+
+		UI_MGR->FindUI("캐릭클릭애니")->m_isActive = true;
+		UI_MGR->FindUI("캐릭클릭애니")->m_Transform.SetPos({ 760.0f, 300.0f });
+
+		for (auto &i : PLAYER_MGR->m_PlayerList)
+		{
+			i->ChangeState(PLAYER_IDLE);
+		}
+
+		PLAYER_MGR->m_PlayerList[3]->ChangeState(PLAYER_WALK);
+
+		DATA_MGR->m_CharacterName = PLAYER_MGR->m_PlayerList[3]->m_CharacInfo.m_Name;
+
+		PLAYER_MGR->m_PlayerIndex = 3;
+
+		UI_MGR->LevelSetting(PLAYER_MGR->m_PlayerList[3]->m_CharacInfo.m_Level, { 1020, 295 }, { 2.0f, 2.0f });
+	};
+
+	UI_MGR->AddEvent("Charac4", ADDEVENT_OnMouseClick, Charac4);
+
+	vector<wstring> cca;
+
+	cca.push_back(L"ZeroAura0.0");
+	cca.push_back(L"ZeroAura0.1");
+	cca.push_back(L"ZeroAura0.2");
+	cca.push_back(L"ZeroAura0.3");
+	cca.push_back(L"ZeroAura0.4");
+	cca.push_back(L"ZeroAura0.5");
+	cca.push_back(L"ZeroAura0.6");
+	cca.push_back(L"ZeroAura0.7");
+	cca.push_back(L"ZeroAura0.8");
+	cca.push_back(L"ZeroAura0.9");
+	cca.push_back(L"ZeroAura0.10");
+	cca.push_back(L"ZeroAura0.11");
+	cca.push_back(L"ZeroAura0.12");
+	cca.push_back(L"ZeroAura0.13");
+	cca.push_back(L"ZeroAura0.14");
+	cca.push_back(L"ZeroAura0.15");
+	cca.push_back(L"ZeroAura0.16");
+	cca.push_back(L"ZeroAura0.17");
+	cca.push_back(L"ZeroAura0.18");
+	cca.push_back(L"ZeroAura0.19");
+	cca.push_back(L"ZeroAura0.20");
+	cca.push_back(L"ZeroAura0.21");
+	cca.push_back(L"ZeroAura0.22");
+	cca.push_back(L"ZeroAura0.23");
+
+	UI_MGR->AddAnimation("캐릭클릭애니", { 0,0 }, 0.1f, cca);
+
+	UI_MGR->FindUI("캐릭클릭애니")->m_isActive = false;
+
+	// 캐릭 정보
+
+	auto Cnick1 = [](void) { 
+
+		if (DATA_MGR->m_CharacterName != "")
+		{
+			UI_MGR->FindUI("캐릭터닉넴")->m_Text = DATA_MGR->m_CharacterName;
+		}
+		
+	};
+	UI_MGR->AddText("캐릭터닉넴", "", { -905, -110 }, ColorF(ColorF::White), L"고딕", 20.0f);
+	UI_MGR->FindUI("캐릭터닉넴")->m_Font.m_WidthAlignment = DWRITE_TEXT_ALIGNMENT_CENTER;
+	UI_MGR->AddEvent("캐릭터닉넴", ADDEVENT_Update, Cnick1);
+	UI_MGR->SetParent("LobbyScene_Status_Default", "캐릭터닉넴");
+
+	auto Cjob = [](void) {
+
+		if (DATA_MGR->m_CharacterName != "")
+		{
+			UI_MGR->FindUI("캐릭터직업")->m_Text = "모험가";			
+		}
+
+
+	};
+	UI_MGR->AddText("캐릭터직업", "", { 30 , -65 }, ColorF(ColorF::White), L"고딕", 10.0f);
+	UI_MGR->AddEvent("캐릭터직업", ADDEVENT_Update, Cjob);
+	UI_MGR->SetParent("LobbyScene_Status_Default", "캐릭터직업");
+
+	auto Cstr = [](void) {
+
+		if (DATA_MGR->m_CharacterName != "")
+		{
+			ostringstream a;
+
+			a << PLAYER_MGR->m_PlayerList[PLAYER_MGR->m_PlayerIndex]->m_CharacInfo.m_STR;
+
+			UI_MGR->FindUI("캐릭터힘")->m_Text = a.str();
+			
+		}
+
+
+	};
+	UI_MGR->AddText("캐릭터힘", "", { -940 , 30 }, ColorF(ColorF::White), L"고딕", 10.0f);
+	UI_MGR->FindUI("캐릭터힘")->m_Font.m_WidthAlignment = DWRITE_TEXT_ALIGNMENT_CENTER;
+	UI_MGR->AddEvent("캐릭터힘", ADDEVENT_Update, Cstr);
+	UI_MGR->SetParent("LobbyScene_Status_Default", "캐릭터힘");
+
+	auto Cdex = [](void) {
+
+		if (DATA_MGR->m_CharacterName != "")
+		{
+			ostringstream a;
+
+			a << PLAYER_MGR->m_PlayerList[PLAYER_MGR->m_PlayerIndex]->m_CharacInfo.m_DEX;
+
+			UI_MGR->FindUI("캐릭터민첩")->m_Text = a.str();
+
+		}
+
+
+	};
+	UI_MGR->AddText("캐릭터민첩", "", { -940 , 60 }, ColorF(ColorF::White), L"고딕", 10.0f);
+	UI_MGR->FindUI("캐릭터민첩")->m_Font.m_WidthAlignment = DWRITE_TEXT_ALIGNMENT_CENTER;
+	UI_MGR->AddEvent("캐릭터민첩", ADDEVENT_Update, Cdex);
+	UI_MGR->SetParent("LobbyScene_Status_Default", "캐릭터민첩");
+
+	auto Cint = [](void) {
+
+		if (DATA_MGR->m_CharacterName != "")
+		{
+			ostringstream a;
+
+			a << PLAYER_MGR->m_PlayerList[PLAYER_MGR->m_PlayerIndex]->m_CharacInfo.m_INT;
+
+			UI_MGR->FindUI("캐릭터지능")->m_Text = a.str();
+
+		}
+
+
+	};
+	UI_MGR->AddText("캐릭터지능", "", { -830 , 30 }, ColorF(ColorF::White), L"고딕", 10.0f);
+	UI_MGR->FindUI("캐릭터지능")->m_Font.m_WidthAlignment = DWRITE_TEXT_ALIGNMENT_CENTER;
+	UI_MGR->AddEvent("캐릭터지능", ADDEVENT_Update, Cint);
+	UI_MGR->SetParent("LobbyScene_Status_Default", "캐릭터지능");
+
+	auto Cluk = [](void) {
+
+		if (DATA_MGR->m_CharacterName != "")
+		{
+			ostringstream a;
+			a << PLAYER_MGR->m_PlayerList[PLAYER_MGR->m_PlayerIndex]->m_CharacInfo.m_LUK;
+			UI_MGR->FindUI("캐릭터운")->m_Text = a.str();
+		}
+	};
+
+	UI_MGR->AddText("캐릭터운", "", { -830 , 60 }, ColorF(ColorF::White), L"고딕", 10.0f);
+	UI_MGR->FindUI("캐릭터운")->m_Font.m_WidthAlignment = DWRITE_TEXT_ALIGNMENT_CENTER;
+	UI_MGR->AddEvent("캐릭터운", ADDEVENT_Update, Cluk);
+	UI_MGR->SetParent("LobbyScene_Status_Default", "캐릭터운");
+
+
 }
 
 void LobbyScene::Update(float _DelayTime)
@@ -247,6 +488,11 @@ void LobbyScene::Update(float _DelayTime)
 
 	UI_MGR->Update(_DelayTime);
 
+	for (auto &i : PLAYER_MGR->m_PlayerList)
+	{
+		i->UpdateLobby(_DelayTime);
+	}
+
 	//m_player.Update(_DelayTime);
 	obj.Update(_DelayTime);
 
@@ -262,6 +508,11 @@ void LobbyScene::Update(float _DelayTime)
 void LobbyScene::Render()
 {
 	UI_MGR->Render();
+
+	for (auto &i : PLAYER_MGR->m_PlayerList)
+	{
+		i->Render();
+	}
 
 	//m_player.Render();
 	obj.Render();

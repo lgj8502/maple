@@ -214,6 +214,17 @@ void cEffectMgr::Update(float _DelayTime)
 			i->m_Transform.m_velocityY = -200.0f;
 
 			i->m_Transform.VelocityTransY(_DelayTime);
+
+			i->m_AplhaTime -= _DelayTime;
+
+			if (i->m_AplhaTime < 0)
+			{
+				float alpha = i->m_Renderer.GetAlpha();
+				alpha -= _DelayTime * 2;
+
+				i->m_Renderer.SetAlpha(alpha);
+				
+			}
 		}
 
 		i->Update(_DelayTime);

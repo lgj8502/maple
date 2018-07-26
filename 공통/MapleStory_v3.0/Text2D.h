@@ -16,6 +16,8 @@ public:
 	DWRITE_TEXT_ALIGNMENT		m_WidthAlignment	= DWRITE_TEXT_ALIGNMENT_LEADING;
 	DWRITE_PARAGRAPH_ALIGNMENT	m_HeightAlignment	= DWRITE_PARAGRAPH_ALIGNMENT_CENTER;
 
+	DWRITE_FONT_WEIGHT			m_FontWeight		= DWRITE_FONT_WEIGHT_NORMAL;
+
 	DWRITE_TEXT_METRICS			m_Metrics = {};
 
 public:
@@ -23,6 +25,7 @@ public:
 	~Text2D();
 
 	HRESULT		SetFont(const wchar_t *_FontName);
+
 	VOID		TextRender(ID2D1RenderTarget *_pRT, ID2D1Brush *_pBrush, D2D1_POINT_2F _Pos, const char *_Format, ...);
 	VOID		TextRender(ID2D1RenderTarget *_pRT, ID2D1Brush *_pBrush, float _Size, D2D1_POINT_2F _Pos, const char *_Format, ...);
 

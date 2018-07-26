@@ -14,7 +14,7 @@ void LoginScene::Init(HWND hWnd)
 {
 	IMG_MGR->FileFindDir(L".\\Img\\LoginScene\\");
 
-	//SOUND_MGR->FileFindDir(L".\\Sound\\");
+	SOUND_MGR->FileFindDir(L".\\Sound\\");
 	//
 	//SOUND_MGR->SoundBGM(L"Sound_Login");
 	//UI_MGR->AddImage("LobbyScene_charBackground1.5.0", L"Message.0", { 600,  400 }, { 1.0f, 1.0f });
@@ -175,6 +175,7 @@ void LoginScene::Init(HWND hWnd)
 		if (result == true)
 		{
 			SCENE_MGR->ChangeScene(SCENE_CHANNEL);
+			DATA_MGR->m_ID = User.m_ID;
 			checkEvent = false;
 		}
 	};
@@ -222,8 +223,9 @@ void LoginScene::Init(HWND hWnd)
 
 	////// 아이디 생성창
 
-	UI_MGR->AddButton("IdCreate", L"IDcreate", { 592, 400 }, { 1.5f, 1.5f }, 1.0f, false, true);
+	//UI_MGR->AddButton("IdCreate", L"IDcreate", { 592, 400 }, { 1.5f, 1.5f }, 1.0f, false, true);
 
+	UI_MGR->AddImage("IdCreate", L"IDcreate", { 592, 400 }, { 1.5f, 1.5f }, 1.0f, false, true);
 	// 확인 버튼
 	UI_MGR->AddButton("IDCreate_OK", L"ChannelScene_returnPage_ok_Default", { -30, 90 }, { 1.0f, 1.0 });
 	UI_MGR->BitMapAdd("IDCreate_OK", L"ChannelScene_returnPage_ok_Over");
@@ -235,23 +237,22 @@ void LoginScene::Init(HWND hWnd)
 
 
 	auto IDC_OK_CLICK = [](void) { 
+
+		if (UI_MGR->FindUI("ID_Create_PW")->m_SonUI[0]->m_Text != UI_MGR->FindUI("ID_Create_PW2")->m_SonUI[0]->m_Text) return;
+
 		sUserInfo User;
 		User.m_ID = UI_MGR->FindUI("ID_Create_Input")->m_SonUI[0]->m_Text;
 		User.m_PassWard = UI_MGR->FindUI("ID_Create_PW")->m_SonUI[0]->m_Text;
 
 		if (DATA_MGR->Check_ID(User.m_ID) == false)
 		{
-			bool result = DATA_MGR->Save_UserInfo(User);
+			bool result = DATA_MGR->Create_UserInfo(User);
 
 			if (result == true)
 			{
 				UI_MGR->FindUI("IdCreate")->m_isActive = false;
 			}
 		}
-
-
-
-
 	};
 
 	UI_MGR->AddEvent("IDCreate_OK", ADDEVENT_OnMouseClick, IDC_OK_CLICK);
@@ -347,7 +348,8 @@ void LoginScene::Init(HWND hWnd)
 	auto End_Func5 = [](void) { UI_MGR->FindUI("gameEnd")->m_isActive = false; };
 	UI_MGR->AddEvent("gameEnd_No", ADDEVENT_OnMouseClick, End_Func5);
 	//게임 종료 확인 이벤트
-	auto End_Func6 = [](void) {PostQuitMessage(WM_DESTROY); };
+	auto End_Func6 = [](void) {
+		DATA_MGR->AllMgrDestroy(); PostQuitMessage(WM_DESTROY); };
 	UI_MGR->AddEvent("gameEnd_Ok", ADDEVENT_OnMouseClick, End_Func6);
 	//============================================================================================
 }
@@ -374,16 +376,6 @@ void LoginScene::Update(float _DelayTime)
 		{
 			UI_MGR->m_isChating = true;
 		}
-	}
-
-	if (OnceKeyDown(VK_F1))
-	{
-		sUserInfo A;
-
-		A.m_ID = "AAA";
-		A.m_PassWard = "1234";
-
-		DATA_MGR->Save_UserInfo(A);
 	}
 
 }
@@ -530,13 +522,19 @@ LRESULT LoginScene::MyWndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lP
 		//	엔터
 		else if (cWord == VK_RETURN)
 		{
-			//CheckText = m_szBuf;
-			m_szBuf = "";
-			m_szMixingString[0] = NULL;
+			sUserInfo User;
 
-			m_oldText = "";
+			User.m_ID = UI_MGR->FindUI("loginScene_textBar1")->m_SonUI[0]->m_Text;
+			User.m_PassWard = UI_MGR->FindUI("loginScene_textBar2")->m_SonUI[0]->m_Text;
 
-			UI_MGR->m_InputField->m_SonUI[0]->m_Text = "";
+			bool result = DATA_MGR->Check_UserInfo(User);
+
+			if (result == true)
+			{
+				SCENE_MGR->ChangeScene(SCENE_CHANNEL);
+				DATA_MGR->m_ID = User.m_ID;
+				checkEvent = false;
+			}
 
 		}
 		else if (cWord == VK_TAB)

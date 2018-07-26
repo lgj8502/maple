@@ -41,7 +41,7 @@ void SceneMgr::SetScene()
 
 SceneMgr::~SceneMgr()
 {
-	delete m_pScene;
+	Destroy();
 }
 
 void SceneMgr::Update(float _DelayTime)
@@ -72,6 +72,13 @@ void SceneMgr::ChangeScene(int _Type)
 
 	UI_MGR->Destroy();
 	IMG_MGR->ClearImgList();
+}
+
+void SceneMgr::Destroy()
+{
+
+	delete m_pScene;
+
 }
 
 LRESULT SceneMgr::MyWndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)

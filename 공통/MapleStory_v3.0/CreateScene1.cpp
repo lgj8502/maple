@@ -32,13 +32,41 @@ void CreateScene1::Init(HWND hWnd)
 {
 
 	IMG_MGR->FileFindDir(L".\\Img\\CreateScene1\\");
-	//SOUND_MGR->FileFindDir(L".\\Sound\\");
+	SOUND_MGR->FileFindDir(L".\\Sound\\");
 
 	p_player = &m_player;
-	m_player.PutLongcoat();
+	//m_player.PutLongcoat();
+
+	m_player.m_isCreate = true;
+
+	m_player.m_CharacInfo.m_Base = 100;
+	m_player.m_CharacInfo.m_Face = 23000;
+	m_player.m_CharacInfo.m_Hair = 30000;
+	m_player.m_CharacInfo.m_Coat = 200;
+	m_player.m_CharacInfo.m_Shoes = 1072833;
+	m_player.m_CharacInfo.m_Weapon = 1322005;
+
+	m_player.m_CharacInfo.m_X = 200;
+	m_player.m_CharacInfo.m_Y = 900;
+	m_player.m_CharacInfo.m_Map = MNAME_COKETOWN;
+
+	//m_player.m_CharacInfo.m_Name = "Test";
+	m_player.m_CharacInfo.m_Level = 1;
+	m_player.m_CharacInfo.m_Exp = 0.0f;
+	m_player.m_CharacInfo.m_Pants = 0;
+	m_player.m_CharacInfo.m_HP = 200;
+	m_player.m_CharacInfo.m_HPmax = 200;
+	m_player.m_CharacInfo.m_MP = 200;
+	m_player.m_CharacInfo.m_MPmax = 200;
+
+	m_player.m_CharacInfo.m_STR = 12;
+	m_player.m_CharacInfo.m_DEX = 5;
+	m_player.m_CharacInfo.m_INT = 4;
+	m_player.m_CharacInfo.m_LUK = 4;
+
 	m_player.Init();
 	m_player.SetPos({ 600,433 });
-	
+	m_player.SetScale(-1.0f, 1.0f);
 
 	//	mouse default image 
 	obj.m_Renderer.AddBitmap(IMG_MGR->GetImage(L"mouseDefault"));	//0
@@ -67,9 +95,9 @@ void CreateScene1::Init(HWND hWnd)
 	secondInfoArray[3] = { "더벅 머리", 30020	};
 	secondInfoArray[4] = { "빡빡 머리", 30030	};
 
-	thirdInfoArray[0] = { "블루 머플러 한벌", (size_t)1050286 };
-	thirdInfoArray[1] = { "퍼플 머플러 한벌", (size_t)1050287 };
-	thirdInfoArray[2] = { "레드 머플러 한벌", (size_t)1050288 };
+	thirdInfoArray[0] = { "블루 머플러 한벌", (size_t)200};
+	thirdInfoArray[1] = { "퍼플 머플러 한벌", (size_t)201 };
+	thirdInfoArray[2] = { "레드 머플러 한벌", (size_t)202 };
 
 	fourInfoArray[0] = { "옐로 어드벤쳐 슈즈", 1072833 };
 	fourInfoArray[1] = { "퍼플 어드벤쳐 슈즈", 1072834 };
@@ -509,8 +537,24 @@ void CreateScene1::Init(HWND hWnd)
 	auto CreateScene1Func2 = [](void) { UI_MGR->FindUI("CreateScene1_Ok1_default")->m_Renderer.ChangeBitmap(1); checkEvent = true; };
 	auto CreateScene1Func3 = [](void) { UI_MGR->FindUI("CreateScene1_Ok1_default")->m_Renderer.ChangeBitmap(0);  checkEvent = false; };
 
+	auto InGameScene = [](void) { 
 
-	auto InGameScene = [](void) { 	SCENE_MGR->ChangeScene(SCENE_INGAME);};
+		//DATA_MGR->Create_Character(p_player->m_CharacInfo);
+		//DATA_MGR->m_CharacterName = p_player->m_CharacInfo.m_Name;
+
+		//SCENE_MGR->ChangeScene(SCENE_LOBBY);
+
+		UI_MGR->FindUI("CreateScene1_Menu")->m_isActive = false;
+		UI_MGR->FindUI("캐릭터이름")->m_isActive = true;
+		UI_MGR->FindUI("캐릭터이름_인풋필드")->m_isActive = true;
+
+		UI_MGR->DrawFirst(UI_MGR->FindUI("캐릭터이름"));
+		UI_MGR->DrawFirst(UI_MGR->FindUI("캐릭터이름_인풋필드"));
+
+		//UI_MGR->FindUI("CreateScene1_Ok1_default")->m_Transform.SetPos(831, 352);
+		//UI_MGR->FindUI("CreateScene1_No1_default")->m_Transform.SetPos(943, 352);
+	
+	};
 	UI_MGR->AddEvent("CreateScene1_Ok1_default", ADDEVENT_OnMouseOver, CreateScene1Func2);
 	UI_MGR->AddEvent("CreateScene1_Ok1_default", ADDEVENT_OnMouseExit, CreateScene1Func3);
 	UI_MGR->AddEvent("CreateScene1_Ok1_default", ADDEVENT_OnMouseClick, InGameScene);
@@ -535,12 +579,59 @@ void CreateScene1::Init(HWND hWnd)
 	UI_MGR->AddEvent("CreateScene1_No1_default", ADDEVENT_OnMouseClick, CreateScene1_No2);
 
 
+	// 캐릭터 이름
 
+	UI_MGR->AddImage("캐릭터이름", L"CreateScene_Name", { 884, 415 }, { 1.5f, 1.33333f },1.0f, true);
+	UI_MGR->FindUI("캐릭터이름")->m_isActive = false;
+	UI_MGR->AddInputField("캐릭터이름_인풋필드", L"CreateScene1_IF", { 884, 281 }, {1.5f,1.33333f}, ColorF(ColorF::White), L"고딕", 1.0f, 15.0f);
+	UI_MGR->FindUI("캐릭터이름_인풋필드")->m_isActive = false;
 
+	//확인
+	UI_MGR->AddButton("캐릭터이름_확인", L"CreateScene1_Ok1_default", { -36, -18 }, { 1.0f, 1.0f });
 
+	UI_MGR->BitMapAdd("캐릭터이름_확인", L"CreateScene1_Ok1_Over");
+	auto CNO1 = [](void) { UI_MGR->FindUI("캐릭터이름_확인")->m_Renderer.ChangeBitmap(1); checkEvent = true; };
+	auto CNO2 = [](void) { UI_MGR->FindUI("캐릭터이름_확인")->m_Renderer.ChangeBitmap(0);  checkEvent = false; };
 
+	auto CNO3 = [](void) {
 
+		UI_MGR->FindUI("캐릭터이름")->m_isActive = false;
+		UI_MGR->FindUI("캐릭터이름_인풋필드")->m_isActive = false;
 
+		p_player->m_CharacInfo.m_Name = UI_MGR->FindUI("캐릭터이름_인풋필드")->m_SonUI[0]->m_Text;
+
+		DATA_MGR->Create_Character(p_player->m_CharacInfo);
+		DATA_MGR->m_CharacterName = p_player->m_CharacInfo.m_Name;
+
+		SCENE_MGR->ChangeScene(SCENE_LOBBY);
+
+		
+	};
+	UI_MGR->AddEvent("캐릭터이름_확인", ADDEVENT_OnMouseOver, CNO1);
+	UI_MGR->AddEvent("캐릭터이름_확인", ADDEVENT_OnMouseExit, CNO2);
+	UI_MGR->AddEvent("캐릭터이름_확인", ADDEVENT_OnMouseClick, CNO3);
+
+	UI_MGR->SetParent("캐릭터이름", "캐릭터이름_확인");
+
+	//취소
+	UI_MGR->AddButton("캐릭터이름_취소", L"CreateScene1_No1_default", { 38, -18 }, { 1.0f, 1.0f });
+
+	UI_MGR->BitMapAdd("캐릭터이름_취소", L"CreateScene1_No1_Over");
+	auto CNC1 = [](void) { UI_MGR->FindUI("캐릭터이름_취소")->m_Renderer.ChangeBitmap(1); checkEvent = true; };
+	auto CNC2 = [](void) { UI_MGR->FindUI("캐릭터이름_취소")->m_Renderer.ChangeBitmap(0);  checkEvent = false; };
+
+	auto CNC3 = [](void) {
+
+		UI_MGR->FindUI("캐릭터이름")->m_isActive = false;
+		UI_MGR->FindUI("캐릭터이름_인풋필드")->m_isActive = false;
+	};
+	UI_MGR->AddEvent("캐릭터이름_취소", ADDEVENT_OnMouseOver, CNC1);
+	UI_MGR->AddEvent("캐릭터이름_취소", ADDEVENT_OnMouseExit, CNC2);
+	UI_MGR->AddEvent("캐릭터이름_취소", ADDEVENT_OnMouseClick, CNC3);
+
+	UI_MGR->SetParent("캐릭터이름", "캐릭터이름_취소");
+
+	//UI_MGR->SetParent("캐릭터이름", "캐릭터이름_인풋필드");
 
 	//이전으로
 	UI_MGR->AddButton("ChannelReturn_Default", L"LobbyScene_ChannelReturn_Default", { 59,694 }, { 1.50f, 1.33333f });
@@ -624,7 +715,7 @@ void CreateScene1::Init(HWND hWnd)
 	auto End_Func5 = [](void) { UI_MGR->FindUI("gameEnd")->m_isActive = false; };
 	UI_MGR->AddEvent("gameEnd_No", ADDEVENT_OnMouseClick, End_Func5);
 	//게임 종료 확인 이벤트
-	auto End_Func6 = [](void) {PostQuitMessage(WM_DESTROY); };
+	auto End_Func6 = [](void) {		DATA_MGR->AllMgrDestroy();  PostQuitMessage(WM_DESTROY); };
 	UI_MGR->AddEvent("gameEnd_Ok", ADDEVENT_OnMouseClick, End_Func6);
 	//============
 }

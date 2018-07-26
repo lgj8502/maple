@@ -405,6 +405,9 @@ void cUIMgr::SetParent(string _Parent, string _Son)
 	{
 		MK_LOG("SetParent 실패");
 
+		MK_LOG("%s, %s", _Parent, _Son);
+
+
 		return;
 	}	
 
@@ -908,34 +911,34 @@ void cUIMgr::AddAnimation(string _name, D2D1_POINT_2F _pos, float _time, vector<
 
 }
 
-void cUIMgr::AddAnimation(string _name, D2D1_RECT_F _rect, float _time, vector<wstring> _bitmapList)
-{
-	if (FindUI(_name) != nullptr)
-	{
-		MK_LOG("UI 이름 중복 : UI 생성 실패");
-
-		return;
-	}
-
-	cUI *UI = new cUI;
-
-	UI->m_Type = UI_IMAGE;
-	UI->m_Name = _name;
-
-	for (size_t i = 0; i < _bitmapList.size(); i++)
-	{
-		ID2D1Bitmap* AddBitmap = IMG_MGR->GetImage(_bitmapList[i]);
-
-		UI->m_Renderer.AddBitmap(AddBitmap);
-		UI->m_Renderer.SetImgRT(_rect, i);
-	}
-
-	UI->m_Renderer.m_State = 0;
-
-	UI->m_Renderer.AddAnimation_const(0, 0, _bitmapList.size() - 1, _time);
-
-	m_UIList.push_back(UI);
-}
+//void cUIMgr::AddAnimation(string _name, D2D1_RECT_F _rect, float _time, vector<wstring> _bitmapList)
+//{
+//	if (FindUI(_name) != nullptr)
+//	{
+//		MK_LOG("UI 이름 중복 : UI 생성 실패");
+//
+//		return;
+//	}
+//
+//	cUI *UI = new cUI;
+//
+//	UI->m_Type = UI_IMAGE;
+//	UI->m_Name = _name;
+//
+//	for (size_t i = 0; i < _bitmapList.size(); i++)
+//	{
+//		ID2D1Bitmap* AddBitmap = IMG_MGR->GetImage(_bitmapList[i]);
+//
+//		UI->m_Renderer.AddBitmap(AddBitmap);
+//		UI->m_Renderer.SetImgRT(_rect, i);
+//	}
+//
+//	UI->m_Renderer.m_State = 0;
+//
+//	UI->m_Renderer.AddAnimation_const(0, 0, _bitmapList.size() - 1, _time);
+//
+//	m_UIList.push_back(UI);
+//}
 
 void cUIMgr::AddHPgauge(D2D1_POINT_2F _pos)
 {
@@ -954,9 +957,9 @@ void cUIMgr::AddHPgauge(D2D1_POINT_2F _pos)
 
 	auto FUNC1 = [](void) { 
 
-		if (PLAYER_MGR->m_player->m_HP <= 0) PLAYER_MGR->m_player->m_HP = 0;
+		if (PLAYER_MGR->m_player->m_CharacInfo.m_HP <= 0) PLAYER_MGR->m_player->m_CharacInfo.m_HP = 0;
 
-		float ratio = (float)PLAYER_MGR->m_player->m_HP / PLAYER_MGR->m_player->m_HPmax;
+		float ratio = (float)PLAYER_MGR->m_player->m_CharacInfo.m_HP / PLAYER_MGR->m_player->m_CharacInfo.m_HPmax;
 		UI_MGR->FindUI("HPgauge")->m_Transform.SetScale(ratio * 1.5f, 1.3333f);
 		};
 
@@ -981,7 +984,7 @@ void cUIMgr::AddMPgauge(D2D1_POINT_2F _pos)
 
 	auto FUNC1 = [](void) {
 
-		float ratio = (float)PLAYER_MGR->m_player->m_MP / PLAYER_MGR->m_player->m_MPmax;
+		float ratio = (float)PLAYER_MGR->m_player->m_CharacInfo.m_MP / PLAYER_MGR->m_player->m_CharacInfo.m_MPmax;
 		UI_MGR->FindUI("MPgauge")->m_Transform.SetScale(ratio * 1.5f, 1.3333f);
 	};
 
@@ -1210,7 +1213,7 @@ void cUIMgr::MPMaxSetting(int _Number)
 	}
 }
 
-void cUIMgr::LevelSetting(int _Lv)
+void cUIMgr::LevelSetting(int _Lv, D2D1_POINT_2F _pos, D2D1_POINT_2F _scale)
 {
 	for (auto &i : m_Level)
 	{
@@ -1225,13 +1228,14 @@ void cUIMgr::LevelSetting(int _Lv)
 
 	for (int i = 0; i < Cipher; i++)
 	{
-		D2D1_POINT_2F pos = { 95, 710 };
+		D2D1_POINT_2F pos = _pos;
 
-		pos.x += 8.0f * i;
+		pos.x += 8.0f * _scale.x * i;
 
 		Object2D *obj = new Object2D;
 
 		obj->m_Transform.SetPos(pos);
+		obj->m_Transform.SetScale(_scale);
 
 		int Num = _Lv % (int)pow(10, (Cipher - i)) / (int)pow(10, Cipher - i - 1);
 

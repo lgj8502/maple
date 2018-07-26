@@ -16,7 +16,7 @@ class IngameScene: public Scene
 	char m_szMixingString[3] = "";
 	size_t m_maxText = 70;
 	string m_oldText = "";
-
+	Object2D obj;
 public:
 
 	~IngameScene();

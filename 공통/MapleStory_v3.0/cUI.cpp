@@ -40,7 +40,7 @@ void cUI::TextRender()
 	{
 		string str = m_Text;
 
-		for (int i = 0; i < str.size(); i++)
+		for (size_t i = 0; i < str.size(); i++)
 		{
 			str[i] = '*';
 		}
@@ -196,6 +196,11 @@ void cUI::OnMouseClick()
 		i();
 	}
 
+	if (m_Type == UI_BUTTON)
+	{
+		SOUND_MGR->SoundResume(L"btMouseClick");
+	}
+
 }
 
 void cUI::OnMouseOver()
@@ -209,9 +214,16 @@ void cUI::OnMouseOver()
 	m_isMouseOver = true;
 
 	for (auto &i : m_OnMouseOver)
-	{
+	{	
+
 		i();
 	}
+
+	if (m_Type == UI_BUTTON)
+	{
+		SOUND_MGR->SoundResume(L"btMouseOver");
+	}
+	
 }
 
 void cUI::OnMouseExit()
