@@ -4,10 +4,13 @@
 
 #include <list>
 
+#define CREATETIME 5.0f
+
 enum eMobName
 {
 	MOB_MUSHROOM, //0
 	MOB_JUNIERYETTI, //1
+	MOB_MURUCOON,
 
 
 	MOB_END,
@@ -38,7 +41,7 @@ private:
 
 	//int m_MobGroupNum = 0;
 
-	float m_CreateTime = 5.0f;
+	float m_CreateTime = CREATETIME;
 
 	//float m_CheckCountTime = 2.0f;
 

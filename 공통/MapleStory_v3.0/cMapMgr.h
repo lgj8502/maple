@@ -93,11 +93,21 @@ public:
 
 	void AddAnimation(D2D1_POINT_2F _pos, eMap_Type _Type, float _time, vector<wstring> _bitmapNamelist);
 
+	void AddNPC_Carl(D2D1_POINT_2F _pos, FUNC _func);
+
+	void AddCoin(D2D1_POINT_2F _pos, int _SumOfMeso);
+	void PickCoin(cMapObj* _Coin);
+
+	void AddItem(D2D1_POINT_2F _pos, int _ItemNo);
+	void PickItem(cMapObj* _Item);
+
 	void Update(float _DelayTime = 0);
 	void BackRender();
 	void FrontRender();
 	void LadderRender();
 	void PortalRender();
+
+	void OnMouseDown(POINT _mousePos);
 
 	void ChangeMap(int _MapName);
 

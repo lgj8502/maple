@@ -26,6 +26,10 @@ void cErebMap::Init()
 	MAP_MGR->AddMinimapWindow(L"minimap_7", { 210,175 }, { 1.0f, 1.0f });
 	MAP_MGR->AddMinimapWindow_Rect(L"minimap_base", { 27, 78, 232, 180 });
 
+	MAP_MGR->AddMinimapWindow(L"MiniMap.BtNpc.normal.0", { 215,28 }, { 1.0f, 1.0f });
+	MAP_MGR->AddMinimapWindow(L"MiniMap.BtMap.normal.0", { 175,28 }, { 1.0f, 1.0f });
+	MAP_MGR->AddMinimapWindow(L"MiniMap.BtSmall.normal.0", { 148,28 }, { 1.0f, 1.0f });
+
 	MAP_MGR->AddMinimapWindow(L"Ereb", { 50, 52 }, { 1.0f, 1.0f });
 
 	IMG_MGR->FileFindDir_Take(L".\\Img\\map\\Ereb\\", m_MapImgList);
@@ -51,9 +55,9 @@ void cErebMap::Init()
 
 	m_LayOut2_Size = { 1400, 850 };
 
-	MAP_MGR->AddBackGround2(L"back.9",	{ 201.0f,  468.0f });
+	MAP_MGR->AddBackGround2(L"back.9", { 201.0f,  468.0f });
 	MAP_MGR->AddBackGround2(L"back.9", { 600.5f,   468.0f });
-	MAP_MGR->AddBackGround2(L"back.9",	{ 1000.0f, 468.0f });
+	MAP_MGR->AddBackGround2(L"back.9", { 1000.0f, 468.0f });
 	MAP_MGR->AddBackGround2(L"back.9", { 1400.0f,  468.0f });
 
 	MAP_MGR->AddBackGround2(L"back.9", { 201.0f,  368.0f });
@@ -88,9 +92,14 @@ void cErebMap::Init()
 
 	m_LayOut6_Size = { 2000, 1200 };
 
-	MAP_MGR->AddBackGround6(L"nature.11.0", { 150.0f, 995.0f });
-	MAP_MGR->AddBackGround6(L"nature.0.0", { 0.0f,    995.0f });
-	MAP_MGR->AddBackGround6(L"nature.10.0", { 50.0f,  995.0f });
+	auto CarlClick = [](void) { MK_LOG("Ä® Å×½ºÆ®"); };
+
+
+	//MAP_MGR->AddNPC_Carl({ 500.0f, 985.0f }, CarlClick);
+
+	MAP_MGR->AddBackGround6(L"nature.11.0", { 300.0f, 995.0f });
+	MAP_MGR->AddBackGround6(L"nature.0.0", { 150.0f,    995.0f });
+	MAP_MGR->AddBackGround6(L"nature.10.0", { 200.0f,  995.0f });
 
 	// Holybird
 	MAP_MGR->AddBackGround6(L"holybird.0.0", { 1301.0f, 995.0f });
@@ -182,7 +191,7 @@ void cErebMap::Init()
 	m_LayOut6.m_Transform.m_CameraRate.y = (m_LayOut6_Size.y - WIN_HEIGHT) / (m_LayOut6_Size.y - WIN_HEIGHT);
 
 
-	m_MiniMap.m_Transform.SetPos({ 35,50 });
+	m_MiniMap.m_Transform.SetPos({ 35,60 });
 	m_MiniMap.m_Transform.SetScale(0.1f, 0.1f);
 
 }

@@ -70,6 +70,8 @@ public:
 	void AddBitmap_LeftBottom(ID2D1Bitmap* _bitmap);
 	void AddBitmap_LeftTop(ID2D1Bitmap* _bitmap);
 
+	void DelLastBitmap();
+
 	void ChangeBitmap(size_t _index);
 
 	void AddAnimation(int _state, int _start, int _end, double _time, ...);
@@ -105,6 +107,11 @@ public:
 	inline D2D1_RECT_F GetImgRT()
 	{
 		return m_ImgRTList[m_BitmapIndex];
+	}
+
+	inline ID2D1Bitmap* GetBitmap()
+	{
+		return m_BitmapList[0];
 	}
 
 

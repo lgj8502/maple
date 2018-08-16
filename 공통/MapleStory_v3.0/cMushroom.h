@@ -5,15 +5,8 @@ class cMushroom : public cMob
 public:
 	~cMushroom();
 
-	void Init();
+	void Setting();
 
-	void StateUpdate(float _DelayTime);
-	void StateChagne() ;
-	void StateSetting();
-
-	void Hit();
-
-	void HPBarUpdate(float _DelayTime);
 	
 };
 

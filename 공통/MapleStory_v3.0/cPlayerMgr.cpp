@@ -14,6 +14,7 @@ void cPlayerMgr::CreatePlayer()
 	m_player = new PlayerTest;
 
 	DATA_MGR->Load_CharacterInfo(m_player->m_CharacInfo);
+	DATA_MGR->Load_Inventory(m_player->m_InvenInfo);
 }
 
 void cPlayerMgr::Destroy()

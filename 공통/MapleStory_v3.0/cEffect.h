@@ -15,6 +15,10 @@ public:
 
 	bool  m_NotDestroy = false;
 
+
+	FUNC m_Func = nullptr;
+
 	bool CheckTime(float _time);
+
 };
 

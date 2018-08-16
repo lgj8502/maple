@@ -18,6 +18,7 @@ enum eUI_Type
 	UI_SCROLLVIEW,
 	UI_SLIDER,
 	UI_GAGE,
+
 };
 
 enum eEvent_Type
@@ -25,6 +26,7 @@ enum eEvent_Type
 	ADDEVENT_OnMouseDown,
 	ADDEVENT_OnMouseUP,
 	ADDEVENT_OnMouseClick,
+	ADDEVENT_OnMouseDbClick,
 	ADDEVENT_OnMouseOver,
 	ADDEVENT_OnMouseExit,
 	ADDEVENT_OnMouseDrag,
@@ -45,7 +47,10 @@ class cUIMgr : public TemplateSingleton<cUIMgr>
 
 	POINT m_MosuePoint = {};
 
-	cUI* m_ClickedUI = nullptr;
+	// 인벤토리용
+	bool m_isInvenPicked = false;
+	int m_InvenPickedNum = 0;
+	int m_ClickedInvenNum = 0;
 
 	float m_time = 0.0f;
 
@@ -54,19 +59,24 @@ class cUIMgr : public TemplateSingleton<cUIMgr>
 	vector<Object2D*> m_MP;
 	vector<Object2D*> m_MPmax;
 	vector<Object2D*> m_Level;
-
-
-private:
-
-	bool	RayCastCheck(POINT _Ray, D2D1_RECT_F _object);
-
+	vector<Object2D*> m_Exp;
+	vector<Object2D*> m_UsetemCount;
 
 public:
+	bool	RayCastCheck(POINT _Ray, D2D1_RECT_F _object);
+
+	cUI* m_ClickedUI = nullptr;
 
 	// IME 용
 	cUI* m_InputField = nullptr;
 	bool m_isChating = false;
 	bool m_ExitField = false;
+
+	// 단축키 용
+	cUI* m_Skill = nullptr;
+
+	FUNC m_ShiftDown = nullptr;
+
 
 	void	Destroy();
 
@@ -84,6 +94,9 @@ public:
 	cUI* FindParent(cUI *_UI);
 
 	void BitMapAdd(string _name, wstring _bitmapName);
+	void BitMapAdd(string _name, ID2D1Bitmap* _pBitmap);
+	void BitMapDel(string _name);
+
 
 	void OnMouseDown(POINT _mousePos);
 	void OnMouseUp(POINT _mousePos);
@@ -131,7 +144,7 @@ public:
 
 	void AddHPgauge(D2D1_POINT_2F _pos);
 	void AddMPgauge(D2D1_POINT_2F _pos);
-
+	void AddEXPgauge(D2D1_POINT_2F _pos);
 
 	void HPSetting(int _Number);
 	void HPMaxSetting(int _Number);
@@ -139,10 +152,23 @@ public:
 	void MPMaxSetting(int _Number);
 	void LevelSetting(int _Lv, D2D1_POINT_2F _pos = { 95, 710 }, D2D1_POINT_2F _scale = { 1.0f, 1.0f });
 
+	void ExpSetting(int _Exp, int _ExpMax);
+
+	void InventoryClick();
+	void InventoryDbClick();
+	void InventoryRender(int _array[28]);
+
+	void EquipDbClick();
+	void EquipRender();
+
+	void SkillClick();
+
+	void ShiftDown();
 
 	void Update(float _DelayTime = 0);
 	void Render();
 
+	void VectorClear(vector<Object2D*> &_vec);
 
 };
 

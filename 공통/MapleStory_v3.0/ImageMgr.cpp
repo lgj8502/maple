@@ -254,12 +254,64 @@ void ImageMgr::FileFindDir_Take(wstring _Path, map<wstring, ImgInfo> &_Imglist)
 
 		// 확인 작업이 끝났다면 다음 파일로 대상 변경 (다음 파일이 없다면 false 로 반목이 중단됨
 		t_bResult = FindNextFileW(t_hSrch, &t_wfd);
+
 	}
 	// 작업 종료에 따른 close 처리
 	FindClose(t_hSrch);
 
 	return VOID();
 }
+
+void ImageMgr::FileFindIcon(wstring _Path, map<wstring, ImgInfo>& _Imglist)
+{
+	HANDLE t_hSrch;
+	WIN32_FIND_DATAW t_wfd;
+	BOOL t_bResult = TRUE;
+
+	_Path += L"Icon\\";
+	// 파일 경로를 에서 첫번째 파일 정보를 받아옴
+	t_hSrch = FindFirstFileW((_Path + L"*.*").c_str(), &t_wfd);
+
+	// 첫번째 파일 정보 받아오기 오류시 종료 처리 (폴더 경로가 잘못된 경우 등)
+	if (t_hSrch == INVALID_HANDLE_VALUE)
+	{
+		MK_LOG("FileFindDir 실패");
+		return VOID();
+	}
+	while (t_bResult)
+	{
+
+		// 파일의 "dwFileAttributes" 속성이 16 (폴더)이고 첫번째 문자가 '.' 이 아니라면 폴더로 처리
+		// 첫번째 문자가 '.' 인 경우 상위 경로 등을 의미하는 폴더로 무시
+		if (t_wfd.dwFileAttributes == FILE_ATTRIBUTE_DIRECTORY && t_wfd.cFileName[0] != '.')
+		{
+			// 하위 폴더를 대상으로 다시 확인 함수 호출(재귀)
+			FileFindDir((_Path + t_wfd.cFileName + L"\\").c_str());
+		}
+		// 파일의 "dwFileAttributes" 속성이 32(파일) 이라면 파일 관련 처리
+		else if (t_wfd.dwFileAttributes != FILE_ATTRIBUTE_COMPRESSED && t_wfd.cFileName[0] != '.')
+		{
+			// wstring 의 find 함수를 사용하기 위해 파일명을 wstring 변수에 대입
+			wstring t_FileTypeChk = t_wfd.cFileName;
+			// ".png" 확장자가 있는 경우에만 AddImg 함수를 호출함
+			if (t_FileTypeChk.find(L".png"))
+			{
+				//이미지 파일에 대한 bitmap 생성 및 리스트 관리를 위한 AddImg함수에 대상 파일(경로 포함) 정보 입력
+				AddImg((LPCWSTR)(_Path + t_wfd.cFileName).c_str(), _Imglist);
+			}
+
+		}
+
+		// 확인 작업이 끝났다면 다음 파일로 대상 변경 (다음 파일이 없다면 false 로 반목이 중단됨
+		t_bResult = FindNextFileW(t_hSrch, &t_wfd);
+	}
+	// 작업 종료에 따른 close 처리
+	FindClose(t_hSrch);
+
+	return VOID();
+}
+
+
 
 
 

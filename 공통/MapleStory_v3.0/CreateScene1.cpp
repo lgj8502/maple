@@ -30,6 +30,7 @@ CreateScene1::~CreateScene1()
 
 void CreateScene1::Init(HWND hWnd)
 {
+	m_SceneName = "Create1";
 
 	IMG_MGR->FileFindDir(L".\\Img\\CreateScene1\\");
 	SOUND_MGR->FileFindDir(L".\\Sound\\");
@@ -43,17 +44,21 @@ void CreateScene1::Init(HWND hWnd)
 	m_player.m_CharacInfo.m_Face = 23000;
 	m_player.m_CharacInfo.m_Hair = 30000;
 	m_player.m_CharacInfo.m_Coat = 200;
-	m_player.m_CharacInfo.m_Shoes = 1072833;
-	m_player.m_CharacInfo.m_Weapon = 1322005;
+	m_player.m_CharacInfo.m_Shoes = 501;
+	m_player.m_CharacInfo.m_Weapon = 600;
 
 	m_player.m_CharacInfo.m_X = 200;
 	m_player.m_CharacInfo.m_Y = 900;
 	m_player.m_CharacInfo.m_Map = MNAME_COKETOWN;
 
+
 	//m_player.m_CharacInfo.m_Name = "Test";
 	m_player.m_CharacInfo.m_Level = 1;
-	m_player.m_CharacInfo.m_Exp = 0.0f;
+	m_player.m_CharacInfo.m_Exp = 0;
+	m_player.m_CharacInfo.m_ExpMax = 200.0f;
+	m_player.m_CharacInfo.m_Ability = 0;
 	m_player.m_CharacInfo.m_Pants = 0;
+	m_player.m_CharacInfo.m_Cap = 0;
 	m_player.m_CharacInfo.m_HP = 200;
 	m_player.m_CharacInfo.m_HPmax = 200;
 	m_player.m_CharacInfo.m_MP = 200;
@@ -99,12 +104,12 @@ void CreateScene1::Init(HWND hWnd)
 	thirdInfoArray[1] = { "ÆÛÇÃ ¸ÓÇÃ·¯ ÇÑ¹ú", (size_t)201 };
 	thirdInfoArray[2] = { "·¹µå ¸ÓÇÃ·¯ ÇÑ¹ú", (size_t)202 };
 
-	fourInfoArray[0] = { "¿»·Î ¾îµåº¥ÃÄ ½´Áî", 1072833 };
-	fourInfoArray[1] = { "ÆÛÇÃ ¾îµåº¥ÃÄ ½´Áî", 1072834 };
+	fourInfoArray[0] = { "¿»·Î ¾îµåº¥ÃÄ ½´Áî", 501 };
+	fourInfoArray[1] = { "ÆÛÇÃ ¾îµåº¥ÃÄ ½´Áî", 502 };
 
-	fiveInfoArray[0] = { "¸ùµÕÀÌ", 1322005 };
-	fiveInfoArray[1] = { "°Ë", 1302000 };
-	fiveInfoArray[2] = { "¼Õµµ³¢", 1312004 };
+	fiveInfoArray[0] = { "¸ùµÕÀÌ", 600 };
+	fiveInfoArray[1] = { "°Ë", 601 };
+	fiveInfoArray[2] = { "¼Õµµ³¢", 602 };
 
 	////////////////////////////////////////////////
 	//Menu
@@ -603,6 +608,8 @@ void CreateScene1::Init(HWND hWnd)
 		DATA_MGR->Create_Character(p_player->m_CharacInfo);
 		DATA_MGR->m_CharacterName = p_player->m_CharacInfo.m_Name;
 
+		DATA_MGR->Create_Inventory(p_player->m_InvenInfo);
+
 		SCENE_MGR->ChangeScene(SCENE_LOBBY);
 
 		
@@ -951,6 +958,7 @@ LRESULT CreateScene1::MyWndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM 
 	// °ÔÀÓ Á¾·á
 	case WM_CLOSE:
 		UI_MGR->FindUI("gameEnd")->m_isActive = true;
+		UI_MGR->DrawFirst(UI_MGR->FindUI("gameEnd"));
 		return 0;
 		/*default:
 		return FALSE;*/

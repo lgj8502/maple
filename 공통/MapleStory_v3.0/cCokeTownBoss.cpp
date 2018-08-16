@@ -20,6 +20,10 @@ void cCokeTownBoss::Init()
 	MAP_MGR->AddMinimapWindow(L"minimap_7", { 210,175 }, { 1.0f, 1.0f });
 	MAP_MGR->AddMinimapWindow_Rect(L"minimap_base", { 27, 78, 232, 180 });
 
+	MAP_MGR->AddMinimapWindow(L"MiniMap.BtNpc.normal.0", { 215,28 }, { 1.0f, 1.0f });
+	MAP_MGR->AddMinimapWindow(L"MiniMap.BtMap.normal.0", { 175,28 }, { 1.0f, 1.0f });
+	MAP_MGR->AddMinimapWindow(L"MiniMap.BtSmall.normal.0", { 148,28 }, { 1.0f, 1.0f });
+
 	MAP_MGR->AddMinimapWindow(L"CokeTown", { 50, 52 }, { 1.0f, 1.0f });
 
 	IMG_MGR->FileFindDir_Take(L".\\Img\\map\\CokeTown\\", m_MapImgList);
@@ -149,7 +153,7 @@ void cCokeTownBoss::Init()
 	m_LayOut6.m_Transform.m_CameraRate.y = (m_LayOut6_Size.y - WIN_HEIGHT) / (m_LayOut6_Size.y - WIN_HEIGHT);
 
 
-	m_MiniMap.m_Transform.SetPos({ 35,50 });
+	m_MiniMap.m_Transform.SetPos({ 35,60 });
 	m_MiniMap.m_Transform.SetScale(0.1f, 0.1f);
 
 }

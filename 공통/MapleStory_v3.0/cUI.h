@@ -1,6 +1,7 @@
 #pragma once
 
 typedef void(*FUNC)();
+typedef void(*FUNCF)(float);
 
 class cUI : public Object2D 
 {
@@ -38,6 +39,7 @@ public:
 	float m_Value = 0.0f;
 	float m_MinPos = 0.0f;
 	float m_MaxPos = 0.0f;
+	float m_OldValue = 0.0f;
 
 	// UI_TEXT 용
 	Text2D m_Font;
@@ -61,6 +63,20 @@ public:
 
 	bool m_isPassword = false;
 
+	// 인벤토리용
+
+	int m_InvenNum = -1;
+
+	// 장비창용
+
+	int m_ItemNum = -1;
+
+	// 단축키용
+
+	FUNC m_QuickFunc = nullptr;
+	
+	
+
 public:
 	cUI();
 	~cUI();
@@ -79,6 +95,10 @@ public:
 
 	void ToggleOn();
 	void ToggleOff();
+
+	// 스크롤바용
+
+	void SettingHandle();
 
 	D2D1_POINT_2F GetUIPos()
 	{

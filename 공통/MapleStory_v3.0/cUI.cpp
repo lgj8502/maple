@@ -71,7 +71,9 @@ void cUI::OnMouseDown()
 
 	m_isClicked = true;
 
+
 	UI_MGR->DrawFirst(this);
+
 
 	if (UI_MGR->m_InputField != nullptr)
 	{
@@ -141,7 +143,7 @@ void cUI::OnMouseDown()
 
 		if (posY - (float)UI_MGR->GetMousePoint().y > 0)
 		{
-			m_Value -= 0.3f;
+			m_Value -= 0.6f;
 
 			if (m_Value < 0.0f)
 			{
@@ -150,7 +152,7 @@ void cUI::OnMouseDown()
 		}
 		else
 		{
-			m_Value += 0.3f;
+			m_Value += 0.6f;
 
 			if (m_Value > 1.0f)
 			{
@@ -302,6 +304,14 @@ void cUI::ToggleOn()
 	if (m_parentUI != nullptr)
 	{
 		if (m_parentUI->m_isActive == false) return;
+
+		//for (auto &i : m_parentUI->m_SonUI)
+		//{
+		//	i->m_isOn = false;
+		//}
+		//
+		//m_isOn = true;
+		
 	}
 	for (auto &i : m_ToggleOn)
 	{
@@ -319,4 +329,12 @@ void cUI::ToggleOff()
 	{
 		i();
 	}
+}
+
+void cUI::SettingHandle()
+{
+	D2D1_POINT_2F sonPos = m_SonUI[0]->m_Transform.GetPos();
+	
+	sonPos.y = m_SonUI[0]->m_MinPos + (m_SonUI[0]->m_MaxPos * 2.0f) * m_Value;
+	m_SonUI[0]->m_Transform.SetPos(sonPos);
 }

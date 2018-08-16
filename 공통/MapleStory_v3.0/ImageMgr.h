@@ -40,6 +40,7 @@ public:
 
 	void FileFindDir(wstring _Path);
 	void FileFindDir_Take(wstring _Path, map<wstring, ImgInfo> &_Imglist);
+	void FileFindIcon(wstring _Path, map<wstring, ImgInfo> &_Imglist);
 
 	inline void ClearImgList()
 	{

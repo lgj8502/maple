@@ -12,6 +12,8 @@ LoginScene::~LoginScene()
 
 void LoginScene::Init(HWND hWnd)
 {
+	m_SceneName = "Login";
+
 	IMG_MGR->FileFindDir(L".\\Img\\LoginScene\\");
 
 	SOUND_MGR->FileFindDir(L".\\Sound\\");
@@ -484,12 +486,11 @@ LRESULT LoginScene::MyWndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lP
 
 		m_isClicked = false;
 
-	}break;
 
-	case WM_MOUSEWHEEL:
-	{
 
 	}break;
+
+
 	// IME ¿ë
 
 	case WM_CHAR:
@@ -666,6 +667,7 @@ LRESULT LoginScene::MyWndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lP
 		UI_MGR->FindUI("gameEnd")->m_isActive = true;
 
 		UI_MGR->DrawFirst(UI_MGR->FindUI("gameEnd"));
+
 		return 0;
 		/*default:
 		return FALSE;*/

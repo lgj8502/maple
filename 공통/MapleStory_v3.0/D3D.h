@@ -23,7 +23,10 @@ class D3D
 	HWND					m_hWnd;
 	D2D						m_D2D;
 
-	POINT					m_MousePos = { 0,0 };	
+	POINT					m_MousePos = { 0,0 };
+	bool					m_showCursur = true;
+
+	TRACKMOUSEEVENT tme = {};
 
 public:
 	D3D();

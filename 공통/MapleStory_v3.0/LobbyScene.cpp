@@ -15,6 +15,8 @@ LobbyScene::~LobbyScene()
 
 void LobbyScene::Init(HWND hWnd)
 {
+	m_SceneName = "Lobby";
+
 	IMG_MGR->FileFindDir(L".\\Img\\LobbyScene\\");
 
 	DATA_MGR->m_CharacterName = "";
@@ -139,7 +141,7 @@ void LobbyScene::Init(HWND hWnd)
 	auto LobbyScene_start1 = [](void) { UI_MGR->FindUI("LobbyScene_GameStart_Default")->m_Renderer.ChangeBitmap(0);  checkEvent = false; };
 	auto LobbyScene_click = [](void) {
 
-		if (PLAYER_MGR->m_PlayerList.size() == 0) return;
+		if (PLAYER_MGR->m_PlayerList.size() == 0 || PLAYER_MGR->m_PlayerIndex == -1) return;
 
 		SCENE_MGR->ChangeScene(SCENE_INGAME);
 	};
@@ -149,7 +151,7 @@ void LobbyScene::Init(HWND hWnd)
 
 	UI_MGR->SetParent("LobbyScene_Status_Default", "LobbyScene_GameStart_Default");
 
-	UI_MGR->AddImage("LV", L"LV", { -10, -115 }, { 1.0f, 1.0f });
+	UI_MGR->AddImage("LV", L"LV", { -15, -115 }, { 1.0f, 1.0f });
 	auto LVu = [](void) {
 		if (DATA_MGR->m_CharacterName == "")
 		{
@@ -256,7 +258,7 @@ void LobbyScene::Init(HWND hWnd)
 
 		PLAYER_MGR->m_PlayerIndex = 0;
 
-		UI_MGR->LevelSetting(PLAYER_MGR->m_PlayerList[0]->m_CharacInfo.m_Level, {1020, 295}, {2.0f, 2.0f});
+		UI_MGR->LevelSetting(PLAYER_MGR->m_PlayerList[0]->m_CharacInfo.m_Level, {1015, 295}, {2.0f, 2.0f});
 	};
 
 	UI_MGR->AddEvent("Charac1", ADDEVENT_OnMouseClick, Charac1);
@@ -278,7 +280,7 @@ void LobbyScene::Init(HWND hWnd)
 
 		PLAYER_MGR->m_PlayerIndex = 1;
 
-		UI_MGR->LevelSetting(PLAYER_MGR->m_PlayerList[1]->m_CharacInfo.m_Level, { 1020, 295 }, { 2.0f, 2.0f });
+		UI_MGR->LevelSetting(PLAYER_MGR->m_PlayerList[1]->m_CharacInfo.m_Level, { 1015, 295 }, { 2.0f, 2.0f });
 	};
 
 	UI_MGR->AddEvent("Charac2", ADDEVENT_OnMouseClick, Charac2);
@@ -303,7 +305,7 @@ void LobbyScene::Init(HWND hWnd)
 
 		PLAYER_MGR->m_PlayerIndex = 2;
 
-		UI_MGR->LevelSetting(PLAYER_MGR->m_PlayerList[2]->m_CharacInfo.m_Level, { 1020, 295 }, { 2.0f, 2.0f });
+		UI_MGR->LevelSetting(PLAYER_MGR->m_PlayerList[2]->m_CharacInfo.m_Level, { 1015, 295 }, { 2.0f, 2.0f });
 	};
 
 	UI_MGR->AddEvent("Charac3", ADDEVENT_OnMouseClick, Charac3);
@@ -327,7 +329,7 @@ void LobbyScene::Init(HWND hWnd)
 
 		PLAYER_MGR->m_PlayerIndex = 3;
 
-		UI_MGR->LevelSetting(PLAYER_MGR->m_PlayerList[3]->m_CharacInfo.m_Level, { 1020, 295 }, { 2.0f, 2.0f });
+		UI_MGR->LevelSetting(PLAYER_MGR->m_PlayerList[3]->m_CharacInfo.m_Level, { 1015, 295 }, { 2.0f, 2.0f });
 	};
 
 	UI_MGR->AddEvent("Charac4", ADDEVENT_OnMouseClick, Charac4);
@@ -373,7 +375,7 @@ void LobbyScene::Init(HWND hWnd)
 		}
 		
 	};
-	UI_MGR->AddText("Ä³¸¯ÅÍ´Ð³Û", "", { -905, -110 }, ColorF(ColorF::White), L"°íµñ", 20.0f);
+	UI_MGR->AddText("Ä³¸¯ÅÍ´Ð³Û", "", { -905, -107 }, ColorF(ColorF::White), L"°íµñ", 20.0f);
 	UI_MGR->FindUI("Ä³¸¯ÅÍ´Ð³Û")->m_Font.m_WidthAlignment = DWRITE_TEXT_ALIGNMENT_CENTER;
 	UI_MGR->AddEvent("Ä³¸¯ÅÍ´Ð³Û", ADDEVENT_Update, Cnick1);
 	UI_MGR->SetParent("LobbyScene_Status_Default", "Ä³¸¯ÅÍ´Ð³Û");
@@ -626,10 +628,6 @@ LRESULT LobbyScene::MyWndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lP
 
 	}break;
 
-	case WM_MOUSEWHEEL:
-	{
-		SCENE_MGR->ChangeScene(SCENE_CHANNEL);
-	}break;
 	// IME ¿ë
 
 	case WM_CHAR:
@@ -740,6 +738,7 @@ LRESULT LobbyScene::MyWndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lP
 	// °ÔÀÓ Á¾·á
 	case WM_CLOSE:
 		UI_MGR->FindUI("gameEnd")->m_isActive = true;
+		UI_MGR->DrawFirst(UI_MGR->FindUI("gameEnd"));
 		return 0;
 		/*default:
 		return FALSE;*/

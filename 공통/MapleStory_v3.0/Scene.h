@@ -6,6 +6,9 @@ class Scene
 {
 
 public:
+
+	string m_SceneName = "";
+
 	virtual ~Scene() = default;
 
 	virtual void Init(HWND hWnd) = 0;

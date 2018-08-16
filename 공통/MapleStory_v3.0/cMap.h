@@ -23,6 +23,13 @@ public:
 
 	vector<cMapObj*> m_Minimap_List;
 
+	list<cMapObj*> m_CoinList;
+	vector<cMapObj*> m_DelCoin;
+
+	list<cMapObj*> m_ItemList;
+	vector<cMapObj*> m_DelItem;
+
+
 	cMapObj m_LayOut2 = {};
 	cMapObj m_LayOut3 = {};
 	cMapObj m_LayOut4 = {};

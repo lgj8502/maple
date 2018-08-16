@@ -13,6 +13,9 @@ CreateScene0::~CreateScene0()
 
 void CreateScene0::Init(HWND hWnd)
 {
+
+	m_SceneName = "Create0";
+
 	IMG_MGR->FileFindDir(L".\\Img\\CreateScene0\\");
 
 	////	mouse default image 
@@ -515,6 +518,7 @@ LRESULT CreateScene0::MyWndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM 
 	// 게임 종료
 	case WM_CLOSE:
 		UI_MGR->FindUI("gameEnd")->m_isActive = true;
+		UI_MGR->DrawFirst(UI_MGR->FindUI("gameEnd"));
 		return 0;
 		/*default:
 		return FALSE;*/

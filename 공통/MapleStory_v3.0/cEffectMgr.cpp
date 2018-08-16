@@ -96,9 +96,94 @@ void cEffectMgr::EffectMultiBtimap_const(vector<wstring> _bitmapList, D2D1_POINT
 	m_EffectList.push_back(Effect);
 }
 
+void cEffectMgr::EffectMultiBtimap_const_B(vector<ID2D1Bitmap*> _bitmapList, D2D1_POINT_2F _pos, float _holdingTIme, bool _camera)
+{
+	cEffect *Effect = new cEffect;
+
+	Effect->m_Transform.SetPos(_pos);
+
+	for (auto &i : _bitmapList)
+	{
+		Effect->m_Renderer.AddBitmap_Bottom(i);
+	}
+
+	Effect->m_destroyTime = _holdingTIme * _bitmapList.size();
+
+	Effect->m_Renderer.AddAnimation_const(0, 0, _bitmapList.size() - 1, _holdingTIme);
+	Effect->m_Renderer.m_State = 0;
+
+	Effect->m_Transform.m_isCamera = _camera;
+
+	m_EffectList.push_back(Effect);
+}
+
+void cEffectMgr::EffectMultiBtimap_const_PlayerFollow(vector<wstring> _bitmapList, D2D1_POINT_2F _pos, float _holdingTIme)
+{
+	cEffect *Effect = new cEffect;
+
+	Effect->m_Transform.SetPos(_pos);
+	Effect->m_Transform.m_pParent = PLAYER_MGR->m_player->TransformAddress();
+
+	for (auto &i : _bitmapList)
+	{
+		Effect->m_Renderer.AddBitmap_Bottom(IMG_MGR->GetImage(i));
+	}
+
+	Effect->m_destroyTime = _holdingTIme * _bitmapList.size();
+
+	Effect->m_Renderer.AddAnimation_const(0, 0, _bitmapList.size() - 1, _holdingTIme);
+	Effect->m_Renderer.m_State = 0;
+
+	m_EffectList.push_back(Effect);
+}
+
+void cEffectMgr::EffectMultiBtimap_const_PlayerFollow_B(vector<ID2D1Bitmap*> _bitmapList, D2D1_POINT_2F _pos, float _holdingTIme, FUNC _func)
+{
+	cEffect *Effect = new cEffect;
+
+	Effect->m_Transform.SetPos(_pos);
+	Effect->m_Transform.m_pParent = PLAYER_MGR->m_player->TransformAddress();
+
+	for (auto &i : _bitmapList)
+	{
+		Effect->m_Renderer.AddBitmap_Bottom(i);
+	}
+
+	Effect->m_destroyTime = _holdingTIme * _bitmapList.size();
+
+	Effect->m_Renderer.AddAnimation_const(0, 0, _bitmapList.size() - 1, _holdingTIme);
+	Effect->m_Renderer.m_State = 0;
+
+	Effect->m_Func = _func;
+
+	m_EffectList.push_back(Effect);
+}
+
 void cEffectMgr::NumberEffect(eNumColor _color, int _Number, D2D1_POINT_2F _pos)
 {
 	int Cipher = CipherCalc(_Number);
+
+	if (_Number == 0)
+	{
+		D2D1_POINT_2F pos = _pos;
+
+		pos.y -= 50.0f;
+
+		cEffect *Effect = new cEffect;
+		Effect->m_Transform.SetPos(pos);
+		Effect->m_isNumber = true;
+
+		Effect->m_Renderer.AddBitmap(IMG_MGR->GetImage(L"NoRed0.Miss"));
+
+		Effect->m_Transform.m_isCamera = true;
+
+		Effect->m_destroyTime = 1.0f;
+
+		m_EffectList.push_back(Effect);
+
+		return;
+	}
+	
 
 	for (int i = 0; i < Cipher; i++)
 	{	
@@ -233,6 +318,11 @@ void cEffectMgr::Update(float _DelayTime)
 
 		if (i->CheckTime(_DelayTime) == true)
 		{
+			if (i->m_Func != nullptr)
+			{
+				i->m_Func();
+			}
+
 			delList.push_back(i);
 		}
 	}
@@ -240,7 +330,16 @@ void cEffectMgr::Update(float _DelayTime)
 	for (auto &i : delList)
 	{
 		m_EffectList.remove(i);
+
 	}
+
+	for (auto &i : delList)
+	{
+		delete i;
+		i = nullptr;
+	}
+
+	delList.clear();
 }
 
 void cEffectMgr::Render()

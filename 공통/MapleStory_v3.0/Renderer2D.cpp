@@ -169,6 +169,15 @@ void Renderer2D::AddBitmap_LeftTop(ID2D1Bitmap * _bitmap)
 	m_HaveBitmap = true;
 }
 
+void Renderer2D::DelLastBitmap()
+{
+	if (m_BitmapList.size() == 0)
+	{
+		return;
+	}
+	m_BitmapList.pop_back();
+}
+
 
 void Renderer2D::ChangeBitmap(size_t _index)
 {

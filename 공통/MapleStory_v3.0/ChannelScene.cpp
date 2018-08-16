@@ -11,6 +11,8 @@ ChannelScene::~ChannelScene()
 
 void ChannelScene::Init(HWND hWnd)
 {
+	m_SceneName = "Channel";
+
 	IMG_MGR->FileFindDir(L".\\Img\\ChannelScene\\");
 
 	//SOUND_MGR->FileFindDir(L".\\Sound\\");
@@ -400,6 +402,7 @@ LRESULT ChannelScene::MyWndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM 
 	// 게임 종료
 	case WM_CLOSE:
 		UI_MGR->FindUI("gameEnd")->m_isActive = true;
+		UI_MGR->DrawFirst(UI_MGR->FindUI("gameEnd"));
 		return 0;
 		/*default:
 		return FALSE;*/

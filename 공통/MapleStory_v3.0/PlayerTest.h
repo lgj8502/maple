@@ -36,9 +36,9 @@ enum ePlayerParts
 	PART_HAIR,
 	PART_FRONTSHIELD,
 	PART_SHOES,
+	PART_CAP,
 	PART_WEAPON,
 	PART_ARM,
-	PART_CAP,
 	PART_COATARM,
 	PART_LONGCOATARM,
 	PART_HAND,
@@ -83,6 +83,9 @@ private:
 	bool m_ChangeMap = false;
 	int m_PortalNum = 0;
 
+	// 메소 줍기용
+	cMapObj* m_CrashMeso = nullptr;
+	cMapObj* m_CrashItem = nullptr;
 
 	bool		m_isProne = false;
 	bool		m_isProneSteb = false;
@@ -97,6 +100,7 @@ private:
 	float		m_AlphaTime = 1.5f;
 	float		m_IntervalTime = 0.02f;
 	bool		m_isProtected = false;
+	bool		 m_isMiss = false;
 
 	//bool		m_isLongcoat = false;
 
@@ -108,6 +112,7 @@ private:
 	map<wstring, ImgInfo>	m_BaseList;
 	map<wstring, ImgInfo>	m_HairList;
 	map<wstring, ImgInfo>	m_FaceList;
+	map<wstring, ImgInfo>	m_CapList;
 	map<wstring, ImgInfo>	m_CoatList;
 	map<wstring, ImgInfo>	m_PantsList;
 	map<wstring, ImgInfo>	m_ShoesList;
@@ -116,6 +121,7 @@ private:
 	void SettingBase();
 	void SettingHair();
 	void SettingFace();
+	void SettingCap();
 	void SettingCoat();
 	void SettingPants();
 	void SettingShoes();
@@ -128,6 +134,7 @@ public:
 	D2D1_POINT_2F m_startPos = {};
 
 	sCharacter m_CharacInfo = {};
+	sInvenInfo m_InvenInfo = {};
 
 	//1050286
 	//size_t m_Base = 100;
@@ -158,7 +165,10 @@ public:
 	//int		m_INT = 0;
 	//int		m_LUK = 0;
 
-	int		m_AttackPower = 50;
+	int		m_AttackPower = 0;
+
+	int		m_DefencePower = 0;
+
 
 	////////////////////////////////////////////////////////////////////////////////
 
@@ -207,22 +217,28 @@ public:
 	void StopWalk();
 
 	void JumpMove();
+	void PickCoin();
+	void PickItem();
 
 	void Revival();
 	void CalcAttackPower();
+	void CalcDefencePower();
 
 	void ChangeBase(size_t _itemNo);
 	void ChangeHair(size_t _itemNo);
 	void ChangeFace(size_t _itemNo);
+	void ChangeCap(size_t _itemNo);
 	void ChangeCoat(size_t _itemNo);
 	void ChangePants(size_t _itemNo);
 	void ChangeShoes(size_t _itemNo);
 	void ChangeWeapon(size_t _itemNo);
 
+	void LevelUp();
+
 	void ChangeState(ePlayerState _state);
 
-	void LoadImg(char *_path, size_t _ItemNo, map<wstring, ImgInfo> &_BotmapList);
-
+	void LoadImg(char *_path, size_t _ItemNo, map<wstring, ImgInfo> &_BitmapList);
+	ID2D1Bitmap *LoadIconImg(size_t _ItemNo);
 
 	inline void SetPos(D2D1_POINT_2F _pos)
 	{
@@ -243,6 +259,11 @@ public:
 	inline void SetScale(float _x, float _y)
 	{
 		m_Parts->m_Transform.SetScale(_x, _y);
+	}
+
+	inline Transform2D* TransformAddress()
+	{
+		return &(m_Parts[0].m_Transform);
 	}
 
 };

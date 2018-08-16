@@ -17,9 +17,6 @@ class cEffectMgr : public TemplateSingleton<cEffectMgr>
 
 	list<cEffect*> m_EffectList;
 
-
-
-
 public:
 
 	~cEffectMgr();
@@ -27,6 +24,9 @@ public:
 	void EffectSingle(wstring _bitmapName, D2D1_POINT_2F _pos, bool _Left, float _watingTime, float _holdingTIme, bool _camera = true);
 	void EffectMultiBtimap(vector<wstring> _bitmapList, D2D1_POINT_2F _pos, bool _Left, bool _camera, double _holdingTIme, ...);
 	void EffectMultiBtimap_const(vector<wstring> _bitmapList, D2D1_POINT_2F _pos, float _holdingTIme, bool _camera = true);
+	void EffectMultiBtimap_const_B(vector<ID2D1Bitmap*> _bitmapList, D2D1_POINT_2F _pos, float _holdingTIme, bool _camera = true);
+	void EffectMultiBtimap_const_PlayerFollow(vector<wstring> _bitmapList, D2D1_POINT_2F _pos, float _holdingTIme);
+	void EffectMultiBtimap_const_PlayerFollow_B(vector<ID2D1Bitmap*> _bitmapList, D2D1_POINT_2F _pos, float _holdingTIme, FUNC _func);
 
 	void NumberEffect(eNumColor _color, int _Number, D2D1_POINT_2F _pos);
 

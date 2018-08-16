@@ -6,6 +6,7 @@ enum eDataType
 {
 	DTT_USERINFO,
 	DTT_CHARACTER,
+	DTT_INVENTORY,
 
 
 	DTT_END
@@ -17,17 +18,20 @@ struct sUserInfo
 	string m_PassWard = "";
 };
 
-#define CHAR_INFO_COUNT 21
+#define CHAR_INFO_COUNT 24
 
 struct sCharacter
 {
 	string m_Name = "";
 	int m_Level = 0;
-	float m_Exp = 0.0f;
+	int m_Exp = 0;
+	float m_ExpMax = 0;
+	int m_Ability = 0;
 
 	size_t m_Base = 0;
 	size_t m_Hair = 0;
 	size_t m_Face = 0;
+	size_t m_Cap = 0;
 	size_t m_Coat = 0;
 	size_t m_Pants = 0;
 	size_t m_Shoes = 0;
@@ -51,13 +55,27 @@ struct sCharacter
 
 };
 
+struct sInvenInfo
+{
+	int m_Meso = 0;
 
+	int m_Equip[28] = {};
+	int m_UseTem[28] = {};
+	int m_Etc[28] = {};
+	int m_Install[28] = {};
+	int m_Cash[28] = {};
+};
+
+//struct sSkillInfo
+//{
+//	int m_FirstSkill[10] = {};
+//	int m_SecondSkill[10] = {};
+//};
 
 
 class cDataMgr : public TemplateSingleton<cDataMgr>
 {
 	BASESET(cDataMgr);
-
 
 private:
 
@@ -85,11 +103,24 @@ public:
 	// 캐릭터 생성
 	bool Create_Character(sCharacter _Info);
 	bool Load_CharacterInfo(sCharacter &_Info);
-	bool Save_Charater(sCharacter _Info);
+	bool Save_Charater();
 
 	bool Load_CharacterList(vector<sCharacter> &_list);
 
+	// 인벤토리 관련
+	bool Create_Inventory(sInvenInfo _Info);
+	bool Load_Inventory(sInvenInfo &_Info);
+	bool Save_Inventory();
+
+	D2D1_POINT_2F Lerp(D2D1_POINT_2F _start, D2D1_POINT_2F _end, float _rate);
+
+	int AddPower(int _Weapon);
+	int AddDefence(int _Armor);
+
+	// 게임 종료시 모든 매니저 delete
 	void AllMgrDestroy();
+
+	void UseItem(int _ItemNo);
 
 private:
 

@@ -25,7 +25,12 @@ HRESULT D3D::Init3D(HWND _hWnd)
 {
 	HRESULT hr = S_OK;
 
-	m_hWnd = _hWnd;
+	m_hWnd = _hWnd;	
+
+	tme.cbSize = sizeof(tme);
+	tme.dwFlags = TME_LEAVE;
+	tme.hwndTrack = m_hWnd;
+	tme.dwHoverTime = 10;
 
 #pragma region 3D Init
 	DXGI_SWAP_CHAIN_DESC		sd = {};
@@ -140,6 +145,8 @@ HRESULT D3D::Init3D(HWND _hWnd)
 
 void D3D::Update(float _DelayTime)
 {
+	TrackMouseEvent(&tme);
+
 	m_cb.matView = XMMatrixTranspose(XMMatrixLookAtLH(m_vEye, m_vAt, m_vUp));
 
 	m_D2D.Update(_DelayTime);
@@ -159,9 +166,27 @@ void D3D::Render()
 
 LRESULT D3D::MyWndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 {
-	switch (iMessage)
-	{	
 
+	switch (iMessage)
+	{
+	case WM_MOUSELEAVE:
+	{
+		if (m_showCursur == false)
+		{
+			ShowCursor(true);
+			m_showCursur = true;
+		}
+	}break;
+
+	case WM_MOUSEMOVE:
+	{
+		if (m_showCursur == true)
+		{
+			ShowCursor(false);
+			m_showCursur = false;
+		}
+	}break;
+	
 	case WM_LBUTTONDOWN :
 	{
 		m_MousePos.x = GET_X_LPARAM(lParam);

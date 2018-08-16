@@ -3,6 +3,7 @@
 
 #include "cMushroom.h"
 #include "cJunierYetti.h"
+#include "cMurucoon.h"
 
 #include <atlbase.h>
 
@@ -27,6 +28,11 @@ void cMonsterMgr::CreateMob(eMobName _MobName, D2D1_POINT_2F _pos, int _range, m
 	case MOB_JUNIERYETTI:
 	{
 		MOB = new cJunierYetti;
+
+	}break;
+	case MOB_MURUCOON:
+	{
+		MOB = new cMurucoon;
 
 	}break;
 	default:
@@ -158,12 +164,16 @@ void cMonsterMgr::Destoy()
 {
 	for (auto &i : m_MobList)
 	{
+		i->Destroy();
+
 		delete i;
 		i = nullptr;
 	}
 
 	for (auto &i : m_DelList)
 	{
+		i->Destroy();
+
 		delete i;
 		i = nullptr;
 	}
@@ -198,7 +208,7 @@ void cMonsterMgr::MobCountCheck(float _DelayTime)
 
 
 
-		m_CreateTime = 5.0f;
+		m_CreateTime = CREATETIME;
 
 	}
 

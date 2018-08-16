@@ -10,7 +10,7 @@ void cCokeTownNormal::Init()
 {
 	m_MapName = "코크타운 사냥터";
 
-	m_RevivalPos = {1800,800};
+	m_RevivalPos = { 1800,800 };
 
 	MAP_MGR->AddMinimapWindow(L"minimap_0", { 50,50 }, { 1.0f, 1.0f });
 	MAP_MGR->AddMinimapWindow(L"minimap_1", { 130,50 }, { 1.5f, 1.0f });
@@ -21,6 +21,10 @@ void cCokeTownNormal::Init()
 	MAP_MGR->AddMinimapWindow(L"minimap_6", { 130,175 }, { 1.5f, 1.0f });
 	MAP_MGR->AddMinimapWindow(L"minimap_7", { 210,175 }, { 1.0f, 1.0f });
 	MAP_MGR->AddMinimapWindow_Rect(L"minimap_base", { 27, 78, 232, 180 });
+
+	MAP_MGR->AddMinimapWindow(L"MiniMap.BtNpc.normal.0", { 215,28 }, { 1.0f, 1.0f });
+	MAP_MGR->AddMinimapWindow(L"MiniMap.BtMap.normal.0", { 175,28 }, { 1.0f, 1.0f });
+	MAP_MGR->AddMinimapWindow(L"MiniMap.BtSmall.normal.0", { 148,28 }, { 1.0f, 1.0f });
 
 	MAP_MGR->AddMinimapWindow(L"CokeTown", { 50, 52 }, { 1.0f, 1.0f });
 
@@ -73,10 +77,18 @@ void cCokeTownNormal::Init()
 	// 배경 6 , addTile과 ㅛ축 변취 차이는 +45
 
 	m_LayOut6_Size = { 2000, 1200 };
-	MAP_MGR->AddBackGround6(L"cokeTown.acc1.0.0", { 1800.0f,    998.0f });
+	//MAP_MGR->AddBackGround6(L"cokeTown.acc1.0.0", { 1800.0f,    998.0f });
+	vector<wstring> cokebottle;
 
+	cokebottle.push_back(L"cokeTown.acc1.1.0");
+	cokebottle.push_back(L"cokeTown.acc1.1.1");
+	cokebottle.push_back(L"cokeTown.acc1.1.2");
+	cokebottle.push_back(L"cokeTown.acc1.1.3");
+	cokebottle.push_back(L"cokeTown.acc1.1.4");
 
-	MAP_MGR->AddBackGround6(L"cokeTown.nature.5.0", { 1500.0f,    998.0f });
+	MAP_MGR->AddAnimation({ 1500.0f, 998.0f }, MAP_BACKGROUND6, 0.2f, cokebottle);
+
+	//MAP_MGR->AddBackGround6(L"cokeTown.nature.5.0", { 1500.0f,    998.0f });
 	MAP_MGR->AddBackGround6(L"cokeTown.nature.6.0", { 1200.0f,    998.0f });
 
 	MAP_MGR->AddBackGround6(L"cokeTown.nature.5.0", { 700.0f,    998.0f });
@@ -109,11 +121,11 @@ void cCokeTownNormal::Init()
 	MAP_MGR->AddFlatTileL({ 260, 718 }, 5);
 
 
-	MAP_MGR->AddFlatTileH({ 1500, 518 }, 3);
-	MAP_MGR->AddFlatTileL({ 1500, 518 }, 3);
-
-	MAP_MGR->AddFlatTileH({ 1400, 718 }, 5);
-	MAP_MGR->AddFlatTileL({ 1400, 718 }, 5);
+	//MAP_MGR->AddFlatTileH({ 1500, 518 }, 3);
+	//MAP_MGR->AddFlatTileL({ 1500, 518 }, 3);
+	//
+	//MAP_MGR->AddFlatTileH({ 1400, 718 }, 5);
+	//MAP_MGR->AddFlatTileL({ 1400, 718 }, 5);
 
 	//MAP_MGR->AddFlatTileH({ 700, 718 }, 20);
 	//MAP_MGR->AddFlatTileL({ 700, 718 }, 20);
@@ -138,18 +150,17 @@ void cCokeTownNormal::Init()
 	MAP_MGR->AddLadder(L"0.1.0", { 596, 870 }, false);
 	MAP_MGR->AddLadder(L"0.2.0", { 596, 900 }, false);
 
-	MAP_MGR->AddLadder(L"0.0.0", { 1500, 520 }, true);
-	MAP_MGR->AddLadder(L"0.1.0", { 1496, 550 }, false);
-	MAP_MGR->AddLadder(L"0.1.0", { 1496, 580 }, false);
-	MAP_MGR->AddLadder(L"0.1.0", { 1496, 610 }, false);
-	MAP_MGR->AddLadder(L"0.2.0", { 1496, 640 }, false);
+	//MAP_MGR->AddLadder(L"0.0.0", { 1500, 520 }, true);
+	//MAP_MGR->AddLadder(L"0.1.0", { 1496, 550 }, false);
+	//MAP_MGR->AddLadder(L"0.1.0", { 1496, 580 }, false);
+	//MAP_MGR->AddLadder(L"0.1.0", { 1496, 610 }, false);
+	//MAP_MGR->AddLadder(L"0.2.0", { 1496, 640 }, false);
+	//
+	//MAP_MGR->AddLadder(L"0.0.0", { 1650, 720 }, true);
+	//MAP_MGR->AddLadder(L"0.3.0", { 1646, 840 }, false);
+	//MAP_MGR->AddLadder(L"0.1.0", { 1646, 870 }, false);
+	//MAP_MGR->AddLadder(L"0.2.0", { 1646, 900 }, false);
 
-	MAP_MGR->AddLadder(L"0.0.0", { 1650, 720 }, true);
-	MAP_MGR->AddLadder(L"0.3.0", { 1646, 840 }, false);
-	MAP_MGR->AddLadder(L"0.1.0", { 1646, 870 }, false);
-	MAP_MGR->AddLadder(L"0.2.0", { 1646, 900 }, false);
-	//MAP_MGR->AddLadder(L"0.3.0", { 396, 760 }, false);
-	//MAP_MGR->AddLadder(L"0.3.0", { 396, 880 }, false);
 
 
 
@@ -173,11 +184,13 @@ void cCokeTownNormal::Init()
 	bossPortalImgList.push_back(L"bossPotal1.5");
 
 
-	MAP_MGR->AddPortal(6, { 1800, 991 }, portalImgList, MNAME_COKETOWN, 2);
-	MAP_MGR->AddPortal(0, { 1000, 999 }, bossPortalImgList, MNAME_COKETOWNBOSS, 4, true);
+	MAP_MGR->AddPortal(6, { 1800, 1000 }, portalImgList, MNAME_COKETOWN, 2);
+	MAP_MGR->AddPortal(0, { 1000, 1000 }, bossPortalImgList, MNAME_COKETOWNBOSS, 4, true);
 
 
-	MOB_MGR->MobSetting(MOB_JUNIERYETTI, 3, { 450, 991 }, 470);
+	MOB_MGR->MobSetting(MOB_JUNIERYETTI, 5, { 450, 991 }, 470);
+	MOB_MGR->MobSetting(MOB_MURUCOON, 5, { 300 , 691 }, 400);
+
 
 	///// 레이아웃 카메라 비율 설정
 
@@ -200,6 +213,6 @@ void cCokeTownNormal::Init()
 	m_LayOut6.m_Transform.m_CameraRate.y = (m_LayOut6_Size.y - WIN_HEIGHT) / (m_LayOut6_Size.y - WIN_HEIGHT);
 
 
-	m_MiniMap.m_Transform.SetPos({ 35,50 });
+	m_MiniMap.m_Transform.SetPos({ 35,60 });
 	m_MiniMap.m_Transform.SetScale(0.1f, 0.1f);
 }
